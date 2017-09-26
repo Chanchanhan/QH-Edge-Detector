@@ -4,6 +4,7 @@
 
 #include "andres/marray.hxx"
 #include "andres/ml/decision-trees.hxx"
+#include "edge/EdgeFeature.hpp"
 #include "edge/ReadImg.hpp"
 inline void test(const bool& x) { 
     if(!x) throw std::logic_error("test failed."); 
@@ -11,8 +12,9 @@ inline void test(const bool& x) {
 
 int main() {
   
-  EDetector::FileSys fileSys("/home/qqh/data/BSR/BSDS500/data/images/train/","/home/qqh/data/BSR/BSDS500/data/images/result");
-  fileSys.readImg(EDetector::PathType::train );
+  ED::FileSys fileSys("/home/qqh/DataSets/BSR/BSDS500/data/","/home/qqh/DataSets/BSR/BSDS500/data/");
+  fileSys.readImg(ED::PathType::train );
+  
  /*   
     const size_t numberOfSamples = 100;
     const size_t numberOfFeatures = 2;

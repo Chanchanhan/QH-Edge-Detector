@@ -6,5 +6,5 @@ CXX_FLAGS = -std=c++11 -march=native -O3 -fopenmp -g
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/qqh/projects/RandomForest/include -I/usr/include/eigen3 
+CXX_INCLUDES = -I/home/qqh/projects/RandomForest/include -I/usr/include/eigen3 -isystem /usr/local/include/opencv -isystem /usr/local/include 
 

@@ -172,3 +172,6 @@ Project Target=RandomForest,test-decision-trees
 Use External Terminal=true
 Working Directory=
 isExecutable=false
+
+[Project]
+VersionControlSupport=kdevgit

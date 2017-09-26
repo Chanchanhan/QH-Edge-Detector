@@ -22,24 +22,12 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/core.hpp>
 
-#include"andres/marray.hxx"
+#include "edge/TypeName.h"
 #include"andres/ml/decision-trees.hxx"
-using namespace cv;
-namespace EDetector{
+#include "edge/EdgeFeature.hpp"
+namespace ED{
   
-enum PathType{
-  train,test,eval,out
-  
-};
-enum Split{
-  gini,entropy,twoing
-  
-};
-enum RGBG{
-  _RGB,
-  _D,
-  _RGBD
-};
+
  //template<class FEATURE>
 class FileSys{
 public :
@@ -122,7 +110,7 @@ inline FileSys::FileSys(const std::string  trainPath_,const std::string outPath_
   nOrients =4;
   rgbd =_RGB;
   
-  imWidth=round(max(gtWidth,imWidth)/shrink/2)*shrink*2;
+  imWidth=round(std::max(gtWidth,imWidth)/shrink/2)*shrink*2;
   
      
   //compute constants and store
@@ -168,11 +156,17 @@ bool FileSys::toTrainTree()
 //   tid = ticStatus('Collecting data',30,1);
 //   
   //set train parameters
+//   std::vector<EdgeFeature> edgeFeatures;
   {    
-    for(std::string trainImgId:trainImgIds){
-      
-      
+    for(std::string trainImgId:trainImgIds){     
+      cv::Mat img=cv::imread(trnImgDir+trainImgId); 
+     // cv::waitKey();  
+//         EdgeFeature(const cv::Mat _Img,const RGBG _rgbd,const unsigned int _nChns,const unsigned int _shrink,const unsigned int ,const unsigned int _grdSmooth);
+
+      EdgeFeature edgeFeature= EdgeFeature(img,rgbd,nChns,shrink,nOrients,grdSmooth);
+      edgeFeature.computeEdgesChns();
     }
+    
   }
 }
 
@@ -187,7 +181,7 @@ bool FileSys::readImg(const PathType path)
   std::string  dir;
   switch (path){
     case train:
-      
+      toTrainTree();
       break;
     case test:
       dir = testPath;

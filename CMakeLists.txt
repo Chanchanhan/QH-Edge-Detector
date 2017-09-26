@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 2.6)
 project(ml)
 include_directories(include)
-file(GLOB headers include/andres/* include/andres/ml/* include/edge/*)
+file(GLOB headers include/andres/* include/andres/ml/* include/edge/* include/tools/*)
 enable_testing()
 
 set( CMAKE_CXX_COMPILER "g++" )
 set( CMAKE_BUILD_TYPE "Debug" )
 
-list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules )
-set( EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin )
-set( LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib )
+# list( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules )
+# set( EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin )
+# set( LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib )
 
 
 ##############################################################################
@@ -77,10 +77,13 @@ endif()
 add_executable(test-decision-trees src/unittest/ml/test-decision-trees.cxx ${headers})
 add_test(test-decision-trees test-decision-trees)
 
-set( 
-    THIRD_PARTY_LIBS
-    ${OpenCV_LIBS}
-)
+target_link_libraries( test-decision-trees ${OpenCV_LIBS} ) # exe 链接 OpenCV
+
+
+# set( 
+#     THIRD_PARTY_LIBS
+#     ${OpenCV_LIBS}
+# )
 if(DOXYGEN_FOUND)
     configure_file("${ml_SOURCE_DIR}/doxygen/doxyfile-ml-decision-trees.in" "${ml_BINARY_DIR}/doxyfile-ml-decision-trees" @ONLY IMMEDIATE)
     add_custom_target(doc-ml-decision-trees ALL COMMAND ${DOXYGEN} "${ml_BINARY_DIR}/doxyfile-ml-decision-trees")
