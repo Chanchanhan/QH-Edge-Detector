@@ -6,9 +6,9 @@
 #include "andres/ml/decision-trees.hxx"
 #include "edge/EdgeFeature.hpp"
 #include "edge/ReadImg.hpp"
-inline void test(const bool& x) { 
-    if(!x) throw std::logic_error("test failed."); 
-}
+// inline void test(const bool& x) { 
+//     if(!x) throw std::logic_error("test failed."); 
+// }
 
 int main() {
   

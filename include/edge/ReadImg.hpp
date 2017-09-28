@@ -149,22 +149,13 @@ bool FileSys::toTrainTree()
   /***finalize setup***/
   
   /***collect positive and negative patches and compute features***/
-//   fids=std::sort(randperm(nTotFtrs,round(nTotFtrs*opts.fracFtrs)));
-//   k = nPos+nNeg; nImgs=min(nImgs,opts.nImgs);
-//   ftrs = zeros(k,length(fids),'single');
-//   labels = zeros(gtWidth,gtWidth,k,'uint8'); k = 0;
-//   tid = ticStatus('Collecting data',30,1);
-//   
-  //set train parameters
+
 //   std::vector<EdgeFeature> edgeFeatures;
+  EdgeFeature edgeFeatures = EdgeFeature(rgbd,nChns,shrink,nOrients,grdSmooth,normRad,simSmooth,chnSmooth);
   {    
     for(std::string trainImgId:trainImgIds){     
-      cv::Mat img=cv::imread(trnImgDir+trainImgId); 
-     // cv::waitKey();  
-//         EdgeFeature(const cv::Mat _Img,const RGBG _rgbd,const unsigned int _nChns,const unsigned int _shrink,const unsigned int ,const unsigned int _grdSmooth);
-
-      EdgeFeature edgeFeature= EdgeFeature(img,rgbd,nChns,shrink,nOrients,grdSmooth);
-      edgeFeature.computeEdgesChns();
+      cv::Mat img=cv::imread(trnImgDir+trainImgId,CV_LOAD_IMAGE_COLOR); 
+      edgeFeatures.computeEdgesChns(img);
     }
     
   }

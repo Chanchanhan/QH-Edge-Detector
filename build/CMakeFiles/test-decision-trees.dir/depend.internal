@@ -7,6 +7,14 @@ CMakeFiles/test-decision-trees.dir/src/unittest/ml/test-decision-trees.cxx.o
  ../include/edge/EdgeFeature.hpp
  ../include/edge/ReadImg.hpp
  ../include/edge/TypeName.h
+ ../include/tools/ConvTri.hpp
+ ../include/tools/gradient.hpp
+ ../include/tools/gradientMex.hpp
+ ../include/tools/imgCvt.hpp
+ ../include/tools/model.h
+ ../include/tools/rgbConvertMex.hpp
+ ../include/tools/sse.hpp
+ ../include/tools/wrappers.hpp
  /home/qqh/projects/RandomForest/src/unittest/ml/test-decision-trees.cxx
  /usr/local/include/opencv/cxcore.h
  /usr/local/include/opencv2/calib3d.hpp
