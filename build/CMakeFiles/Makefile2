@@ -60,39 +60,39 @@ CMAKE_SOURCE_DIR = /home/qqh/projects/RandomForest
 CMAKE_BINARY_DIR = /home/qqh/projects/RandomForest/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/test-decision-trees.dir
+# Target rules for target CMakeFiles/test-Edge-detector.dir
 
 # All Build rule for target.
-CMakeFiles/test-decision-trees.dir/all:
-	$(MAKE) -f CMakeFiles/test-decision-trees.dir/build.make CMakeFiles/test-decision-trees.dir/depend
-	$(MAKE) -f CMakeFiles/test-decision-trees.dir/build.make CMakeFiles/test-decision-trees.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=1,2 "Built target test-decision-trees"
-.PHONY : CMakeFiles/test-decision-trees.dir/all
+CMakeFiles/test-Edge-detector.dir/all:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/depend
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=1,2,3,4,5 "Built target test-Edge-detector"
+.PHONY : CMakeFiles/test-Edge-detector.dir/all
 
 # Include target in all.
-all: CMakeFiles/test-decision-trees.dir/all
+all: CMakeFiles/test-Edge-detector.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/test-decision-trees.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/qqh/projects/RandomForest/build/CMakeFiles 2
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test-decision-trees.dir/all
+CMakeFiles/test-Edge-detector.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/qqh/projects/RandomForest/build/CMakeFiles 5
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test-Edge-detector.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/qqh/projects/RandomForest/build/CMakeFiles 0
-.PHONY : CMakeFiles/test-decision-trees.dir/rule
+.PHONY : CMakeFiles/test-Edge-detector.dir/rule
 
 # Convenience name for target.
-test-decision-trees: CMakeFiles/test-decision-trees.dir/rule
+test-Edge-detector: CMakeFiles/test-Edge-detector.dir/rule
 
-.PHONY : test-decision-trees
-
-# clean rule for target.
-CMakeFiles/test-decision-trees.dir/clean:
-	$(MAKE) -f CMakeFiles/test-decision-trees.dir/build.make CMakeFiles/test-decision-trees.dir/clean
-.PHONY : CMakeFiles/test-decision-trees.dir/clean
+.PHONY : test-Edge-detector
 
 # clean rule for target.
-clean: CMakeFiles/test-decision-trees.dir/clean
+CMakeFiles/test-Edge-detector.dir/clean:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/clean
+.PHONY : CMakeFiles/test-Edge-detector.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/test-Edge-detector.dir/clean
 
 .PHONY : clean
 

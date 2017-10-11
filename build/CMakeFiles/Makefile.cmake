@@ -30,6 +30,8 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/share/cmake-3.5/Modules/Compiler/GNU-CXX.cmake"
   "/usr/share/cmake-3.5/Modules/Compiler/GNU.cmake"
   "/usr/share/cmake-3.5/Modules/FindDoxygen.cmake"
+  "/usr/share/cmake-3.5/Modules/FindGLUT.cmake"
+  "/usr/share/cmake-3.5/Modules/FindOpenGL.cmake"
   "/usr/share/cmake-3.5/Modules/FindOpenMP.cmake"
   "/usr/share/cmake-3.5/Modules/FindPackageHandleStandardArgs.cmake"
   "/usr/share/cmake-3.5/Modules/FindPackageMessage.cmake"
@@ -53,5 +55,5 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/test-decision-trees.dir/DependInfo.cmake"
+  "CMakeFiles/test-Edge-detector.dir/DependInfo.cmake"
   )

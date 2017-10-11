@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.6)
 project(ml)
 include_directories(include)
-file(GLOB headers include/andres/* include/andres/ml/* include/edge/* include/tools/*)
+file(GLOB headers include/andres/* include/andres/ml/* include/edge/* include/tools/* include/ObjectDetector/*)
 enable_testing()
+
+aux_source_directory(./src SRC_LIST)
 
 set( CMAKE_CXX_COMPILER "g++" )
 set( CMAKE_BUILD_TYPE "Debug" )
@@ -57,6 +59,16 @@ else()
 endif()
 
 ##############################################################################
+# OpenGL
+##############################################################################
+
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
+# target_link_libraries(testas  )
+
+
+##############################################################################
 # Eigen
 ##############################################################################
 include_directories( "/usr/include/eigen3" )
@@ -64,28 +76,34 @@ include_directories( "/usr/include/eigen3" )
 # OpenCV
 ##############################################################################
 find_package( OpenCV 3.1 REQUIRED )
-if(OPENCV_FOUND)
+# if(OPENCV_FOUND)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
-    message(STATUS "OpenCV found")
-else()
-    message("OpenCV not found")
-endif()
+#     message(STATUS "OpenCV found")
+# else()d
+#     message("OpenCV not found")
+# endif()
 
 ##############################################################################
 # targets
 ##############################################################################
-add_executable(test-decision-trees src/unittest/ml/test-decision-trees.cxx ${headers})
-add_test(test-decision-trees test-decision-trees)
+# add_executable(test-decision-trees src/unittest/ml/test-decision-trees.cxx ${headers})
+add_executable(test-Edge-detector src/unittest/ml/test-Edge-detector.cpp ${headers} ${SRC_LIST})
 
-target_link_libraries( test-decision-trees ${OpenCV_LIBS} ) # exe 链接 OpenCV
+# add_test(test-decision-trees test-decision-trees)
 
+add_test(test-Edge-detector test-Edge-detector)
+
+
+# target_link_libraries( test-decision-trees ${OpenCV_LIBS} ) # exe 链接 OpenCV
+
+target_link_libraries( test-Edge-detector ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}) # exe 链接 OpenCV
 
 # set( 
 #     THIRD_PARTY_LIBS
 #     ${OpenCV_LIBS}
 # )
-if(DOXYGEN_FOUND)
-    configure_file("${ml_SOURCE_DIR}/doxygen/doxyfile-ml-decision-trees.in" "${ml_BINARY_DIR}/doxyfile-ml-decision-trees" @ONLY IMMEDIATE)
-    add_custom_target(doc-ml-decision-trees ALL COMMAND ${DOXYGEN} "${ml_BINARY_DIR}/doxyfile-ml-decision-trees")
-endif()
+# if(DOXYGEN_FOUND)
+#     configure_file("${ml_SOURCE_DIR}/doxygen/doxyfile-ml-decision-trees.in" "${ml_BINARY_DIR}/doxyfile-ml-decision-trees" @ONLY IMMEDIATE)
+#     add_custom_target(doc-ml-decision-trees ALL COMMAND ${DOXYGEN} "${ml_BINARY_DIR}/doxyfile-ml-decision-trees")
+# endif()
 

@@ -67,17 +67,6 @@ test/fast: test
 
 .PHONY : test/fast
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
@@ -88,6 +77,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -122,44 +122,125 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test-decision-trees
+# Target rules for targets named test-Edge-detector
 
 # Build rule for target.
-test-decision-trees: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test-decision-trees
-.PHONY : test-decision-trees
+test-Edge-detector: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test-Edge-detector
+.PHONY : test-Edge-detector
 
 # fast build rule for target.
-test-decision-trees/fast:
-	$(MAKE) -f CMakeFiles/test-decision-trees.dir/build.make CMakeFiles/test-decision-trees.dir/build
-.PHONY : test-decision-trees/fast
+test-Edge-detector/fast:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/build
+.PHONY : test-Edge-detector/fast
 
-src/unittest/ml/test-decision-trees.o: src/unittest/ml/test-decision-trees.cxx.o
+src/CameraCalibration.o: src/CameraCalibration.cpp.o
 
-.PHONY : src/unittest/ml/test-decision-trees.o
+.PHONY : src/CameraCalibration.o
 
 # target to build an object file
-src/unittest/ml/test-decision-trees.cxx.o:
-	$(MAKE) -f CMakeFiles/test-decision-trees.dir/build.make CMakeFiles/test-decision-trees.dir/src/unittest/ml/test-decision-trees.cxx.o
-.PHONY : src/unittest/ml/test-decision-trees.cxx.o
+src/CameraCalibration.cpp.o:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.o
+.PHONY : src/CameraCalibration.cpp.o
 
-src/unittest/ml/test-decision-trees.i: src/unittest/ml/test-decision-trees.cxx.i
+src/CameraCalibration.i: src/CameraCalibration.cpp.i
 
-.PHONY : src/unittest/ml/test-decision-trees.i
+.PHONY : src/CameraCalibration.i
 
 # target to preprocess a source file
-src/unittest/ml/test-decision-trees.cxx.i:
-	$(MAKE) -f CMakeFiles/test-decision-trees.dir/build.make CMakeFiles/test-decision-trees.dir/src/unittest/ml/test-decision-trees.cxx.i
-.PHONY : src/unittest/ml/test-decision-trees.cxx.i
+src/CameraCalibration.cpp.i:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.i
+.PHONY : src/CameraCalibration.cpp.i
 
-src/unittest/ml/test-decision-trees.s: src/unittest/ml/test-decision-trees.cxx.s
+src/CameraCalibration.s: src/CameraCalibration.cpp.s
 
-.PHONY : src/unittest/ml/test-decision-trees.s
+.PHONY : src/CameraCalibration.s
 
 # target to generate assembly for a file
-src/unittest/ml/test-decision-trees.cxx.s:
-	$(MAKE) -f CMakeFiles/test-decision-trees.dir/build.make CMakeFiles/test-decision-trees.dir/src/unittest/ml/test-decision-trees.cxx.s
-.PHONY : src/unittest/ml/test-decision-trees.cxx.s
+src/CameraCalibration.cpp.s:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.s
+.PHONY : src/CameraCalibration.cpp.s
+
+src/Render.o: src/Render.cpp.o
+
+.PHONY : src/Render.o
+
+# target to build an object file
+src/Render.cpp.o:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o
+.PHONY : src/Render.cpp.o
+
+src/Render.i: src/Render.cpp.i
+
+.PHONY : src/Render.i
+
+# target to preprocess a source file
+src/Render.cpp.i:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/Render.cpp.i
+.PHONY : src/Render.cpp.i
+
+src/Render.s: src/Render.cpp.s
+
+.PHONY : src/Render.s
+
+# target to generate assembly for a file
+src/Render.cpp.s:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/Render.cpp.s
+.PHONY : src/Render.cpp.s
+
+src/glm.o: src/glm.cpp.o
+
+.PHONY : src/glm.o
+
+# target to build an object file
+src/glm.cpp.o:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o
+.PHONY : src/glm.cpp.o
+
+src/glm.i: src/glm.cpp.i
+
+.PHONY : src/glm.i
+
+# target to preprocess a source file
+src/glm.cpp.i:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/glm.cpp.i
+.PHONY : src/glm.cpp.i
+
+src/glm.s: src/glm.cpp.s
+
+.PHONY : src/glm.s
+
+# target to generate assembly for a file
+src/glm.cpp.s:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/glm.cpp.s
+.PHONY : src/glm.cpp.s
+
+src/unittest/ml/test-Edge-detector.o: src/unittest/ml/test-Edge-detector.cpp.o
+
+.PHONY : src/unittest/ml/test-Edge-detector.o
+
+# target to build an object file
+src/unittest/ml/test-Edge-detector.cpp.o:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o
+.PHONY : src/unittest/ml/test-Edge-detector.cpp.o
+
+src/unittest/ml/test-Edge-detector.i: src/unittest/ml/test-Edge-detector.cpp.i
+
+.PHONY : src/unittest/ml/test-Edge-detector.i
+
+# target to preprocess a source file
+src/unittest/ml/test-Edge-detector.cpp.i:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.i
+.PHONY : src/unittest/ml/test-Edge-detector.cpp.i
+
+src/unittest/ml/test-Edge-detector.s: src/unittest/ml/test-Edge-detector.cpp.s
+
+.PHONY : src/unittest/ml/test-Edge-detector.s
+
+# target to generate assembly for a file
+src/unittest/ml/test-Edge-detector.cpp.s:
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.s
+.PHONY : src/unittest/ml/test-Edge-detector.cpp.s
 
 # Help Target
 help:
@@ -168,12 +249,21 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... test"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... test-decision-trees"
-	@echo "... src/unittest/ml/test-decision-trees.o"
-	@echo "... src/unittest/ml/test-decision-trees.i"
-	@echo "... src/unittest/ml/test-decision-trees.s"
+	@echo "... rebuild_cache"
+	@echo "... test-Edge-detector"
+	@echo "... src/CameraCalibration.o"
+	@echo "... src/CameraCalibration.i"
+	@echo "... src/CameraCalibration.s"
+	@echo "... src/Render.o"
+	@echo "... src/Render.i"
+	@echo "... src/Render.s"
+	@echo "... src/glm.o"
+	@echo "... src/glm.i"
+	@echo "... src/glm.s"
+	@echo "... src/unittest/ml/test-Edge-detector.o"
+	@echo "... src/unittest/ml/test-Edge-detector.i"
+	@echo "... src/unittest/ml/test-Edge-detector.s"
 .PHONY : help
 
 

@@ -4,4 +4,4 @@
 # 
 # This file includes the relevant testing commands required for 
 # testing this directory and lists subdirectories to be tested as well.
-add_test(test-decision-trees "test-decision-trees")
+add_test(test-Edge-detector "test-Edge-detector")

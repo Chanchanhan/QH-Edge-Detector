@@ -26,7 +26,30 @@ _para initial_para() {
     return o;
 }
 
+cv::Mat bwdist(Mat I,uchar radius){
+     Mat bw;
 
+
+     cvtColor(I, bw, CV_BGR2GRAY);
+    threshold(bw, bw, 40, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+    imshow("Binary Image", bw);
+        
+    // Perform the distance transform algorithm
+    Mat dist;
+    distanceTransform(bw, dist, CV_DIST_L2, 3);
+    // Normalize the distance image for range = {0.0, 1.0}
+    // so we can visualize and threshold it
+    cv::MatIterator_<uchar> colorit;
+    for(int i=0;i<bw.size().width;i++){
+      for(int j=0;j<bw.size().height;j++){
+	bw.at<uchar>(i,j)=bw.at<uchar>(i,j)>=radius?1:0; 
+      }
+    }
+//     normalize(dist, dist, 0, 1., cv::NORM_MINMAX);
+    imshow("Distance Transform Image", dist);
+    waitKey(0);
+    return dist;
+}
 
 //for float mat
 void getadd(Mat I, float *I_data) {

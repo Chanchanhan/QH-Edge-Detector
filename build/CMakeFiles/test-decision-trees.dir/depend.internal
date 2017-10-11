@@ -4,6 +4,7 @@
 CMakeFiles/test-decision-trees.dir/src/unittest/ml/test-decision-trees.cxx.o
  ../include/andres/marray.hxx
  ../include/andres/ml/decision-trees.hxx
+ ../include/edge/EdgeDetector.hpp
  ../include/edge/EdgeFeature.hpp
  ../include/edge/ReadImg.hpp
  ../include/edge/TypeName.h
@@ -69,3 +70,14 @@ CMakeFiles/test-decision-trees.dir/src/unittest/ml/test-decision-trees.cxx.o
  /usr/local/include/opencv2/videoio/videoio_c.h
  /usr/local/include/opencv2/xfeatures2d.hpp
  /usr/local/include/opencv2/xfeatures2d/nonfree.hpp
+ /usr/local/include/opencv2/ximgproc.hpp
+ /usr/local/include/opencv2/ximgproc/disparity_filter.hpp
+ /usr/local/include/opencv2/ximgproc/edge_filter.hpp
+ /usr/local/include/opencv2/ximgproc/estimated_covariance.hpp
+ /usr/local/include/opencv2/ximgproc/fast_hough_transform.hpp
+ /usr/local/include/opencv2/ximgproc/lsc.hpp
+ /usr/local/include/opencv2/ximgproc/seeds.hpp
+ /usr/local/include/opencv2/ximgproc/segmentation.hpp
+ /usr/local/include/opencv2/ximgproc/slic.hpp
+ /usr/local/include/opencv2/ximgproc/sparse_match_interpolator.hpp
+ /usr/local/include/opencv2/ximgproc/structured_edge_detection.hpp

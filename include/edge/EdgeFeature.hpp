@@ -19,11 +19,11 @@ namespace ED{
 
   
 class EdgeFeature{
-  
+typedef unsigned int  UInt;  
 public:
   EdgeFeature(){};
   EdgeFeature(cv::Mat _Img,RGBG rgbd);
-  EdgeFeature(const RGBG _rgbd,const unsigned int _nChns,const unsigned int _shrink,const unsigned int _nOrients,const unsigned int _grdSmooth,const unsigned int _normRad,const unsigned int _simSmooth,const unsigned int _chnSmooth);
+  EdgeFeature(const RGBG _rgbd,const UInt _nChns,const UInt _shrink,const UInt _nOrients,const UInt _grdSmooth,const UInt _normRad,const UInt _simSmooth,const UInt _chnSmooth);
   bool computeEdgesChns(cv::Mat Img);
   void onResample(const cv::Mat &img,float scale,cv::Mat &Ishrink);
 //   void convTri(const cv::Mat from, cv::Mat &dst,const int radius,const int s=1,const int nomex=0);
@@ -32,32 +32,43 @@ public:
   void converTo(const cv::Mat &Img,uint flag =0);
 //   void gradientMag(const cv::Mat img,cv::Mat &Gradient,const int orientation=2,const int channel=0,const int normRad=0,const float normConst=0.005,const int full=0);
   void showMat(std::string name,cv::Mat imgMat);
+  void computeLabels(std::vector<cv::Mat> Imgs);
+  std::vector<tuple<cv::Mat, cv::Mat>> & getEdgeChnns(){
+    return edgeChnns;
+  }
 private:
  // cv::Mat Img;//- [h x w x 3] color input image
 //   cv::Mat chnsReg;//- [h x w x nChannel] regular output channels
 //   cv::Mat chnsSim;//- [h x w x nChannel] self-similarity output channels
-  std::vector<tuple<Mat, Mat>>  edgeChnns;
+  std::vector<tuple<cv::Mat, cv::Mat>>  edgeChnns;
   //feature parameters:
-  unsigned int nOrients  ;// - [4] number of orientations per gradient scale
-  unsigned int grdSmooth ;// - [0] radius for image gradient smoothing (using convTri)
-  unsigned int chnSmooth;//  - [2] radius for reg channel smoothing (using convTri)
-  unsigned int simSmooth;//  - [8] radius for sim channel smoothing (using convTri)
-  unsigned int normRad ;//   - [4] gradient normalization radius (see gradientMag)
-  unsigned int shrink  ;//   - [2] amount to shrink channels
-//   unsigned int nCells    ;// - [5] number of self similarity cells
-  unsigned int nChns;
+  UInt nOrients  ;// - [4] number of orientations per gradient scale
+  UInt grdSmooth ;// - [0] radius for image gradient smoothing (using convTri)
+  UInt chnSmooth;//  - [2] radius for reg channel smoothing (using convTri)
+  UInt simSmooth;//  - [8] radius for sim channel smoothing (using convTri)
+  UInt normRad ;//   - [4] gradient normalization radius (see gradientMag)
+  UInt shrink  ;//   - [2] amount to shrink channels
+  UInt nChns;
   RGBG rgbd     ;//  - [0] 0:RGB, 1:depth, 2:RBG+depth (for NYU data only)  
+  
+  
+  //label parameters:
+  
  
 };
 
 
 EdgeFeature::EdgeFeature
-(const RGBG _rgbd,const unsigned int _nChns,const unsigned int _shrink,const unsigned int _nOrients,const unsigned int _grdSmooth,const unsigned int _normRad,const unsigned int _simSmooth,const unsigned int _chnSmooth)
+(const RGBG _rgbd,const UInt _nChns,const UInt _shrink,const UInt _nOrients,const UInt _grdSmooth,const UInt _normRad,const UInt _simSmooth,const UInt _chnSmooth)
 :rgbd(_rgbd),nChns(_nChns),shrink(_shrink),nOrients(_nOrients),grdSmooth(_grdSmooth),normRad(_normRad),simSmooth(_simSmooth),chnSmooth(_chnSmooth)
 {
 
   
 }
+
+
+
+
 void EdgeFeature::onResample
 (const cv::Mat& img, const float scale, cv::Mat& outImg)
 {
@@ -87,6 +98,25 @@ void EdgeFeature::showMat(std::string name,cv::Mat imgMat)
   cv::waitKey(); 
   std::getchar();
   cv::destroyWindow(name);
+}
+void EdgeFeature::computeLabels(std::vector<cv::Mat > Imgs)
+{
+  int nImg = Imgs.size();
+  for (int i=0;i<nImg;i++){
+    
+    cv::Mat M=Imgs[i]; 
+    cv::Mat bw=TL::bwdist(M,3);
+    showMat("bw",bw);
+//     M(bwdist(M)<gtRadius)=1;
+//     [y,x]=find(M.*B); k2=min(length(y),ceil(nPos/nImgs/nGt));
+//     rp=randperm(length(y),k2); y=y(rp); x=x(rp);
+//     xy=[xy; x y ones(k2,1)*j]; k1=k1+k2; %#ok<AGROW>
+//     [y,x]=find(~M.*B); k2=min(length(y),ceil(nNeg/nImgs/nGt));
+//     rp=randperm(length(y),k2); y=y(rp); x=x(rp);
+//     xy=[xy; x y ones(k2,1)*j]; k1=k1+k2; %#ok<AGROW>
+   
+     
+  }
 }
 
 // Convert from rgb to luv
@@ -141,10 +171,10 @@ bool EdgeFeature::computeEdgesChns(cv::Mat Img)
   Mat luv_I(rowsiz, colsiz, CV_32FC3);;
   Mat I_shrink;
   luv_I = TL::rgbToLuvu(Img);
+
   luv_I.convertTo(Img, CV_32FC3);
 
   luv_I.release();
-  
   
   
   double scale = (double) 1 / shrink;
@@ -176,7 +206,8 @@ bool EdgeFeature::computeEdgesChns(cv::Mat Img)
       double rescale = (double) s / shrink;
       resize(M, M_re, Size(), rescale, rescale);
       resize(H, H_re, Size(), fmax(1, rescale), fmax(1, rescale));
-      showMat("M",M);
+//       showMat("M",H);
+
       mergemat[k] = M_re;
       k++;
       mergemat[k] = H_re;

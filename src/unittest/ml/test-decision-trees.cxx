@@ -6,14 +6,16 @@
 #include "andres/ml/decision-trees.hxx"
 #include "edge/EdgeFeature.hpp"
 #include "edge/ReadImg.hpp"
+#include "edge/EdgeDetector.hpp"
 // inline void test(const bool& x) { 
 //     if(!x) throw std::logic_error("test failed."); 
 // }
 
 int main() {
   
-  ED::FileSys fileSys("/home/qqh/DataSets/BSR/BSDS500/data/","/home/qqh/DataSets/BSR/BSDS500/data/");
-  fileSys.readImg(ED::PathType::train );
+   ED::FileSys fileSys("/home/qqh/DataSets/BSR/BSDS500/data/","/home/qqh/DataSets/BSR/BSDS500/data/");
+   fileSys.readImg(ED::PathType::test );
+  ED::EdgeDetector edgeDetector_("/home/qqh/projects/RandomForest/model.yml");
   
  /*   
     const size_t numberOfSamples = 100;

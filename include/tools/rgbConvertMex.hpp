@@ -15,11 +15,11 @@
 
 #include "model.h"
 #include "imgCvt.hpp"
-using namespace std;
-using namespace cv;
 namespace TL{
 //for uint8 mat
 
+using namespace std;
+using namespace cv;
 
 // Constants for rgb2luv conversion and lookup table for y-> l conversion
 template<class oT>
