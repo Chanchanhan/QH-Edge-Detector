@@ -4,8 +4,8 @@
 #include <string>
 
 #include "tools//glm.h"
-#include "edge/CameraCalibration.h"
-namespace ED
+#include "ObjectDetector/CameraCalibration.h"
+namespace OD
 {
   class Config
   {

@@ -8,7 +8,7 @@
 using namespace std;
 using namespace cv;
 
-namespace ED
+namespace OD
 {
 class CameraCalibration
 {

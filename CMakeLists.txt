@@ -4,7 +4,8 @@ include_directories(include)
 file(GLOB headers include/andres/* include/andres/ml/* include/edge/* include/tools/* include/ObjectDetector/*)
 enable_testing()
 
-aux_source_directory(./src SRC_LIST)
+aux_source_directory(./src  SRC_LIST)
+# aux_source_directory(./src/Quaternion.cpp  SRC_LIST)
 
 set( CMAKE_CXX_COMPILER "g++" )
 set( CMAKE_BUILD_TYPE "Debug" )
@@ -86,17 +87,22 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 ##############################################################################
 # targets
 ##############################################################################
-# add_executable(test-decision-trees src/unittest/ml/test-decision-trees.cxx ${headers})
-add_executable(test-Edge-detector src/unittest/ml/test-Edge-detector.cpp ${headers} ${SRC_LIST})
-
-# add_test(test-decision-trees test-decision-trees)
-
-add_test(test-Edge-detector test-Edge-detector)
+# 
+# add_executable(test-Edge-detector src/unittest/test-obj-detector.cpp ${headers} ${SRC_LIST})
+# add_test(test-Edge-detector test-Edge-detector)
+# target_link_libraries( test-Edge-detector ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}) # exe 链接 OpenCV
 
 
-# target_link_libraries( test-decision-trees ${OpenCV_LIBS} ) # exe 链接 OpenCV
 
-target_link_libraries( test-Edge-detector ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}) # exe 链接 OpenCV
+add_executable(test-model src/unittest/test-model.cpp ${headers} ${SRC_LIST})
+add_test(test-model test-Edge-detector)
+target_link_libraries( test-model ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}) # exe 链接 OpenCV
+
+
+
+add_executable(test-optimizer src/unittest/test-optimizer.cpp ${headers} ${SRC_LIST})
+add_test(test-optimizer test-Edge-detector)
+target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}) # exe 链接 OpenCV
 
 # set( 
 #     THIRD_PARTY_LIBS

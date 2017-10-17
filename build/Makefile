@@ -67,17 +67,6 @@ test/fast: test
 
 .PHONY : test/fast
 
-# Special rule for the target edit_cache
-edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : edit_cache
-
-# Special rule for the target edit_cache
-edit_cache/fast: edit_cache
-
-.PHONY : edit_cache/fast
-
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
@@ -88,6 +77,17 @@ rebuild_cache:
 rebuild_cache/fast: rebuild_cache
 
 .PHONY : rebuild_cache/fast
+
+# Special rule for the target edit_cache
+edit_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : edit_cache
+
+# Special rule for the target edit_cache
+edit_cache/fast: edit_cache
+
+.PHONY : edit_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -122,17 +122,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test-Edge-detector
+# Target rules for targets named test-model
 
 # Build rule for target.
-test-Edge-detector: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test-Edge-detector
-.PHONY : test-Edge-detector
+test-model: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test-model
+.PHONY : test-model
 
 # fast build rule for target.
-test-Edge-detector/fast:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/build
-.PHONY : test-Edge-detector/fast
+test-model/fast:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/build
+.PHONY : test-model/fast
+
+#=============================================================================
+# Target rules for targets named test-optimizer
+
+# Build rule for target.
+test-optimizer: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test-optimizer
+.PHONY : test-optimizer
+
+# fast build rule for target.
+test-optimizer/fast:
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/build
+.PHONY : test-optimizer/fast
 
 src/CameraCalibration.o: src/CameraCalibration.cpp.o
 
@@ -140,7 +153,8 @@ src/CameraCalibration.o: src/CameraCalibration.cpp.o
 
 # target to build an object file
 src/CameraCalibration.cpp.o:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.o
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/CameraCalibration.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o
 .PHONY : src/CameraCalibration.cpp.o
 
 src/CameraCalibration.i: src/CameraCalibration.cpp.i
@@ -149,7 +163,8 @@ src/CameraCalibration.i: src/CameraCalibration.cpp.i
 
 # target to preprocess a source file
 src/CameraCalibration.cpp.i:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.i
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/CameraCalibration.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.i
 .PHONY : src/CameraCalibration.cpp.i
 
 src/CameraCalibration.s: src/CameraCalibration.cpp.s
@@ -158,8 +173,99 @@ src/CameraCalibration.s: src/CameraCalibration.cpp.s
 
 # target to generate assembly for a file
 src/CameraCalibration.cpp.s:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.s
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/CameraCalibration.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.s
 .PHONY : src/CameraCalibration.cpp.s
+
+src/Model.o: src/Model.cpp.o
+
+.PHONY : src/Model.o
+
+# target to build an object file
+src/Model.cpp.o:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Model.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Model.cpp.o
+.PHONY : src/Model.cpp.o
+
+src/Model.i: src/Model.cpp.i
+
+.PHONY : src/Model.i
+
+# target to preprocess a source file
+src/Model.cpp.i:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Model.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Model.cpp.i
+.PHONY : src/Model.cpp.i
+
+src/Model.s: src/Model.cpp.s
+
+.PHONY : src/Model.s
+
+# target to generate assembly for a file
+src/Model.cpp.s:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Model.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Model.cpp.s
+.PHONY : src/Model.cpp.s
+
+src/Optimizer.o: src/Optimizer.cpp.o
+
+.PHONY : src/Optimizer.o
+
+# target to build an object file
+src/Optimizer.cpp.o:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Optimizer.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o
+.PHONY : src/Optimizer.cpp.o
+
+src/Optimizer.i: src/Optimizer.cpp.i
+
+.PHONY : src/Optimizer.i
+
+# target to preprocess a source file
+src/Optimizer.cpp.i:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Optimizer.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.i
+.PHONY : src/Optimizer.cpp.i
+
+src/Optimizer.s: src/Optimizer.cpp.s
+
+.PHONY : src/Optimizer.s
+
+# target to generate assembly for a file
+src/Optimizer.cpp.s:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Optimizer.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.s
+.PHONY : src/Optimizer.cpp.s
+
+src/Quaternion.o: src/Quaternion.cpp.o
+
+.PHONY : src/Quaternion.o
+
+# target to build an object file
+src/Quaternion.cpp.o:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Quaternion.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o
+.PHONY : src/Quaternion.cpp.o
+
+src/Quaternion.i: src/Quaternion.cpp.i
+
+.PHONY : src/Quaternion.i
+
+# target to preprocess a source file
+src/Quaternion.cpp.i:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Quaternion.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.i
+.PHONY : src/Quaternion.cpp.i
+
+src/Quaternion.s: src/Quaternion.cpp.s
+
+.PHONY : src/Quaternion.s
+
+# target to generate assembly for a file
+src/Quaternion.cpp.s:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Quaternion.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.s
+.PHONY : src/Quaternion.cpp.s
 
 src/Render.o: src/Render.cpp.o
 
@@ -167,7 +273,8 @@ src/Render.o: src/Render.cpp.o
 
 # target to build an object file
 src/Render.cpp.o:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Render.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Render.cpp.o
 .PHONY : src/Render.cpp.o
 
 src/Render.i: src/Render.cpp.i
@@ -176,7 +283,8 @@ src/Render.i: src/Render.cpp.i
 
 # target to preprocess a source file
 src/Render.cpp.i:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/Render.cpp.i
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Render.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Render.cpp.i
 .PHONY : src/Render.cpp.i
 
 src/Render.s: src/Render.cpp.s
@@ -185,7 +293,8 @@ src/Render.s: src/Render.cpp.s
 
 # target to generate assembly for a file
 src/Render.cpp.s:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/Render.cpp.s
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Render.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Render.cpp.s
 .PHONY : src/Render.cpp.s
 
 src/glm.o: src/glm.cpp.o
@@ -194,7 +303,8 @@ src/glm.o: src/glm.cpp.o
 
 # target to build an object file
 src/glm.cpp.o:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/glm.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/glm.cpp.o
 .PHONY : src/glm.cpp.o
 
 src/glm.i: src/glm.cpp.i
@@ -203,7 +313,8 @@ src/glm.i: src/glm.cpp.i
 
 # target to preprocess a source file
 src/glm.cpp.i:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/glm.cpp.i
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/glm.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/glm.cpp.i
 .PHONY : src/glm.cpp.i
 
 src/glm.s: src/glm.cpp.s
@@ -212,35 +323,63 @@ src/glm.s: src/glm.cpp.s
 
 # target to generate assembly for a file
 src/glm.cpp.s:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/glm.cpp.s
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/glm.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/glm.cpp.s
 .PHONY : src/glm.cpp.s
 
-src/unittest/ml/test-Edge-detector.o: src/unittest/ml/test-Edge-detector.cpp.o
+src/unittest/test-model.o: src/unittest/test-model.cpp.o
 
-.PHONY : src/unittest/ml/test-Edge-detector.o
+.PHONY : src/unittest/test-model.o
 
 # target to build an object file
-src/unittest/ml/test-Edge-detector.cpp.o:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o
-.PHONY : src/unittest/ml/test-Edge-detector.cpp.o
+src/unittest/test-model.cpp.o:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o
+.PHONY : src/unittest/test-model.cpp.o
 
-src/unittest/ml/test-Edge-detector.i: src/unittest/ml/test-Edge-detector.cpp.i
+src/unittest/test-model.i: src/unittest/test-model.cpp.i
 
-.PHONY : src/unittest/ml/test-Edge-detector.i
+.PHONY : src/unittest/test-model.i
 
 # target to preprocess a source file
-src/unittest/ml/test-Edge-detector.cpp.i:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.i
-.PHONY : src/unittest/ml/test-Edge-detector.cpp.i
+src/unittest/test-model.cpp.i:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/unittest/test-model.cpp.i
+.PHONY : src/unittest/test-model.cpp.i
 
-src/unittest/ml/test-Edge-detector.s: src/unittest/ml/test-Edge-detector.cpp.s
+src/unittest/test-model.s: src/unittest/test-model.cpp.s
 
-.PHONY : src/unittest/ml/test-Edge-detector.s
+.PHONY : src/unittest/test-model.s
 
 # target to generate assembly for a file
-src/unittest/ml/test-Edge-detector.cpp.s:
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.s
-.PHONY : src/unittest/ml/test-Edge-detector.cpp.s
+src/unittest/test-model.cpp.s:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/unittest/test-model.cpp.s
+.PHONY : src/unittest/test-model.cpp.s
+
+src/unittest/test-optimizer.o: src/unittest/test-optimizer.cpp.o
+
+.PHONY : src/unittest/test-optimizer.o
+
+# target to build an object file
+src/unittest/test-optimizer.cpp.o:
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o
+.PHONY : src/unittest/test-optimizer.cpp.o
+
+src/unittest/test-optimizer.i: src/unittest/test-optimizer.cpp.i
+
+.PHONY : src/unittest/test-optimizer.i
+
+# target to preprocess a source file
+src/unittest/test-optimizer.cpp.i:
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.i
+.PHONY : src/unittest/test-optimizer.cpp.i
+
+src/unittest/test-optimizer.s: src/unittest/test-optimizer.cpp.s
+
+.PHONY : src/unittest/test-optimizer.s
+
+# target to generate assembly for a file
+src/unittest/test-optimizer.cpp.s:
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.s
+.PHONY : src/unittest/test-optimizer.cpp.s
 
 # Help Target
 help:
@@ -249,21 +388,34 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... test"
-	@echo "... edit_cache"
+	@echo "... test-model"
+	@echo "... test-optimizer"
 	@echo "... rebuild_cache"
-	@echo "... test-Edge-detector"
+	@echo "... edit_cache"
 	@echo "... src/CameraCalibration.o"
 	@echo "... src/CameraCalibration.i"
 	@echo "... src/CameraCalibration.s"
+	@echo "... src/Model.o"
+	@echo "... src/Model.i"
+	@echo "... src/Model.s"
+	@echo "... src/Optimizer.o"
+	@echo "... src/Optimizer.i"
+	@echo "... src/Optimizer.s"
+	@echo "... src/Quaternion.o"
+	@echo "... src/Quaternion.i"
+	@echo "... src/Quaternion.s"
 	@echo "... src/Render.o"
 	@echo "... src/Render.i"
 	@echo "... src/Render.s"
 	@echo "... src/glm.o"
 	@echo "... src/glm.i"
 	@echo "... src/glm.s"
-	@echo "... src/unittest/ml/test-Edge-detector.o"
-	@echo "... src/unittest/ml/test-Edge-detector.i"
-	@echo "... src/unittest/ml/test-Edge-detector.s"
+	@echo "... src/unittest/test-model.o"
+	@echo "... src/unittest/test-model.i"
+	@echo "... src/unittest/test-model.s"
+	@echo "... src/unittest/test-optimizer.o"
+	@echo "... src/unittest/test-optimizer.i"
+	@echo "... src/unittest/test-optimizer.s"
 .PHONY : help
 
 

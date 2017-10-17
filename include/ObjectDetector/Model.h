@@ -4,8 +4,8 @@
 #include "tools/glm.h"
 #include <string>
 #include <opencv2/core.hpp>
-#include "edge/CameraCalibration.h"
-#include "edge/Model_Config.h"
+#include "ObjectDetector/CameraCalibration.h"
+#include "ObjectDetector/Model_Config.h"
 #include "ObjectDetector/PointSet.hpp"
 namespace OD
 {
@@ -20,7 +20,7 @@ namespace OD
 		PointSet& GetVisibleModelPointsCV(const cv::Mat& prepose, int pointnum);
 		
 		void GetImagePoints(const cv::Mat& prepose, PointSet& pointset);
-		
+		void setPointSet();
 		void DisplayCV(const cv::Mat& pose, cv::Mat& frame);
 		void DisplayGL(const cv::Mat& pose);
 	public:
@@ -30,13 +30,15 @@ namespace OD
 		void InitPose(const cv::Mat& initPose);
 		void getIntrinsic(cv::Mat& intrinsic) const;
 		
+		
 		cv::Mat GetPoseMatrix();
+		cv::Mat GetPoseMatrix(cv::Mat pose);
 		GLMmodel* GetObjModel();
 		cv::Mat m_rvec;
 		cv::Mat m_tvec;
 	private:
 		GLMmodel* m_model;
-		ED::CameraCalibration m_calibration;
+		OD::CameraCalibration m_calibration;
 		int m_width;
 		int m_height;
 		PointSet m_point_set;

@@ -55,5 +55,6 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/test-Edge-detector.dir/DependInfo.cmake"
+  "CMakeFiles/test-model.dir/DependInfo.cmake"
+  "CMakeFiles/test-optimizer.dir/DependInfo.cmake"
   )

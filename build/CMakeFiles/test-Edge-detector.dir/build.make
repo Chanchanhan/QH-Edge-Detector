@@ -57,28 +57,28 @@ include CMakeFiles/test-Edge-detector.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/test-Edge-detector.dir/flags.make
 
-CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o: CMakeFiles/test-Edge-detector.dir/flags.make
-CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o: ../src/unittest/ml/test-Edge-detector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o"
-	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o -c /home/qqh/projects/RandomForest/src/unittest/ml/test-Edge-detector.cpp
+CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o: CMakeFiles/test-Edge-detector.dir/flags.make
+CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o: ../src/unittest/test-obj-detector.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o"
+	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o -c /home/qqh/projects/RandomForest/src/unittest/test-obj-detector.cpp
 
-CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.i"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/qqh/projects/RandomForest/src/unittest/ml/test-Edge-detector.cpp > CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.i
+CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.i"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/qqh/projects/RandomForest/src/unittest/test-obj-detector.cpp > CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.i
 
-CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.s"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/qqh/projects/RandomForest/src/unittest/ml/test-Edge-detector.cpp -o CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.s
+CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.s"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/qqh/projects/RandomForest/src/unittest/test-obj-detector.cpp -o CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.s
 
-CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o.requires:
+CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o.requires:
 
-.PHONY : CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o.requires
+.PHONY : CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o.requires
 
-CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o.provides: CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o.requires
-	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o.provides.build
-.PHONY : CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o.provides
+CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o.provides: CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o.requires
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o.provides.build
+.PHONY : CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o.provides
 
-CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o.provides.build: CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o
+CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o.provides.build: CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o
 
 
 CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.o: CMakeFiles/test-Edge-detector.dir/flags.make
@@ -129,9 +129,57 @@ CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o.provides: CMakeFiles/test-Edg
 CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o.provides.build: CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o
 
 
+CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o: CMakeFiles/test-Edge-detector.dir/flags.make
+CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o: ../src/Model.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o"
+	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o -c /home/qqh/projects/RandomForest/src/Model.cpp
+
+CMakeFiles/test-Edge-detector.dir/src/Model.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test-Edge-detector.dir/src/Model.cpp.i"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/qqh/projects/RandomForest/src/Model.cpp > CMakeFiles/test-Edge-detector.dir/src/Model.cpp.i
+
+CMakeFiles/test-Edge-detector.dir/src/Model.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test-Edge-detector.dir/src/Model.cpp.s"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/qqh/projects/RandomForest/src/Model.cpp -o CMakeFiles/test-Edge-detector.dir/src/Model.cpp.s
+
+CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o.requires:
+
+.PHONY : CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o.requires
+
+CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o.provides: CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o.requires
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o.provides.build
+.PHONY : CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o.provides
+
+CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o.provides.build: CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o
+
+
+CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o: CMakeFiles/test-Edge-detector.dir/flags.make
+CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o: ../src/Optimizer.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o"
+	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o -c /home/qqh/projects/RandomForest/src/Optimizer.cpp
+
+CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.i"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/qqh/projects/RandomForest/src/Optimizer.cpp > CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.i
+
+CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.s"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/qqh/projects/RandomForest/src/Optimizer.cpp -o CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.s
+
+CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o.requires:
+
+.PHONY : CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o.requires
+
+CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o.provides: CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o.requires
+	$(MAKE) -f CMakeFiles/test-Edge-detector.dir/build.make CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o.provides.build
+.PHONY : CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o.provides
+
+CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o.provides.build: CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o
+
+
 CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o: CMakeFiles/test-Edge-detector.dir/flags.make
 CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o: ../src/glm.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o -c /home/qqh/projects/RandomForest/src/glm.cpp
 
 CMakeFiles/test-Edge-detector.dir/src/glm.cpp.i: cmake_force
@@ -155,17 +203,21 @@ CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o.provides.build: CMakeFiles/test-
 
 # Object files for target test-Edge-detector
 test__Edge__detector_OBJECTS = \
-"CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o" \
+"CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o" \
 "CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.o" \
 "CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o" \
+"CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o" \
+"CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o" \
 "CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o"
 
 # External object files for target test-Edge-detector
 test__Edge__detector_EXTERNAL_OBJECTS =
 
-test-Edge-detector: CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o
+test-Edge-detector: CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o
 test-Edge-detector: CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.o
 test-Edge-detector: CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o
+test-Edge-detector: CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o
+test-Edge-detector: CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o
 test-Edge-detector: CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o
 test-Edge-detector: CMakeFiles/test-Edge-detector.dir/build.make
 test-Edge-detector: /usr/local/lib/libopencv_xphoto.so.3.1.0
@@ -216,7 +268,7 @@ test-Edge-detector: /usr/local/lib/libopencv_imgproc.so.3.1.0
 test-Edge-detector: /usr/local/lib/libopencv_flann.so.3.1.0
 test-Edge-detector: /usr/local/lib/libopencv_core.so.3.1.0
 test-Edge-detector: CMakeFiles/test-Edge-detector.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable test-Edge-detector"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable test-Edge-detector"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test-Edge-detector.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -224,9 +276,11 @@ CMakeFiles/test-Edge-detector.dir/build: test-Edge-detector
 
 .PHONY : CMakeFiles/test-Edge-detector.dir/build
 
-CMakeFiles/test-Edge-detector.dir/requires: CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o.requires
+CMakeFiles/test-Edge-detector.dir/requires: CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o.requires
 CMakeFiles/test-Edge-detector.dir/requires: CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.o.requires
 CMakeFiles/test-Edge-detector.dir/requires: CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o.requires
+CMakeFiles/test-Edge-detector.dir/requires: CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o.requires
+CMakeFiles/test-Edge-detector.dir/requires: CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o.requires
 CMakeFiles/test-Edge-detector.dir/requires: CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o.requires
 
 .PHONY : CMakeFiles/test-Edge-detector.dir/requires

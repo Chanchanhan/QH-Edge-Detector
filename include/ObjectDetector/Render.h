@@ -6,9 +6,9 @@
 #include <GL/freeglut.h>
 
 #include "tools/glm.h"
-#include "edge/CameraCalibration.h"
+#include "ObjectDetector/CameraCalibration.h"
 #include <opencv2/core/core.hpp>
-using namespace ED;
+using namespace OD;
 namespace ORD
 {
 

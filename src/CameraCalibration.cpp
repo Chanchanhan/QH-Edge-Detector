@@ -1,5 +1,5 @@
-#include "edge/CameraCalibration.h"
-using namespace ED;
+#include "ObjectDetector/CameraCalibration.h"
+using namespace OD;
 CameraCalibration::CameraCalibration() : m_intrinsic(3,3,CV_32FC1), m_extrinsic(4,4,CV_32FC1)
 {
   m_intrinsic1 = cv::Matx33f::eye();

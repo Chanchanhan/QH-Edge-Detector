@@ -153,32 +153,18 @@ pattern=__pycache__
 targets=2
 
 [Launch]
-Launch Configurations=Launch Configuration 0,Launch Configuration 1,Launch Configuration 2
+Launch Configurations=Launch Configuration 1,Launch Configuration 2,Launch Configuration 7,Launch Configuration 0,Launch Configuration 3
 
 [Launch][Launch Configuration 0]
-Configured Launch Modes=execute
-Configured Launchers=nativeAppLauncher
-Name=New Compiled Binary Launcher
+Configured Launch Modes=debug
+Configured Launchers=gdb
+Name=test-model
 Type=Native Application
 
 [Launch][Launch Configuration 0][Data]
-Arguments=
-Debugger Shell=
-Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
-Dependency Action=Build
-Display Demangle Names=false
-Display Static Members=false
-EnvironmentGroup=
-Executable=file:///home/qqh/projects/RandomForest/
-External Terminal=gnome-terminal -e %exe
-GDB Path=
-Project Target=RandomForest,test-Edge-detector
-Remote GDB Config Script=
-Remote GDB Run Script=
-Remote GDB Shell Script=
-Start With=ApplicationOutput
-Use External Terminal=true
-Working Directory=
+Configured from ProjectItem=RandomForest,test-model
+Project Target=RandomForest,test-model
+Working Directory=file:///home/qqh/projects/RandomForest/build/
 isExecutable=false
 
 [Launch][Launch Configuration 1]
@@ -188,8 +174,15 @@ Name=test-Edge-detector
 Type=Native Application
 
 [Launch][Launch Configuration 1][Data]
+Arguments=
 Configured from ProjectItem=RandomForest,test-Edge-detector
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=
+Executable=file:///home/qqh/projects/RandomForest/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
 Project Target=RandomForest,test-Edge-detector
+Use External Terminal=false
 Working Directory=file:///home/qqh/projects/RandomForest/build/
 isExecutable=false
 
@@ -200,8 +193,60 @@ Name=test-decision-trees
 Type=Native Application
 
 [Launch][Launch Configuration 2][Data]
+Arguments=
 Configured from ProjectItem=RandomForest,test-decision-trees
-Project Target=RandomForest,test-decision-trees
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=
+Executable=file:///home/qqh/projects/RandomForest/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=RandomForest,test-Edge-detector
+Use External Terminal=false
+Working Directory=file:///home/qqh/projects/RandomForest/build/
+isExecutable=false
+
+[Launch][Launch Configuration 3]
+Configured Launch Modes=debug
+Configured Launchers=gdb
+Name=test-optimizer
+Type=Native Application
+
+[Launch][Launch Configuration 3][Data]
+Arguments=
+Configured from ProjectItem=RandomForest,test-optimizer
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=
+Executable=file:///home/qqh/projects/RandomForest/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+Project Target=RandomForest,test-optimizer
+Use External Terminal=false
+Working Directory=file:///home/qqh/projects/RandomForest/build/
+isExecutable=false
+
+[Launch][Launch Configuration 7]
+Configured Launch Modes=debug
+Configured Launchers=gdb
+Name=test-model
+Type=Native Application
+
+[Launch][Launch Configuration 7][Data]
+Arguments=
+Debugger Shell=
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+Display Demangle Names=true
+Display Static Members=false
+EnvironmentGroup=
+Executable=file:///home/qqh/projects/RandomForest/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
+GDB Path=
+Project Target=RandomForest,test-model
+Remote GDB Config Script=
+Remote GDB Run Script=
+Remote GDB Shell Script=
+Start With=ApplicationOutput
+Use External Terminal=false
 Working Directory=file:///home/qqh/projects/RandomForest/build/
 isExecutable=false
 

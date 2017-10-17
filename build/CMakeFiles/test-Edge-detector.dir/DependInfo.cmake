@@ -5,9 +5,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/qqh/projects/RandomForest/src/CameraCalibration.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-Edge-detector.dir/src/CameraCalibration.cpp.o"
+  "/home/qqh/projects/RandomForest/src/Model.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-Edge-detector.dir/src/Model.cpp.o"
+  "/home/qqh/projects/RandomForest/src/Optimizer.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-Edge-detector.dir/src/Optimizer.cpp.o"
   "/home/qqh/projects/RandomForest/src/Render.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-Edge-detector.dir/src/Render.cpp.o"
   "/home/qqh/projects/RandomForest/src/glm.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-Edge-detector.dir/src/glm.cpp.o"
-  "/home/qqh/projects/RandomForest/src/unittest/ml/test-Edge-detector.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-Edge-detector.dir/src/unittest/ml/test-Edge-detector.cpp.o"
+  "/home/qqh/projects/RandomForest/src/unittest/test-obj-detector.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-Edge-detector.dir/src/unittest/test-obj-detector.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

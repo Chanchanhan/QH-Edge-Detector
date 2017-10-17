@@ -1,6 +1,7 @@
 #ifndef _GLM_
 #define _GLM_
 #include <vector>
+#include <stdio.h>
 #if defined(__APPLE__) || defined(MACOSX)
 #include <GLUT/glut.h>
 #else
@@ -89,7 +90,12 @@ typedef struct _GLMmodel {
   GLuint  numLines;
   GLMLine* lines;
   //std::vector<GLMLine> lines; //cÓïÑÔÖÐÃ»ÓÐµ÷ÓÃ¹¹Ôìº¯Êý£¬²»ÄÜÓÃ£¬³ý·ÇÓÃnew (&model->lines) std::vector<GLMLine>,µï±¤µÄÓï·¨
-
+  void printV(){
+    for(int i =1;i<=numvertices;i++){
+      printf("printV%d : x %f  y %f z %f\n",i,vertices[i*3+0],vertices[i*3+1],vertices[i*3+1]);
+      
+    }
+  }
 } GLMmodel;
 
 

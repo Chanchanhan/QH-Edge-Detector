@@ -1,4 +1,4 @@
-#include "edge/Render.h"
+#include "ObjectDetector/Render.h"
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
 
@@ -662,7 +662,7 @@ cv::Mat Render::getRenderedImg(const cv::Point p1, const cv::Point p2)
 	return bufferImg;
 }
 
-void Render::buildProjectionMatrix(const ED::CameraCalibration& calibration, GLfloat* projectionMatrix)
+void Render::buildProjectionMatrix(const OD::CameraCalibration& calibration, GLfloat* projectionMatrix)
 {
 	int screen_width = m_width;
 	int screen_height = m_height;
