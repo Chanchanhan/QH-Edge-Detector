@@ -601,6 +601,7 @@ glmSecondPass(GLMmodel* model, FILE* file)
     numvertices = numnormals = numtexcoords = 1;
     numtriangles = 0;
     material = 0;
+    
     while(fscanf(file, "%s", buf) != EOF) {
         switch(buf[0]) {
         case '#':               /* comment */

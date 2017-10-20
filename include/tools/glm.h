@@ -56,6 +56,9 @@ typedef struct _GLMgroup {
 typedef struct _GLMLine {
 	GLuint vindices[2];
 	GLuint e1,e2;
+	float n1[3],n2[3];
+	bool visible;
+
 } GLMLine;
 
 /* GLMmodel: Structure that defines a model.
@@ -90,12 +93,7 @@ typedef struct _GLMmodel {
   GLuint  numLines;
   GLMLine* lines;
   //std::vector<GLMLine> lines; //cÓïÑÔÖÐÃ»ÓÐµ÷ÓÃ¹¹Ôìº¯Êý£¬²»ÄÜÓÃ£¬³ý·ÇÓÃnew (&model->lines) std::vector<GLMLine>,µï±¤µÄÓï·¨
-  void printV(){
-    for(int i =1;i<=numvertices;i++){
-      printf("printV%d : x %f  y %f z %f\n",i,vertices[i*3+0],vertices[i*3+1],vertices[i*3+1]);
-      
-    }
-  }
+
 } GLMmodel;
 
 

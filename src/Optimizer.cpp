@@ -6,7 +6,7 @@
 #include "ObjectDetector/Optimizer.h"
 using namespace OD;
 const int MAX_ITERATIN_NUM =100;
-const float THREHOLD_ENERGY = 9000.0f;
+const float THREHOLD_ENERGY = 8000.0f;
 const float STEP_LENGTH = 0.00001f;
 static void printMat(std::string name, cv::Mat M){
   cout<<name<<std::endl;;
@@ -50,6 +50,7 @@ Optimizer::~Optimizer()
 
 cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const int frameId)
 {
+  
   int64 time0 = cv::getTickCount();
   {
     std::vector<m_img_point_data> m_img_points_data;  
@@ -65,7 +66,7 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const int 
     cv::Mat _prePose =prePose.clone();
     int itration_num=0;
     cv::Mat newPose=cv::Mat::zeros(1,6,CV_32FC1);
-
+    m_data.m_model->generatePoints();
     float e2 = computeEnergy(_prePose,m_img_points_data,nPoints);
 
     while(++itration_num<MAX_ITERATIN_NUM){      
@@ -73,7 +74,7 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const int 
       if(e2<THREHOLD_ENERGY){
 	break;
       }
-      constructEnergyFunction(nPoints,A,b);
+      constructEnergyFunction(prePose, nPoints,A,b);
       Mat A_inverse ;
       cv::invert(A,A_inverse);
     //  printMat("b",b);
@@ -83,11 +84,11 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const int 
       UpdateStateLM(dX,_prePose,newPose);
       std::vector<cv::Point> new_nPoints;
       float e2_new = computeEnergy(newPose,m_img_points_data,new_nPoints);
-      printf("e2 :%f e2_new:%f \n",e2,e2_new);
       if(e2_new<e2){
+	printf("e2 :%f e2_new:%f \n",e2,e2_new);
+	computeEnergy(newPose,m_img_points_data,new_nPoints,true);
 	_prePose=newPose.clone();
 	e2= e2_new;
-	printf("a little optimize\n");
       }
       if(e2_new<THREHOLD_ENERGY){
 	printf("succees optimize!\n");
@@ -105,36 +106,49 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const int 
   //printf("solving time:%lf\n",(time_s1-time_s)/cv::getTickFrequency());
 }
 
-void Optimizer::constructEnergyFunction(const std::vector<cv::Point> &nPoints , cv::Mat &A, cv::Mat &b){
+void Optimizer::constructEnergyFunction(const cv::Mat prePose, const std::vector<cv::Point> &nPoints , cv::Mat &A, cv::Mat &b){
   cv::Mat j_X_Pose= cv::Mat::zeros(2,6,CV_32FC1);
   cv::Mat j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
   float coffes = 1.0f/nPoints.size();
+  cv::Mat W_to_C= m_data.m_model->GetPoseMatrix(prePose);
   for(int i=1;i<=m_data.m_model->GetObjModel()->numvertices;i++){
     cv::Mat _j_X_Pose = cv::Mat::zeros(2,6,CV_32FC1);
     cv::Mat _j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
-    float _x=m_data.m_model->GetObjModel()->vertices[i*3+0];
-    float _y=m_data.m_model->GetObjModel()->vertices[i*3+1];
-    float _z=m_data.m_model->GetObjModel()->vertices[i*3+2];
-    _j_X_Pose.at<float>(0,0)+=m_calibration.fx()/_z; 
-    _j_X_Pose.at<float>(0,2)+=-m_calibration.fx()*_x/(_z*_z);
-    _j_X_Pose.at<float>(0,3)+=-m_calibration.fx()*_x*_y/(_z*_z);
-    _j_X_Pose.at<float>(0,4)+=m_calibration.fx()*(1+_x*_x/(_z*_z));
-    _j_X_Pose.at<float>(0,5)+=m_calibration.fx()*_y/_z;
+    
 
+    cv::Mat W_X(4,1,CV_32FC1),C_X(1,4,CV_32FC1);
+    W_X.at<float>(0,0)=m_data.m_model->GetObjModel()->vertices[i*3+0];
+    W_X.at<float>(0,1)=m_data.m_model->GetObjModel()->vertices[i*3+1];
+    W_X.at<float>(2,2)=m_data.m_model->GetObjModel()->vertices[i*3+2];
+    W_X.at<float>(3,0)=1;
+    C_X=W_to_C*W_X;
+//     printMat("C_X",C_X);
+    float _x=C_X.at<float>(0,0);
+    float _y=C_X.at<float>(0,1);
+    float _z=C_X.at<float>(0,2);
+    _j_X_Pose.at<float>(0,0)=m_calibration.fx()/_z; 
+    _j_X_Pose.at<float>(0,1)=0;
+    _j_X_Pose.at<float>(0,2)=-m_calibration.fx()*_x/(_z*_z);
+    _j_X_Pose.at<float>(0,3)=-m_calibration.fx()*_x*_y/(_z*_z);
+    _j_X_Pose.at<float>(0,4)=m_calibration.fx()*(1+_x*_x/(_z*_z));
+    _j_X_Pose.at<float>(0,5)=m_calibration.fx()*_y/_z;
+
+    _j_X_Pose.at<float>(1,0)=0;  
+    _j_X_Pose.at<float>(1,1)=m_calibration.fy()/_z;      
+    _j_X_Pose.at<float>(1,2)=-m_calibration.fy()*_y/(_z*_z);    
+    _j_X_Pose.at<float>(1,3)=-m_calibration.fy()*(1+_y*_y*(1/(_z*_z)));
+    _j_X_Pose.at<float>(1,4)=-m_calibration.fy()*_x*_y/(_z*_z);
+    _j_X_Pose.at<float>(1,5)=m_calibration.fy()*_x/_z;
     
-    _j_X_Pose.at<float>(1,1)+=m_calibration.fy()/_z;      
-    _j_X_Pose.at<float>(1,2)+=-m_calibration.fy()*_y/(_z*_z);    
-    _j_X_Pose.at<float>(1,3)+=-m_calibration.fy()*(1+_y*_y*(1/(_z*_z)));
-    _j_X_Pose.at<float>(1,4)+=-m_calibration.fy()*_x*_y/(_z*_z);
-    _j_X_Pose.at<float>(1,5)+=m_calibration.fy()*_x/_z;
-    
+//     printMat("_j_X_Pose",_j_X_Pose);
     _j_Energy_X.at<float>(0,0)=2*(m_data.m_pointset.m_img_points[i-1].x - nPoints[i-1].x);
     _j_Energy_X.at<float>(0,1)=2*(m_data.m_pointset.m_img_points[i-1].y - nPoints[i-1].y);
     
+    
+    _j_X_Pose/=1000;
     _j_X_Pose*=coffes;
     _j_Energy_X*=coffes;
-    _j_X_Pose/=100000;
-    _j_Energy_X/=100;
+
     Mat _J=_j_Energy_X*_j_X_Pose;
     Mat _J_T;
     cv::transpose(_J,_J_T);
@@ -149,14 +163,17 @@ void Optimizer::constructEnergyFunction(const std::vector<cv::Point> &nPoints , 
   Mat J(6,6,CV_32FC1),J_T(6,6,CV_32FC1);
   Mat I = Mat::eye(6,6,CV_32FC1);
   J=j_Energy_X*j_X_Pose;  
+
   cv::transpose(J,J_T);
   float u=0.5;
+//   float norm = A.diag();
   A= J_T*J+I*u;//6*6
-  
+    printMat("A",A);
+
   
 }
 
-float Optimizer::computeEnergy(const cv::Mat& pose, const std::vector<m_img_point_data> m_img_points_data,std::vector<cv::Point> &nPoints )
+float Optimizer::computeEnergy(const cv::Mat& pose, const std::vector<m_img_point_data> m_img_points_data,std::vector<cv::Point> &nPoints ,const bool printP)
 {
   m_data.m_model->GetImagePoints(pose, m_data.m_pointset);
   float energy =0;
@@ -173,7 +190,7 @@ float Optimizer::computeEnergy(const cv::Mat& pose, const std::vector<m_img_poin
   
 }
 
-float Optimizer::nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint)
+float Optimizer::nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint ,const bool printP)
 {
   assert(edge_points.size()>0);  
   float nearstD = -1;
@@ -183,7 +200,10 @@ float Optimizer::nearestEdgeDistance(const cv::Point & point,const std::vector<m
     float temp_D= (edge_point.m_img_point.x-point.x)*(edge_point.m_img_point.x-point.x)+(edge_point.m_img_point.y-point.y)*(edge_point.m_img_point.y-point.y);
     if(nearstD>temp_D||nearstD==-1){
       nearstD = temp_D;
-      nPoint.x =edge_point.m_img_point.x,nPoint.y=edge_point.m_img_point.y;      
+      nPoint.x =edge_point.m_img_point.x,nPoint.y=edge_point.m_img_point.y;   
+      if(printP){
+	printf("p %d %d , np %d %d",point.x,point.y,nPoint.x,nPoint.y);
+      }
     }
   }
 //   J.at<float>(0,1)+=2*point.x-2*ni;
