@@ -268,30 +268,30 @@ void Model::getVisibleLines()
 }
 int Model::crossProductNorm(const Point &p, const Point &p1)
 {
-  int x1= p.x,x2=p1.x,y1=p.y,y2=p1.y;
-  printf("x1 %d  y1 %d  x2 %d y2 %d ",x1,y1,x2,y2);
-  int t= p.x*p1.y - p.y*p1.x;
-  printf(" t =%d\n",t);
-return t;
+//   int x1= p.x,x2=p1.x,y1=p.y,y2=p1.y;
+//   printf("x1 %d  y1 %d  x2 %d y2 %d ",x1,y1,x2,y2);
+//   int t= ;
+//   printf(" t =%d\n",t);
+  return p.x*p1.y - p.y*p1.x;
 }
 
 bool Model::checkPointInTrinangle(const cv::Point p,const cv::Point a, const cv::Point b,const cv::Point c){
   cv::Point pa=a-p,
-	      pb=b-p,
-	      pc=c-p;
-
+	    pb=b-p,
+	    pc=c-p;
+ 
   int t1 = crossProductNorm(pa,pb);
   int t2 = crossProductNorm(pb,pc);
   int t3 = crossProductNorm(pc,pa);
+ 
   
-  
-  if(!(t1*t2 >= 0 && t1*t3 >= 0)){
+   if(!(t1*t2 >= 0 && t1*t3 >= 0)){
     printf("t1 %d t2 %d t3 %d \n",t1,t2,t3);
     printf("p %d %d\n",p.x,p.x);
-    printf("pa %d %d\n",pa.x,pa.x);
-    printf("pb %d %d\n",pb.x,pb.x);
-    printf("pc %d %d\n",pc.x,pc.x);
-  }
+    printf("pa %d %d\n",pa.x,pa.y);
+    printf("pb %d %d\n",pb.x,pb.y);
+    printf("pc %d %d\n",pc.x,pc.y);
+   }
   return t1*t2 >= 0 && t1*t3 >= 0;
 }
 bool Model::isLineVisible(const Point& v1, const Point& v2, const PointSet& point_set)
@@ -310,13 +310,13 @@ bool Model::isPointVisible(const Point& vertice, const PointSet& point_set)
 //       if(checkPointInTrinangle(cv::Point(vertice.x,vertice.y-move),p1,p2,p3)){
 // 	printf("in %d %d %d",m_model->triangles->vindices[0],m_model->triangles->vindices[1],m_model->triangles->vindices[2]);
 //       }
-      four[0]+=checkPointInTrinangle(cv::Point(vertice.x,vertice.y/*+move*/),p1,p2,p3);
+      four[0]+=checkPointInTrinangle(cv::Point(vertice.x,vertice.y+move),p1,p2,p3);
       four[1]+=checkPointInTrinangle(cv::Point(vertice.x,vertice.y-move),p1,p2,p3);
       four[2]+=checkPointInTrinangle(cv::Point(vertice.x+move,vertice.y),p1,p2,p3);
       four[3]+=checkPointInTrinangle(cv::Point(vertice.x-move,vertice.y),p1,p2,p3);
     }
     printf("in %d \n",four[0]);
-    return (four[0]==0/*||four[1]==0||four[2]==0||four[3]==0*/);
+    return (four[0]==0||four[1]==0||four[2]==0||four[3]==0);
 //     return false;
 }
 
