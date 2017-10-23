@@ -58,7 +58,7 @@ typedef struct _GLMLine {
 	GLuint e1,e2;
 	float n1[3],n2[3];
 	bool visible;
-
+	bool tovisit;
 } GLMLine;
 
 /* GLMmodel: Structure that defines a model.

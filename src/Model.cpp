@@ -266,39 +266,59 @@ void Model::getVisibleLines()
   }
   
 }
-float Model::crossProductNorm(const Point2f p, const Point2f p1)
+int Model::crossProductNorm(const Point &p, const Point &p1)
 {
-      return p.x*p1.y - p.y*p1.x;
-
+  int x1= p.x,x2=p1.x,y1=p.y,y2=p1.y;
+  printf("x1 %d  y1 %d  x2 %d y2 %d ",x1,y1,x2,y2);
+  int t= p.x*p1.y - p.y*p1.x;
+  printf(" t =%d\n",t);
+return t;
 }
 
-void Model::checkPointInTrinangle(const cv::Point2f p,const cv::Point2f a, const cv::Point2f b,const cv::Point2f c){
-  cv::Point2f pa=p-a,
-	      pb=p-b,
-	      pc=p-c;
-  float t1 = crossProductNorm(pa,pb);
-  float t2 = crossProductNorm(pa,pc);
-  float t3 = crossProductNorm(pc,pb);
+bool Model::checkPointInTrinangle(const cv::Point p,const cv::Point a, const cv::Point b,const cv::Point c){
+  cv::Point pa=a-p,
+	      pb=b-p,
+	      pc=c-p;
+
+  int t1 = crossProductNorm(pa,pb);
+  int t2 = crossProductNorm(pb,pc);
+  int t3 = crossProductNorm(pc,pa);
+  
+  
+  if(!(t1*t2 >= 0 && t1*t3 >= 0)){
+    printf("t1 %d t2 %d t3 %d \n",t1,t2,t3);
+    printf("p %d %d\n",p.x,p.x);
+    printf("pa %d %d\n",pa.x,pa.x);
+    printf("pb %d %d\n",pb.x,pb.x);
+    printf("pc %d %d\n",pc.x,pc.x);
+  }
   return t1*t2 >= 0 && t1*t3 >= 0;
 }
-bool Model::isLineVisible(const Point2f& v1, const Point2f& v2, const PointSet& point_set)
+bool Model::isLineVisible(const Point& v1, const Point& v2, const PointSet& point_set)
 {
-   for (int j = 0; j < m_model->numtriangles; j++) {
-      cv::Point2f p1= point_set.m_img_points_f[m_model->triangles->vindices[0]];
-      cv::Point2f p2= point_set.m_img_points_f[m_model->triangles->vindices[1]];
-      cv::Point2f p3= point_set.m_img_points_f[m_model->triangles->vindices[2]]; 
-    return (1-
-      checkPointInTrinangle(cv::Point2f(v1.x,v1.y+2),p1,p2,p3)&&
-      checkPointInTrinangle(cv::Point2f(v1.x,v1.y-2),p1,p2,p3)&&
-      checkPointInTrinangle(cv::Point2f(v1.x+2,v1.y),p1,p2,p3)&&
-      checkPointInTrinangle(cv::Point2f(v1.x-2,v1.y),p1,p2,p3)&&
-      checkPointInTrinangle(cv::Point2f(v2.x,v2.y+2),p1,p2,p3)&&
-      checkPointInTrinangle(cv::Point2f(v2.x,v2.y-2),p1,p2,p3)&&
-      checkPointInTrinangle(cv::Point2f(v2.x+2,v2.y),p1,p2,p3)&&
-      checkPointInTrinangle(cv::Point2f(v2.x-2,v2.y),p1,p2,p3));
-   }
+  return isPointVisible(v1,point_set)&&isPointVisible(v2,point_set);
 }
 
+bool Model::isPointVisible(const Point& vertice, const PointSet& point_set)
+{
+    float move=1;
+    int four[4]={0};
+    for (int j = 0; j < m_model->numtriangles; j++) {
+      cv::Point p1= point_set.m_img_points[m_model->triangles->vindices[0]-1];
+      cv::Point p2= point_set.m_img_points[m_model->triangles->vindices[1]-1];
+      cv::Point p3= point_set.m_img_points[m_model->triangles->vindices[2]-1]; 
+//       if(checkPointInTrinangle(cv::Point(vertice.x,vertice.y-move),p1,p2,p3)){
+// 	printf("in %d %d %d",m_model->triangles->vindices[0],m_model->triangles->vindices[1],m_model->triangles->vindices[2]);
+//       }
+      four[0]+=checkPointInTrinangle(cv::Point(vertice.x,vertice.y/*+move*/),p1,p2,p3);
+      four[1]+=checkPointInTrinangle(cv::Point(vertice.x,vertice.y-move),p1,p2,p3);
+      four[2]+=checkPointInTrinangle(cv::Point(vertice.x+move,vertice.y),p1,p2,p3);
+      four[3]+=checkPointInTrinangle(cv::Point(vertice.x-move,vertice.y),p1,p2,p3);
+    }
+    printf("in %d \n",four[0]);
+    return (four[0]==0/*||four[1]==0||four[2]==0||four[3]==0*/);
+//     return false;
+}
 
 
 void Model::visibleLinesAtPose(const Mat pose)
@@ -307,11 +327,23 @@ void Model::visibleLinesAtPose(const Mat pose)
   cv::Mat pos(4,m_model->numvertices,CV_32FC1);
   PointSet pointset;
   GetImagePoints(pose,pointset);
-  for(int i=0;i<m_model->numLines.size();i++){
+  for(int i=0;i<m_model->numLines;i++){
     if(m_model->lines[i].visible){
-      cv::Point2f v1=pointset.m_img_points_f[m_model->lines[i].vindices[0]];
-      cv::Point2f v2=pointset.m_img_points_f[m_model->lines[i].vindices[1]];
-      m_model->lines[i].visible=isLineVisible(v1,v2,pointset);
+      cv::Point v1=pointset.m_img_points[m_model->lines[i].vindices[0]-1];
+      cv::Point v2=pointset.m_img_points[m_model->lines[i].vindices[1]-1];
+//       if(m_model->lines[i].vindices[0]==1 ||m_model->lines[i].vindices[0]==8){
+// 	printf("v-1\n");
+// 	m_model->lines[i].tovisit=isLineVisible(v1,v2,pointset);
+//       }else
+      m_model->lines[i].tovisit=isLineVisible(v1,v2,pointset);
+
+      if( m_model->lines[i].tovisit){
+	printf("to visit ");
+      }    
+      printf("v1 %d %d %d   v2 %d %d %d\n",m_model->lines[i].vindices[0],v1.x,v1.y,m_model->lines[i].vindices[1],v2.x,v2.y);      
+
+    }else{
+      m_model->lines[i].tovisit=false;
     }
   }
   
@@ -335,12 +367,12 @@ void Model::DisplayCV(const cv::Mat& pose, cv::Mat& frame)
 	//extract the points which can be visible or in the edge of object
 	std::vector<cv::Point> vertexIndexs;
 	std::vector<cv::Point3f> points_3d;
-
+	visibleLinesAtPose(pose);
 	for(int i=0; i<m_model->numLines; i++)
 	{
 // 		if((m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 0) || (m_model->lines[i].e1==0 && m_model->lines[i].e2==1) || (m_model->lines[i].e1==1 && m_model->lines[i].e2==1))
 // 	  if(!isSameNormal(m_model->lines[i].n1, m_model->lines[i].n2)){
-	  if(m_model->lines[i].visible){
+	  if(m_model->lines[i].tovisit){
 		GLuint v0 = m_model->lines[i].vindices[0];
 		GLuint v1 = m_model->lines[i].vindices[1];
 

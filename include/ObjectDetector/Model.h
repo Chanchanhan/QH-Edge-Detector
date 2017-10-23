@@ -59,11 +59,12 @@ namespace OD
 		
 	private:
 		cv::Vec3f getPos_E(int e);
-		void checkPointInTrinangle(const cv::Point2f p,const cv::Point2f p1, const cv::Point2f p2,const cv::Point2f p3);
+		bool checkPointInTrinangle(const cv::Point p,const cv::Point p1, const cv::Point p2,const cv::Point p3);
 		void getVisibleLines();
-		float crossProductNorm(const cv::Point2f p,const cv::Point2f p1);
+		int crossProductNorm(const cv::Point &p,const cv::Point &p1);
 		void visibleLinesAtPose(const cv::Mat pose);
-		bool isLineVisible(const cv::Point2f &v1,const cv::Point2f &v1,const PointSet &point_set);
+		bool isLineVisible(const cv::Point &v1,const cv::Point &v2,const PointSet &point_set);
+		bool isPointVisible(const cv::Point &v1,const PointSet &point_set);
 		bool isSameNormal(const float *n1,const float *n2);
 	};
 }
