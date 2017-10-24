@@ -258,6 +258,9 @@ CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/include/eigen3/Eigen/src/plu
 CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/include/eigen3/Eigen/src/plugins/CommonCwiseUnaryOps.h
 CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseBinaryOps.h
 CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseUnaryOps.h
+CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/local/include/glog/log_severity.h
+CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/local/include/glog/logging.h
+CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/local/include/opencv/cv.h
 CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/local/include/opencv/cxcore.h
 CMakeFiles/test-optimizer.dir/src/Model.cpp.o: /usr/local/include/opencv2/calib3d.hpp
@@ -322,6 +325,9 @@ CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: ../include/ObjectDetector/Poi
 CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: ../include/ObjectDetector/Quaternion.h
 CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: ../include/tools/glm.h
 CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: ../src/Optimizer.cpp
+CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: /usr/local/include/glog/log_severity.h
+CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: /usr/local/include/glog/logging.h
+CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: /usr/local/include/opencv/cxcore.h
 CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: /usr/local/include/opencv2/calib3d.hpp
 CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o: /usr/local/include/opencv2/calib3d/calib3d_c.h
@@ -519,6 +525,9 @@ CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: ../include/tool
 CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: ../include/tools/sse.hpp
 CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: ../include/tools/wrappers.hpp
 CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: ../src/unittest/test-optimizer.cpp
+CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: /usr/local/include/glog/log_severity.h
+CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: /usr/local/include/glog/logging.h
+CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: /usr/local/include/opencv/cxcore.h
 CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: /usr/local/include/opencv2/calib3d.hpp
 CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o: /usr/local/include/opencv2/calib3d/calib3d_c.h

@@ -1,6 +1,9 @@
 #include <stdexcept>
 #include <vector>
 #include <random>
+#include <glog/logging.h>
+
+
 
 #include "andres/marray.hxx"
 #include "andres/ml/decision-trees.hxx"
@@ -17,6 +20,12 @@ ORD::Render g_render;
 OD::CameraCalibration g_calibration;
 
 int main(int argc, char* argv[]) {
+  
+  
+  google::InitGoogleLogging(argv[0]);    //
+  FLAGS_stderrthreshold = 1;  // INFO: 0, WARNING: 1, ERROR: 2, FATAL: 3
+
+  
   cv::Mat pose(1,6,CV_32FC1);
   OD::Config config;
   ED::EdgeDetector edgeDetector_;

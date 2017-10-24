@@ -277,6 +277,7 @@ test-optimizer: /usr/lib/x86_64-linux-gnu/libGL.so
 test-optimizer: /usr/lib/x86_64-linux-gnu/libglut.so
 test-optimizer: /usr/lib/x86_64-linux-gnu/libXmu.so
 test-optimizer: /usr/lib/x86_64-linux-gnu/libXi.so
+test-optimizer: /usr/local/lib/libglog.a
 test-optimizer: /usr/local/lib/libopencv_text.so.3.1.0
 test-optimizer: /usr/local/lib/libopencv_face.so.3.1.0
 test-optimizer: /usr/local/lib/libopencv_ximgproc.so.3.1.0

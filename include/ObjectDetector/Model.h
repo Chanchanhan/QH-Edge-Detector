@@ -9,14 +9,12 @@
 #include "ObjectDetector/PointSet.hpp"
 namespace OD
 {
-
+	struct Line{
+	 cv::Mat v1,v2;
+	};
 	class Model
 	{
-	struct Line{
-	 int e1,e2;
-	 std::vector<Vec3f> points;
-	 bool visible;
-	};
+
 // 	struct Triangle{
 // 	 int v1,v2;
 // 	 std::vector<Vec3f> points;
@@ -32,21 +30,30 @@ namespace OD
 		void setPointSet();
 		void DisplayCV(const cv::Mat& pose, cv::Mat& frame);
 		void DisplayGL(const cv::Mat& pose);
-	public:
+		
 		void computeExtrinsicByEuler(cv::Mat* mvMatrix, float& _x, float& _y, float& _z, float& _rx, float &_ry, float &_rz);
 		void FilterModel(const cv::Mat& prepose,int pointnum);
-		
+		void getVisitLines(const cv::Mat pose);
 		void InitPose(const cv::Mat& initPose);
 		void getIntrinsic(cv::Mat& intrinsic) const;
-		void generatePoints();	  
+		void generatePoints();	 
+		void setVisibleLinesAtPose(const cv::Mat pose);
+		const cv::Mat& getIntrinsic()  const;
 		const std::vector<Line> & getMyLines();
+		
+		
+		const cv::Mat& getPos() const;
+		Point2f X_to_x(Point3f X,Mat extrisic);
+
 		cv::Mat GetPoseMatrix();
 		cv::Mat GetPoseMatrix(cv::Mat pose);
+	public:
+
 		GLMmodel* GetObjModel();
 		cv::Mat m_rvec;
 		cv::Mat m_tvec;
 	private:
-		
+		cv::Mat pos;
 		std::vector<Line> myLines;
 		GLMmodel* m_model;
 		OD::CameraCalibration m_calibration;
@@ -58,11 +65,10 @@ namespace OD
 		cv::Mat intrinsic;
 		
 	private:
-		cv::Vec3f getPos_E(int e);
+		cv::Point3f getPos_E(int e);
 		bool checkPointInTrinangle(const cv::Point p,const cv::Point p1, const cv::Point p2,const cv::Point p3);
 		void getVisibleLines();
 		int crossProductNorm(const cv::Point &p,const cv::Point &p1);
-		void visibleLinesAtPose(const cv::Mat pose);
 		bool isLineVisible(const cv::Point &v1,const cv::Point &v2,const PointSet &point_set);
 		bool isPointVisible(const cv::Point &v1,const PointSet &point_set);
 		bool isSameNormal(const float *n1,const float *n2);

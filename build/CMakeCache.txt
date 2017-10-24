@@ -171,6 +171,9 @@ DOXYGEN_DOT_EXECUTABLE:FILEPATH=/usr/bin/dot
 //Doxygen documentation generation tool (http://www.doxygen.org)
 DOXYGEN_EXECUTABLE:FILEPATH=DOXYGEN_EXECUTABLE-NOTFOUND
 
+//The directory containing a CMake configuration file for GLOG.
+GLOG_DIR:PATH=GLOG_DIR-NOTFOUND
+
 //Path to a file.
 GLUT_INCLUDE_DIR:PATH=/usr/include
 
@@ -182,6 +185,9 @@ GLUT_Xmu_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libXmu.so
 
 //Path to a library.
 GLUT_glut_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libglut.so
+
+//The directory containing a CMake configuration file for Glog.
+Glog_DIR:PATH=Glog_DIR-NOTFOUND
 
 //Path to a file.
 OPENGL_INCLUDE_DIR:PATH=/usr/include
@@ -217,6 +223,12 @@ OpenMP_CXX_FLAGS:STRING=-fopenmp
 
 //C compiler flags for OpenMP parallization
 OpenMP_C_FLAGS:STRING=-fopenmp
+
+//The directory containing a CMake configuration file for glog-0.3.3.
+glog-0.3.3_DIR:PATH=glog-0.3.3_DIR-NOTFOUND
+
+//The directory containing a CMake configuration file for glog.
+glog_DIR:PATH=/usr/local/lib/cmake/glog
 
 //Value Computed by CMake
 ml_BINARY_DIR:STATIC=/home/qqh/projects/RandomForest/build

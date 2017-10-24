@@ -258,6 +258,9 @@ CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/include/eigen3/Eigen/src/plugins
 CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/include/eigen3/Eigen/src/plugins/CommonCwiseUnaryOps.h
 CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseBinaryOps.h
 CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/include/eigen3/Eigen/src/plugins/MatrixCwiseUnaryOps.h
+CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/local/include/glog/log_severity.h
+CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/local/include/glog/logging.h
+CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/local/include/opencv/cv.h
 CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/local/include/opencv/cxcore.h
 CMakeFiles/test-model.dir/src/Model.cpp.o: /usr/local/include/opencv2/calib3d.hpp
@@ -322,6 +325,9 @@ CMakeFiles/test-model.dir/src/Optimizer.cpp.o: ../include/ObjectDetector/PointSe
 CMakeFiles/test-model.dir/src/Optimizer.cpp.o: ../include/ObjectDetector/Quaternion.h
 CMakeFiles/test-model.dir/src/Optimizer.cpp.o: ../include/tools/glm.h
 CMakeFiles/test-model.dir/src/Optimizer.cpp.o: ../src/Optimizer.cpp
+CMakeFiles/test-model.dir/src/Optimizer.cpp.o: /usr/local/include/glog/log_severity.h
+CMakeFiles/test-model.dir/src/Optimizer.cpp.o: /usr/local/include/glog/logging.h
+CMakeFiles/test-model.dir/src/Optimizer.cpp.o: /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/test-model.dir/src/Optimizer.cpp.o: /usr/local/include/opencv/cxcore.h
 CMakeFiles/test-model.dir/src/Optimizer.cpp.o: /usr/local/include/opencv2/calib3d.hpp
 CMakeFiles/test-model.dir/src/Optimizer.cpp.o: /usr/local/include/opencv2/calib3d/calib3d_c.h
@@ -517,6 +523,9 @@ CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: ../include/tools/rgbCon
 CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: ../include/tools/sse.hpp
 CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: ../include/tools/wrappers.hpp
 CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: ../src/unittest/test-model.cpp
+CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: /usr/local/include/glog/log_severity.h
+CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: /usr/local/include/glog/logging.h
+CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: /usr/local/include/glog/vlog_is_on.h
 CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: /usr/local/include/opencv/cxcore.h
 CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: /usr/local/include/opencv2/calib3d.hpp
 CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o: /usr/local/include/opencv2/calib3d/calib3d_c.h

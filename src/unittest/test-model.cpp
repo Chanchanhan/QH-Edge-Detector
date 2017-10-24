@@ -1,7 +1,7 @@
 #include <stdexcept>
 #include <vector>
 #include <random>
-
+#include<glog/logging.h>
 #include "andres/marray.hxx"
 #include "andres/ml/decision-trees.hxx"
 #include "edge/EdgeFeature.hpp"
@@ -16,6 +16,8 @@ ORD::Render g_render;
 OD::CameraCalibration g_calibration;
 
 int main(int argc, char* argv[]) {
+    google::InitGoogleLogging(argv[0]);    //
+
   cv::Mat pose(1,6,CV_32FC1);
   OD::Config config;
 //   ED::EdgeDetector edgeDetector_("/home/qqh/projects/RandomForest/model.yml");
@@ -57,7 +59,7 @@ int main(int argc, char* argv[]) {
     cv::Mat curFrame = cv::imread(config.videoPath+frameFile);
     frameId++;
     Mat edgeOfFrame;
-    edgeOfFrame=edgeDetector_.edgeCanny(curFrame);
+    edgeOfFrame=edgeDetector_.dealImg(curFrame);
     model.DisplayCV(pose,edgeOfFrame);
     //to test model  , get its point set ,and try to compute energy
      imshow("curFrame",edgeOfFrame);

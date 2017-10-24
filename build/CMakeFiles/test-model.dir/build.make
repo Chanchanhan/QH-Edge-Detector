@@ -277,6 +277,7 @@ test-model: /usr/lib/x86_64-linux-gnu/libGL.so
 test-model: /usr/lib/x86_64-linux-gnu/libglut.so
 test-model: /usr/lib/x86_64-linux-gnu/libXmu.so
 test-model: /usr/lib/x86_64-linux-gnu/libXi.so
+test-model: /usr/local/lib/libglog.a
 test-model: /usr/local/lib/libopencv_text.so.3.1.0
 test-model: /usr/local/lib/libopencv_face.so.3.1.0
 test-model: /usr/local/lib/libopencv_ximgproc.so.3.1.0

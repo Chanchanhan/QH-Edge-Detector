@@ -15,6 +15,13 @@ set( CMAKE_BUILD_TYPE "Debug" )
 # set( LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib )
 
 
+
+############################################################################## 
+##glog
+##############################################################################
+find_package(glog 0.3.5 REQUIRED)
+include_directories(BEFORE ${GLOG_INCLUDE_DIRS}) 
+
 ##############################################################################
 # Doxygen
 ##############################################################################
@@ -96,13 +103,13 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable(test-model src/unittest/test-model.cpp ${headers} ${SRC_LIST})
 add_test(test-model test-Edge-detector)
-target_link_libraries( test-model ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}) # exe 链接 OpenCV
+target_link_libraries( test-model ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY} glog::glog) # exe 链接 OpenCV
 
 
 
 add_executable(test-optimizer src/unittest/test-optimizer.cpp ${headers} ${SRC_LIST})
 add_test(test-optimizer test-Edge-detector)
-target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}) # exe 链接 OpenCV
+target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY} glog::glog) # exe 链接 OpenCV
 
 # set( 
 #     THIRD_PARTY_LIBS
