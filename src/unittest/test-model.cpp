@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
   /*** load first frame to init***/
   
   std::vector<std::string> Frames = ED::FileSys::getFiles(config.videoPath,".png");
-  cv::Mat frame = cv::imread(config.videoPath+Frames[0]);
+  cv::Mat frame = cv::imread(/*config.videoPath+Frames[0]*/"/home/qqh/DataSets/aa.png");
   config.width = frame.size().width;
   config.height = frame.size().height;
   g_render.init(config.camCalibration,config.width,config.height,argc,argv);
@@ -56,11 +56,11 @@ int main(int argc, char* argv[]) {
     int64 time0 = cv::getTickCount();	
     //to do
     {
-    cv::Mat curFrame = cv::imread(config.videoPath+frameFile);
+    cv::Mat curFrame = cv::imread(/*config.videoPath+frameFile*/"/home/qqh/DataSets/aa.png");
     frameId++;
     Mat edgeOfFrame;
     edgeOfFrame=edgeDetector_.dealImg(curFrame);
-    model.DisplayCV(pose,edgeOfFrame);
+//     model.DisplayCV(pose,edgeOfFrame);
     //to test model  , get its point set ,and try to compute energy
      imshow("curFrame",edgeOfFrame);
     waitKey(0);

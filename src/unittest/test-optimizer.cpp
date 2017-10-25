@@ -61,12 +61,15 @@ int main(int argc, char* argv[]) {
     {
     cv::Mat curFrame = cv::imread(config.videoPath+frameFile);
     frameId++;
-    Mat edgeOfFrame;
-    edgeOfFrame=edgeDetector_.edgeCanny(curFrame);
-    pose=optimizer.optimizingLM(pose,edgeOfFrame,frameId);
-    optimizer.m_data.m_model->DisplayCV(pose,edgeOfFrame);
+    Mat distanceFrame;
+    distanceFrame=edgeDetector_.dealImg(curFrame);
+    pose=optimizer.optimizingLM(pose,distanceFrame,frameId);
+    optimizer.m_data.m_model->DisplayCV(pose,curFrame);
+    optimizer.m_data.m_model->DisplayCV(pose,distanceFrame);
+
     //to test model  , get its point set ,and try to compute energy
-     imshow("curFrame",edgeOfFrame);
+    imshow("curFrame",curFrame);
+    imshow("distanceFrame",distanceFrame);
     waitKey(0);
     
     }

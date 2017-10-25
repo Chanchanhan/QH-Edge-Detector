@@ -320,7 +320,6 @@ bool Model::isPointVisible(const Point& vertice, const PointSet& point_set)
     return (four[0]==0||four[1]==0||four[2]==0||four[3]==0);
 //     return false;
 }
-
 const cv::Mat& Model::getIntrinsic() const
 {
   return intrinsic;

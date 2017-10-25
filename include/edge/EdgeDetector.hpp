@@ -45,6 +45,7 @@ cv::Mat EdgeDetector::dealImg(cv::Mat src)
   cv::Mat dst =edgeCanny(src);
   return toTistanceTransform(dst);
 }
+
 cv::Mat EdgeDetector::toTistanceTransform(cv::Mat src)
 {
   Mat bw;
@@ -53,10 +54,17 @@ cv::Mat EdgeDetector::toTistanceTransform(cv::Mat src)
 
   cv::threshold(bw, bw, 40, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
   // Perform the distance transform algorithm
-    imshow("Binary Image", bw);
+   // imshow("Binary Image", bw);
+//   for(int i=0;i<bw.size().height;i++){
+//     for(int j=0;j<bw.size().width;j++){
+//       bw.at<uchar>(i,j)=255-bw.at<uchar>(i,j);
+//     }
+//   }
+  
+  bw=~bw;
 
   Mat dist;
-  cv::distanceTransform(bw, dist, CV_DIST_L2, 10);
+  cv::distanceTransform(bw, dist, CV_DIST_L2, 5);
   // Normalize the distance image for range = {0.0, 1.0}
   // so we can visualize and threshold it
   normalize(dist, dist, 0, 1., NORM_MINMAX);
@@ -64,6 +72,8 @@ cv::Mat EdgeDetector::toTistanceTransform(cv::Mat src)
   
 }
 
+      
+ 
 Mat EdgeDetector::edgeCanny(Mat src)
 {
 
