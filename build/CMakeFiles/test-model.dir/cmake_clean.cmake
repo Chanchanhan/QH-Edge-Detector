@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/test-model.dir/src/unittest/test-model.cpp.o"
   "CMakeFiles/test-model.dir/src/CameraCalibration.cpp.o"
   "CMakeFiles/test-model.dir/src/Quaternion.cpp.o"
+  "CMakeFiles/test-model.dir/src/DT.cpp.o"
   "CMakeFiles/test-model.dir/src/Render.cpp.o"
   "CMakeFiles/test-model.dir/src/Model.cpp.o"
   "CMakeFiles/test-model.dir/src/Optimizer.cpp.o"

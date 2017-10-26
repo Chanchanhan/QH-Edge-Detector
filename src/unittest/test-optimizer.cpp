@@ -19,6 +19,7 @@
 ORD::Render g_render;
 OD::CameraCalibration g_calibration;
 
+const float mask =100.f;
 int main(int argc, char* argv[]) {
   
   
@@ -61,8 +62,8 @@ int main(int argc, char* argv[]) {
     {
     cv::Mat curFrame = cv::imread(config.videoPath+frameFile);
     frameId++;
-    Mat distanceFrame;
-    distanceFrame=edgeDetector_.dealImg(curFrame);
+    Mat distanceFrame,locations;
+    edgeDetector_.getDistanceTransform(curFrame,mask,distanceFrame,location);
     pose=optimizer.optimizingLM(pose,distanceFrame,frameId);
     optimizer.m_data.m_model->DisplayCV(pose,curFrame);
     optimizer.m_data.m_model->DisplayCV(pose,distanceFrame);

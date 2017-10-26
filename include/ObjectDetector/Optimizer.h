@@ -33,7 +33,7 @@ namespace OD
 		Optimizer(const Config& config, const cv::Mat& initPose, bool is_writer);
 		~Optimizer();
 	public:
-		cv::Mat optimizingLM(const cv::Mat& prePose,const cv::Mat& frame, const int frameId);
+		cv::Mat optimizingLM(const cv::Mat& prePose,const cv::Mat& frame, const cv::Mat locations, const int frameId);
 	      
 	private:
 		static void lm(double *p, double* x, int m, int n, void* data);	

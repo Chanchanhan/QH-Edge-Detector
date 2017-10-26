@@ -177,6 +177,36 @@ src/CameraCalibration.cpp.s:
 	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.s
 .PHONY : src/CameraCalibration.cpp.s
 
+src/DT.o: src/DT.cpp.o
+
+.PHONY : src/DT.o
+
+# target to build an object file
+src/DT.cpp.o:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/DT.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/DT.cpp.o
+.PHONY : src/DT.cpp.o
+
+src/DT.i: src/DT.cpp.i
+
+.PHONY : src/DT.i
+
+# target to preprocess a source file
+src/DT.cpp.i:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/DT.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/DT.cpp.i
+.PHONY : src/DT.cpp.i
+
+src/DT.s: src/DT.cpp.s
+
+.PHONY : src/DT.s
+
+# target to generate assembly for a file
+src/DT.cpp.s:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/DT.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/DT.cpp.s
+.PHONY : src/DT.cpp.s
+
 src/Model.o: src/Model.cpp.o
 
 .PHONY : src/Model.o
@@ -395,6 +425,9 @@ help:
 	@echo "... src/CameraCalibration.o"
 	@echo "... src/CameraCalibration.i"
 	@echo "... src/CameraCalibration.s"
+	@echo "... src/DT.o"
+	@echo "... src/DT.i"
+	@echo "... src/DT.s"
 	@echo "... src/Model.o"
 	@echo "... src/Model.i"
 	@echo "... src/Model.s"

@@ -8,7 +8,9 @@
 
 #include <opencv2/highgui.hpp>
 #include <opencv2/ximgproc.hpp>
-  using namespace cv;
+#include"edge/DT.hpp"
+  
+using namespace cv;
 
 // using namespace cv::ximgproc;
 namespace ED{
@@ -21,7 +23,7 @@ public:
   EdgeDetector(std::string modelFilename);
   Mat edgeCanny(Mat src);
   Mat extractEdgeOfImg(Mat src);
-  Mat dealImg(Mat src);
+  void getDistanceTransform(const Mat &,const float &mask, Mat &dst, Mat& locations);
   Mat toTistanceTransform(Mat src);
 private :
   int edgeThresh ;
@@ -40,11 +42,22 @@ EdgeDetector::EdgeDetector()
   kernel_size = 3;
   lowThreshold = 20;
 }
-cv::Mat EdgeDetector::dealImg(cv::Mat src)
+
+void EdgeDetector::getDistanceTransform(const Mat &src, const float &mask, Mat& dst, Mat& locations)
 {
-  cv::Mat dst =edgeCanny(src);
-  return toTistanceTransform(dst);
+  cv::Mat edge =edgeCanny(src);
+  cv::cvtColor(edge, edge, CV_BGR2GRAY);  
+  edge=~edge;
+  cv::Mat input=Mat::zeros(edge.size(),CV_32FC1);
+  edge.convertTo(input,CV_32FC1, 1.0/255.0);	
+  vector<float> weights;	
+  weights.push_back(mask);	
+  weights.push_back(mask);
+  distanceTransform(input,dst,locations,weights);
+  
 }
+
+
 
 cv::Mat EdgeDetector::toTistanceTransform(cv::Mat src)
 {
@@ -62,7 +75,7 @@ cv::Mat EdgeDetector::toTistanceTransform(cv::Mat src)
 //   }
   
   bw=~bw;
-
+  
   Mat dist;
   cv::distanceTransform(bw, dist, CV_DIST_L2, 5);
   // Normalize the distance image for range = {0.0, 1.0}

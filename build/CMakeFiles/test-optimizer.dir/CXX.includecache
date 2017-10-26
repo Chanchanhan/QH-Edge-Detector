@@ -118,6 +118,10 @@ iostream
 andres/marray.hxx
 ../include/andres/ml/andres/marray.hxx
 
+../include/edge/DT.hpp
+opencv2/opencv.hpp
+-
+
 ../include/edge/EdgeDetector.hpp
 stdlib.h
 -
@@ -129,6 +133,8 @@ opencv2/highgui.hpp
 -
 opencv2/ximgproc.hpp
 -
+edge/DT.hpp
+../include/edge/edge/DT.hpp
 
 ../include/edge/EdgeFeature.hpp
 iostream
@@ -269,6 +275,18 @@ mex.h
 /home/qqh/projects/RandomForest/src/CameraCalibration.cpp
 ObjectDetector/CameraCalibration.h
 /home/qqh/projects/RandomForest/src/ObjectDetector/CameraCalibration.h
+
+/home/qqh/projects/RandomForest/src/DT.cpp
+opencv2/highgui/highgui.hpp
+/home/qqh/projects/RandomForest/src/opencv2/highgui/highgui.hpp
+opencv2/imgproc/imgproc.hpp
+/home/qqh/projects/RandomForest/src/opencv2/imgproc/imgproc.hpp
+opencv2/opencv_modules.hpp
+/home/qqh/projects/RandomForest/src/opencv2/opencv_modules.hpp
+edge/DT.hpp
+/home/qqh/projects/RandomForest/src/edge/DT.hpp
+algorithm
+-
 
 /home/qqh/projects/RandomForest/src/Model.cpp
 iostream
@@ -1722,6 +1740,10 @@ opencv2/highgui.hpp
 opencv2/imgproc/imgproc_c.h
 /usr/local/include/opencv2/opencv2/imgproc/imgproc_c.h
 
+/usr/local/include/opencv2/imgproc/imgproc.hpp
+opencv2/imgproc.hpp
+/usr/local/include/opencv2/imgproc/opencv2/imgproc.hpp
+
 /usr/local/include/opencv2/imgproc/imgproc_c.h
 opencv2/imgproc/types_c.h
 /usr/local/include/opencv2/imgproc/opencv2/imgproc/types_c.h
@@ -1783,6 +1805,8 @@ opencv2/highgui.hpp
 /usr/local/include/opencv2/opencv2/highgui.hpp
 opencv2/ml.hpp
 /usr/local/include/opencv2/opencv2/ml.hpp
+
+/usr/local/include/opencv2/opencv_modules.hpp
 
 /usr/local/include/opencv2/photo.hpp
 opencv2/core.hpp

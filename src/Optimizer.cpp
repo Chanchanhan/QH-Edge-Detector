@@ -62,7 +62,7 @@ Optimizer::~Optimizer()
   }
 }
 
-cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const int frameId)
+cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat& locations, const int frameId)
 {
   
   int64 time0 = cv::getTickCount();
@@ -270,7 +270,6 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const cv::Mat& pose, const s
       for(int i=0;i<=Nx;++i,X+=dX){
 	 cv::Point nPoint;
 	 Point2f point= m_data.m_model->X_to_x(X,extrinsic);
-// 	 float e=nearestEdgeDistance(point,m_img_points_data,nPoint);
 	 int de2=frame.at<uchar>(point.x,point.y);
 	 de2 =ENERGY_SIZE*de2*de2;
 	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y/*<<"  np:"<<nPoint.x<<" "<<nPoint.y<< "  energy: " <<e*/<<" Distance energy: "<<de2;
