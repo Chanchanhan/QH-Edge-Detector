@@ -335,24 +335,19 @@ void Model::setVisibleLinesAtPose(const Mat pose)
     if(m_model->lines[i].visible){
       cv::Point v1=pointset.m_img_points[m_model->lines[i].vindices[0]-1];
       cv::Point v2=pointset.m_img_points[m_model->lines[i].vindices[1]-1];
-//       if(m_model->lines[i].vindices[0]==1 ||m_model->lines[i].vindices[0]==8){
-// 	printf("v-1\n");
-// 	m_model->lines[i].tovisit=isLineVisible(v1,v2,pointset);
-//       }else
+
       m_model->lines[i].tovisit=isLineVisible(v1,v2,pointset);
 
-   /*   if( m_model->lines[i].tovisit){
-	printf("to visit ");
-      }  */  
-//       printf("v1 %d %d %d   v2 %d %d %d\n",m_model->lines[i].vindices[0],v1.x,v1.y,m_model->lines[i].vindices[1],v2.x,v2.y);      
-
+      if(m_model->lines[i].vindices[0]==8&&m_model->lines[i].vindices[1]==4){
+	m_model->lines[i].tovisit=false;
+      }
     }else{
       m_model->lines[i].tovisit=false;
     }
   }
   
 }
-Point2f Model::X_to_x(Point3f X,Mat extrisic)
+Point Model::X_to_x(Point3f X,Mat extrisic)
 {
   Mat P(4,1,CV_32FC1);
   Mat res(3,1,CV_32FC1);
@@ -362,7 +357,7 @@ Point2f Model::X_to_x(Point3f X,Mat extrisic)
   P.at<float>(3,0)=1;
   res=intrinsic*extrisic*P;
   
-  return Point2f(res.at<float>(0,0)/res.at<float>(2,0),res.at<float>(1,0)/res.at<float>(2,0));
+  return Point(res.at<float>(0,0)/res.at<float>(2,0),res.at<float>(1,0)/res.at<float>(2,0));
   
 }
 
@@ -431,8 +426,6 @@ void Model::DisplayCV(const cv::Mat& pose, cv::Mat& frame)
 		  LOG(INFO)<< "v0:"<< u1<<" "<<v1<< " , v1:"<< u2<<" "<<v2<<std::endl;
 
 		  cv::line(frame,cv::Point(u1,v1),cv::Point(u2,v2),cv::Scalar(0,0,255),1,CV_AA);
-		}else{
-		  LOG(WARNING)<<"frame.cols = "<<frame.cols<<" , frame.rows= "<<frame.rows; 
 		}
 	}
 }

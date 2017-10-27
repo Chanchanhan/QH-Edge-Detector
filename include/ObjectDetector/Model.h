@@ -43,7 +43,7 @@ namespace OD
 		
 		
 		const cv::Mat& getPos() const;
-		Point2f X_to_x(Point3f X,Mat extrisic);
+		Point X_to_x(Point3f X,Mat extrisic);
 
 		cv::Mat GetPoseMatrix();
 		cv::Mat GetPoseMatrix(cv::Mat pose);

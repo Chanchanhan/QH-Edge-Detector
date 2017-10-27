@@ -9,7 +9,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/ximgproc.hpp>
 #include"edge/DT.hpp"
-  
+#include<glog/logging.h>
 using namespace cv;
 
 // using namespace cv::ximgproc;
@@ -49,12 +49,15 @@ void EdgeDetector::getDistanceTransform(const Mat &src, const float &mask, Mat& 
   cv::cvtColor(edge, edge, CV_BGR2GRAY);  
   edge=~edge;
   cv::Mat input=Mat::zeros(edge.size(),CV_32FC1);
-  edge.convertTo(input,CV_32FC1, 1.0/255.0);	
+  edge.convertTo(input,CV_32FC1, 1/*/255.0f*/);	
   vector<float> weights;	
   weights.push_back(mask);	
   weights.push_back(mask);
+//   LOG(ERROR)<<"input: "<<std::endl<<input;
   distanceTransform(input,dst,locations,weights);
-  
+//     imshow("dst",dst/255);
+//waitKey(0);
+//   LOG(ERROR)<<"dst: "<<std::endl<<dst;
 }
 
 

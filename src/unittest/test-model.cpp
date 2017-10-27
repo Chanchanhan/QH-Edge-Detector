@@ -64,10 +64,10 @@ int main(int argc, char* argv[]) {
 //     cv::Mat curFrame = cv::imread(/*config.videoPath+frameFile*/"/home/qqh/DataSets/aa.png");
     frameId++;
     Mat dst,location;
-    edgeDetector_.getDistanceTransform(curFrame,100.f,dst,location);
-//     model.DisplayCV(pose,edgeOfFrame);
+//     edgeDetector_.getDistanceTransform(curFrame,100.f,dst,location);
+     model.DisplayCV(pose,curFrame);
     //to test model  , get its point set ,and try to compute energy
-     imshow("curFrame",dst);
+     imshow("curFrame",curFrame);
     waitKey(0);
     
     

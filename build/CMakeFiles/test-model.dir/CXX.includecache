@@ -135,6 +135,8 @@ opencv2/ximgproc.hpp
 -
 edge/DT.hpp
 ../include/edge/edge/DT.hpp
+glog/logging.h
+-
 
 ../include/edge/EdgeFeature.hpp
 iostream
