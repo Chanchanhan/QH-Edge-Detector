@@ -48,6 +48,8 @@ void EdgeDetector::getDistanceTransform(const Mat &src, const float &mask, Mat& 
   cv::Mat edge =edgeCanny(src);
   cv::cvtColor(edge, edge, CV_BGR2GRAY);  
   edge=~edge;
+  imshow("edge",edge);
+
   cv::Mat input=Mat::zeros(edge.size(),CV_32FC1);
   edge.convertTo(input,CV_32FC1, 1/*/255.0f*/);	
   vector<float> weights;	

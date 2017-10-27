@@ -44,6 +44,7 @@ namespace OD
 		float nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint ,const bool printP=false);
 		void UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Mat &pose_New);
 		void getMk();
+		float getDistanceToEdege(const cv::Point& e1,const cv::Point& e2,const cv::Point& v);
 		cv::Point getNearstPointLocation(const cv::Point &point);
 	public:
 		Data m_data;	

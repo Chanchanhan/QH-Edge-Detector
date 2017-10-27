@@ -312,12 +312,11 @@ bool Model::isPointVisible(const Point& vertice, const PointSet& point_set)
 // 	printf("in %d %d %d",m_model->triangles->vindices[0],m_model->triangles->vindices[1],m_model->triangles->vindices[2]);
 //       }
       four[0]+=checkPointInTrinangle(cv::Point(vertice.x,vertice.y+move),p1,p2,p3);
-      four[1]+=checkPointInTrinangle(cv::Point(vertice.x,vertice.y-move),p1,p2,p3);
-      four[2]+=checkPointInTrinangle(cv::Point(vertice.x+move,vertice.y),p1,p2,p3);
-      four[3]+=checkPointInTrinangle(cv::Point(vertice.x-move,vertice.y),p1,p2,p3);
     }
 //     printf("in %d \n",four[0]);
-    return (four[0]==0||four[1]==0||four[2]==0||four[3]==0);
+    if( (four[0]==0||four[1]==0||four[2]==0||four[3]==0)){
+      return true;
+    }
 //     return false;
 }
 const cv::Mat& Model::getIntrinsic() const
@@ -338,7 +337,7 @@ void Model::setVisibleLinesAtPose(const Mat pose)
 
       m_model->lines[i].tovisit=isLineVisible(v1,v2,pointset);
 
-      if(m_model->lines[i].vindices[0]==8&&m_model->lines[i].vindices[1]==4){
+      if((m_model->lines[i].vindices[0]==8&&m_model->lines[i].vindices[1]==4) ||m_model->lines[i].vindices[0]==5||m_model->lines[i].vindices[1]==5){
 	m_model->lines[i].tovisit=false;
       }
     }else{

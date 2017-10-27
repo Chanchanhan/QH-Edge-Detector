@@ -231,6 +231,7 @@ Name=test-DT
 Type=Native Application
 
 [Launch][Launch Configuration 4][Data]
+Configured from ProjectItem=RandomForest,test-DT
 Project Target=RandomForest,test-DT
 Working Directory=file:///home/qqh/projects/RandomForest/build/
 isExecutable=false
