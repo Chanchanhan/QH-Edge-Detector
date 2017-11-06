@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/qqh/projects/RandomForest/src/Optimizer.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o"
   "/home/qqh/projects/RandomForest/src/Quaternion.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o"
   "/home/qqh/projects/RandomForest/src/Render.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-optimizer.dir/src/Render.cpp.o"
+  "/home/qqh/projects/RandomForest/src/Transformation.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o"
   "/home/qqh/projects/RandomForest/src/glm.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-optimizer.dir/src/glm.cpp.o"
   "/home/qqh/projects/RandomForest/src/unittest/test-optimizer.cpp" "/home/qqh/projects/RandomForest/build/CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o"
   )

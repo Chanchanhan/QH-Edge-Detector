@@ -59,6 +59,7 @@ typedef struct _GLMLine {
 	float n1[3],n2[3];
 	bool visible;
 	bool tovisit;
+	float energy;
 } GLMLine;
 
 /* GLMmodel: Structure that defines a model.

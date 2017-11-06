@@ -6,6 +6,8 @@
 #include "ObjectDetector/Model_Config.h"
 #include "ObjectDetector/Model.h"
 #include "ObjectDetector/Quaternion.h"
+#include "ObjectDetector/Transformation.h"
+
 #include <fstream>
 
 namespace OD
@@ -38,11 +40,13 @@ namespace OD
 	private:
 		static void lm(double *p, double* x, int m, int n, void* data);	
 		static void jaclm(double *p, double *jac, int m, int n, void* data);
-		void constructEnergyFunction(const cv::Mat prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
+		void constructEnergyFunction(const cv::Mat frame, const cv::Mat prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
 		void solveEnergyFunction();
 		float computeEnergy(const cv::Mat& frame,const cv::Mat& pose);
 		float nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint ,const bool printP=false);
 		void UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Mat &pose_New);
+		void UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, Transformation &transformation_New);
+
 		void getMk();
 		float getDistanceToEdege(const cv::Point& e1,const cv::Point& e2,const cv::Point& v);
 		cv::Point getNearstPointLocation(const cv::Point &point);
@@ -54,6 +58,7 @@ namespace OD
 		int _row;
 		bool m_is_writer;
 		std::ofstream m_outPose;
+		Transformation m_Transformation;
 		CameraCalibration m_calibration;
 
 	};

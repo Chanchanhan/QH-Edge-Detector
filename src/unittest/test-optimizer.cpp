@@ -22,7 +22,7 @@ OD::CameraCalibration g_calibration;
 const float mask =10.f;
 int main(int argc, char* argv[]) {
   
-  
+  FLAGS_log_dir="/home/qqh/output/ObjTrackLog/";
   google::InitGoogleLogging(argv[0]);    //
   FLAGS_stderrthreshold = 1;  // INFO: 0, WARNING: 1, ERROR: 2, FATAL: 3
 

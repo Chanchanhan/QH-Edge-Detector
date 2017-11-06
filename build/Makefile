@@ -327,6 +327,36 @@ src/Render.cpp.s:
 	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Render.cpp.s
 .PHONY : src/Render.cpp.s
 
+src/Transformation.o: src/Transformation.cpp.o
+
+.PHONY : src/Transformation.o
+
+# target to build an object file
+src/Transformation.cpp.o:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Transformation.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o
+.PHONY : src/Transformation.cpp.o
+
+src/Transformation.i: src/Transformation.cpp.i
+
+.PHONY : src/Transformation.i
+
+# target to preprocess a source file
+src/Transformation.cpp.i:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Transformation.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Transformation.cpp.i
+.PHONY : src/Transformation.cpp.i
+
+src/Transformation.s: src/Transformation.cpp.s
+
+.PHONY : src/Transformation.s
+
+# target to generate assembly for a file
+src/Transformation.cpp.s:
+	$(MAKE) -f CMakeFiles/test-model.dir/build.make CMakeFiles/test-model.dir/src/Transformation.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Transformation.cpp.s
+.PHONY : src/Transformation.cpp.s
+
 src/glm.o: src/glm.cpp.o
 
 .PHONY : src/glm.o
@@ -440,6 +470,9 @@ help:
 	@echo "... src/Render.o"
 	@echo "... src/Render.i"
 	@echo "... src/Render.s"
+	@echo "... src/Transformation.o"
+	@echo "... src/Transformation.i"
+	@echo "... src/Transformation.s"
 	@echo "... src/glm.o"
 	@echo "... src/glm.i"
 	@echo "... src/glm.s"

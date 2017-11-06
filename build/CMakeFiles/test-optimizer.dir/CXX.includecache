@@ -47,6 +47,8 @@ ObjectDetector/Model.h
 ../include/ObjectDetector/ObjectDetector/Model.h
 ObjectDetector/Quaternion.h
 ../include/ObjectDetector/ObjectDetector/Quaternion.h
+ObjectDetector/Transformation.h
+../include/ObjectDetector/ObjectDetector/Transformation.h
 fstream
 -
 
@@ -69,6 +71,16 @@ ObjectDetector/CameraCalibration.h
 ../include/ObjectDetector/ObjectDetector/CameraCalibration.h
 opencv2/core/core.hpp
 -
+
+../include/ObjectDetector/Transformation.h
+math.h
+-
+opencv2/opencv.hpp
+../include/ObjectDetector/opencv2/opencv.hpp
+opencv2/highgui.hpp
+-
+ObjectDetector/Quaternion.h
+../include/ObjectDetector/ObjectDetector/Quaternion.h
 
 ../include/andres/marray.hxx
 cassert
@@ -341,6 +353,12 @@ iostream
 -
 opencv2/highgui/highgui.hpp
 -
+
+/home/qqh/projects/RandomForest/src/Transformation.cpp
+glog/logging.h
+-
+ObjectDetector/Transformation.h
+/home/qqh/projects/RandomForest/src/ObjectDetector/Transformation.h
 
 /home/qqh/projects/RandomForest/src/glm.cpp
 math.h

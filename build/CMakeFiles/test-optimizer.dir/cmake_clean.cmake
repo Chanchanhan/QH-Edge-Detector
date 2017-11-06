@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/DT.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/Render.cpp.o"
+  "CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/Model.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/Optimizer.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/glm.cpp.o"
