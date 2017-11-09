@@ -128,12 +128,30 @@ float& Transformation::z()
 {
   return m_pose.at<float>(0,5);
 }
+void Transformation::setPoseFromTransformationMatrix(const Eigen::Matrix< double, int(4), int(4) >& T)
+{
+ cv::Mat rotMat(3,3,CV_32FC1);
+ cv::Mat roV(3,1,CV_32FC1);
+ for(int c=0; c<3; c++)
+ {
+   for(int r=0; r<3; r++)
+   {
+     rotMat.at<float>(r,c) = T(r,c);
+   }    
+ }
+ roV=getRotationParametrization(rotMat);
+ u1()=roV.at<float>(0,0); 
+ u2()=roV.at<float>(1,0);
+ u3()=roV.at<float>(2,0);
+ x()=T(0,3);
+ y()=T(1,3);
+ z()=T(2,3);
+}
 
 void Transformation::setPoseFromTransformationMatrix(const cv::Mat &T)
 {
 //  LOG(INFO)<<"in T"<<T;
  
- int startIndex=1;
  cv::Mat rotMat(3,3,CV_32FC1);
  cv::Mat roV(3,1,CV_32FC1);
  for(int c=0; c<3; c++)

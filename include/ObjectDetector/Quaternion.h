@@ -16,5 +16,6 @@ public:
 	Quaternion dAxB(const float dA0,const float dA1,const float dA2);
 	Quaternion dAxB(const cv::Vec3f &dA);
 	cv::Vec3f GetEulerAngle() const;
+	cv::Vec3f GetRotVec() const;
 };
 }

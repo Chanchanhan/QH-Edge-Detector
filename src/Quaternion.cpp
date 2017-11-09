@@ -24,6 +24,17 @@ void Quaternion::SetEulerAngle(const cv::Vec3f &ea)
 	z = fSinHRoll * fCosHPitch * fCosHYaw - fCosHRoll * fSinHPitch * fSinHYaw;
 	Normalize();
 }
+cv::Vec3f Quaternion::GetRotVec() const
+{
+  cv::Vec3f axis(x,y,z),rvec;
+  float theta = acos(z) * 2;  
+  
+  axis =axis/sin(theta/2);  
+  axis = axis /cv::norm(axis);  
+  
+  rvec = axis*theta;  
+  return rvec;
+}
 
 cv::Vec3f Quaternion::GetEulerAngle() const
 {

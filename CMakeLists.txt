@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
-set(OpenCV_DIR "/usr/local/opencv-3.3.0/share/OpenCV")
-include_directories("/usr/local/opencv-3.3.0/include")
+# set(OpenCV_DIR "/usr/local/opencv-3.3.0/share/OpenCV")
+# include_directories("/usr/local/opencv-3.3.0/include")
 project(ml)
 include_directories(include)
 file(GLOB headers include/andres/* include/andres/ml/* include/edge/* include/tools/* include/ObjectDetector/*)
@@ -77,7 +77,9 @@ find_package(GLUT REQUIRED)
 include_directories( ${OPENGL_INCLUDE_DIRS}  ${GLUT_INCLUDE_DIRS} )
 # target_link_libraries(testas  )
 
-
+# Sophus 
+find_package( Sophus REQUIRED )
+include_directories( ${Sophus_INCLUDE_DIRS} )
 ##############################################################################
 # Eigen
 ##############################################################################
@@ -108,13 +110,13 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable(test-model src/unittest/test-model.cpp ${headers} ${SRC_LIST})
 add_test(test-model test-Edge-detector)
-target_link_libraries( test-model ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY} glog::glog) # exe 链接 OpenCV
+target_link_libraries( test-model ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}     ${Sophus_LIBRARIES} glog::glog) # exe 链接 OpenCV
 
 
 
 add_executable(test-optimizer src/unittest/test-optimizer.cpp ${headers} ${SRC_LIST})
 add_test(test-optimizer test-Edge-detector)
-target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY} glog::glog) # exe 链接 OpenCV
+target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}  ${Sophus_LIBRARIES} glog::glog) # exe 链接 OpenCV
 
 # set( 
 #     THIRD_PARTY_LIBS

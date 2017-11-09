@@ -7,6 +7,7 @@
 #include <opencv2/highgui.hpp>
 
 #include "ObjectDetector/Quaternion.h"
+#include "sophus/se3.h"
 namespace OD{
 class Transformation{
 public:
@@ -18,6 +19,7 @@ public:
   void rotateWithR(const cv::Mat &Rotation);
   void translationWith(const float &_x,const float &_y,const float &_z);
   void setPoseFromTransformationMatrix(const cv::Mat &T);
+  void setPoseFromTransformationMatrix(const Eigen::Matrix<double,4,4> &T);
 
   cv::Mat getDistortion(const cv::Mat &meanP);
   static cv::Mat getTransformationMatrix(const cv::Mat &pose);
