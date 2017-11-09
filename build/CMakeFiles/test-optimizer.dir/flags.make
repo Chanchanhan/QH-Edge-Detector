@@ -6,5 +6,5 @@ CXX_FLAGS = -std=c++11 -march=native -O3 -fopenmp -g
 
 CXX_DEFINES = -DGOOGLE_GLOG_DLL_DECL=""
 
-CXX_INCLUDES = -I/home/qqh/projects/RandomForest/include -I/usr/include/eigen3 -isystem /usr/local/include/opencv -isystem /usr/local/include 
+CXX_INCLUDES = -I/usr/local/opencv-3.3.0/include -I/home/qqh/projects/RandomForest/include -I/usr/include/eigen3 -isystem /usr/local/include -isystem /usr/local/include/opencv 
 

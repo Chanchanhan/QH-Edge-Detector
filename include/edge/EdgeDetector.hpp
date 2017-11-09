@@ -69,8 +69,15 @@ cv::Mat EdgeDetector::toTistanceTransform(cv::Mat src)
   Mat bw;
      
   cvtColor(src, bw, CV_BGR2GRAY);
-
-  cv::threshold(bw, bw, 40, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+  cv::adaptiveThreshold(bw,   // Input image
+		bw,// Result binary image
+		255,         // 
+		cv::ADAPTIVE_THRESH_GAUSSIAN_C, //
+		cv::THRESH_BINARY_INV, //
+		7, //
+		7  //
+		);
+//   cv::threshold(bw, bw, 40, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
   // Perform the distance transform algorithm
    // imshow("Binary Image", bw);
 //   for(int i=0;i<bw.size().height;i++){

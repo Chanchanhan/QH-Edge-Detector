@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
+set(OpenCV_DIR "/usr/local/opencv-3.3.0/share/OpenCV")
+include_directories("/usr/local/opencv-3.3.0/include")
 project(ml)
 include_directories(include)
 file(GLOB headers include/andres/* include/andres/ml/* include/edge/* include/tools/* include/ObjectDetector/*)
@@ -83,7 +85,7 @@ include_directories( "/usr/include/eigen3" )
 ##############################################################################
 # OpenCV
 ##############################################################################
-find_package( OpenCV 3.1 REQUIRED )
+find_package( OpenCV 3.3 REQUIRED )
 # if(OPENCV_FOUND)
 include_directories( ${OpenCV_INCLUDE_DIRS} )
 #     message(STATUS "OpenCV found")

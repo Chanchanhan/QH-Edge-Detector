@@ -15,7 +15,7 @@ const float LM_STEP =10 ;
 const float INIT_LAMDA =1;
 const float SIZE_A =1;
 const float INF =1e10;
-const float THREHOLD_DX= 1e7;
+const float THREHOLD_DX= 1.0e17;
 
 
 #define FACTOR_DEG_TO_RAD 0.01745329252222222222222222222222f
@@ -33,9 +33,9 @@ static void printMat(std::string name, cv::Mat M){
 }
 Optimizer::Optimizer(const Config& config, const Mat& initPose, bool is_writer)
 {
-  
+
   m_data.m_model->generatePoints();
-  
+
   m_data.m_model = new Model(config);
   //m_data.m_model->LoadGLMModel(config.filename.c_str());
 //   m_data.m_correspondence = new Correspondence(config.width,config.height);
@@ -341,7 +341,7 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const cv::Mat& pose)
       for(int i=0;i<=Nx;++i,X+=dX){
 	 Point point= m_data.m_model->X_to_x(X,extrinsic);	 	 
 	 Point nearst=getNearstPointLocation(point);
-	 float de2 = /*getDistance2ToEdege(point1,point2,nearst)+*/frame.at<float>(point);
+	 float de2 = frame.at<float>(point);
 	 meanE_LINE+=de2;
 //  	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " <<" Distance energy2: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" nEnergy = "<<frame.at<float>(nearst);	 
        }
@@ -356,10 +356,10 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const cv::Mat& pose)
 	 float de2 = /*getDistance2ToEdege(point1,point2,nearst)+*/frame.at<float>(point);
 	 float DX=pow(de2-meanE_LINE,2); 	
 	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << frame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" DX = "<<DX;	 
-	 if(DX<THREHOLD_DX||DX<meanE_LINE*meanE_LINE){
+//	 if(DX<THREHOLD_DX||DX<meanE_LINE*meanE_LINE){
 	  meanDX+=DX;
 	  energy+=de2;
-	 }
+//	 }
   
        }
 
