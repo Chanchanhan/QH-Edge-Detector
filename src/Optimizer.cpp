@@ -23,7 +23,7 @@ const float SIZE_A =1;
 const float INF =1e10;
 const float THREHOLD_DX= 1.0e17;
 const bool  USE_SOPHUS = 1;
-
+const bool  USE_MY_TRANSFORMATION = 1;
 #define FACTOR_DEG_TO_RAD 0.01745329252222222222222222222222f
 #define PRIOR_MAX_DEVIATION_CAMERA_HEIGHT			0.5f
 #define PRIOR_MAX_DEVIATION_CAMERA_ROTATION_XY			5.0f
@@ -122,13 +122,18 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
       b/=abs(b.at<float>(0,0));
       LOG(INFO)<<"A_inverse\n"<<A_inverse;      
       LOG(INFO)<<"b\n"<<b;
-      dX = -A_inverse*b*DX_SIZE;
+      dX =- A_inverse*b*DX_SIZE;
       LOG(WARNING)<<"dX "<<dX;
       }
   
       
       float e2_new;
-      if(USE_SOPHUS)
+      if(USE_MY_TRANSFORMATION){
+	newTransformation.setPose(m_Transformation.Pose());
+	newTransformation.xTransformation(dX);
+	e2_new = computeEnergy(frame, newTransformation.Pose());
+      }
+      else if(USE_SOPHUS)
       {      
 	Eigen::Vector3d v3d(m_Transformation.Pose().at<float>(0,0),m_Transformation.Pose().at<float>(0,1),m_Transformation.Pose().at<float>(0,2));     
 	Eigen::Vector3d translationV3(m_Transformation.Pose().at<float>(0,3),m_Transformation.Pose().at<float>(0,4),m_Transformation.Pose().at<float>(0,5));     
@@ -149,9 +154,6 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
 	  e2_new = computeEnergy(frame, newPose);
       }
       
-      
-      
-      
       while(e2_new>e2){	  
 	  LOG(INFO)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
 	  lamda*=LM_STEP;
@@ -161,14 +163,19 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
 	  b/=abs(b.at<float>(0,0));
 // 	  LOG(INFO)<<"A_inverse\n"<<A_inverse;      
 // 	  LOG(INFO)<<"b\n"<<b;
-	  Mat dX = A_inverse*b*DX_SIZE;
+	  Mat dX =- A_inverse*b*DX_SIZE;
 	  LOG(WARNING)<<"dX "<<dX;
 	  float lastE2;
 	  
 	  /*
  	  e2_new = computeEnergy(frame, newTransformation.Pose());
  	  LOG(WARNING)<<"newTransformation.Pose(): "<<newTransformation.Pose()<<" e2_new(newTransformation) = "<<e2_new;*/
-	  if(USE_SOPHUS)
+	  if(USE_MY_TRANSFORMATION){
+	    newTransformation.setPose(m_Transformation.Pose());
+	    newTransformation.xTransformation(dX);
+	    e2_new = computeEnergy(frame, newTransformation.Pose());
+	  }
+	  else if(USE_SOPHUS)
 	  {
 	    Vector6d se3_Update;
 	    for(int i=0;i<3;i++){
@@ -296,7 +303,7 @@ void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePos
 	/*get nearestEdgeDistance ponit*/
 	Point point(P_x.at<float>(0,0)/P_x.at<float>(2,0),P_x.at<float>(1,0)/P_x.at<float>(2,0));
 	Point nearstPoint = getNearstPointLocation(point);
-//	printf("point: %d %d \n",point.x,point.y);
+	printf("point: %d %d \n",point.x,point.y);
 // 	_j_Energy_X.at<float>(0,0)=2*((point1.y-point2.y)*nearstPoint.x +
 // 				     ((point1.x*point2.y-point2.x*point1.y)+(point2.x-point1.y)*nearstPoint.y)*(point1.y-point2.y))
 // 				    * (1.f/(pow((point2.x-point1.x),2)+pow((point2.y-point1.y),2)));
