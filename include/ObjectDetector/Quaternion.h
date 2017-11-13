@@ -15,6 +15,7 @@ public:
 	void SetEulerAngle(const cv::Vec3f& ea);
 	Quaternion dAxB(const float dA0,const float dA1,const float dA2);
 	Quaternion dAxB(const cv::Vec3f &dA);
+	void SetRotVec(const cv::Vec3f &rvec);
 	cv::Vec3f GetEulerAngle() const;
 	cv::Vec3f GetRotVec() const;
 };

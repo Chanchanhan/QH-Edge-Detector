@@ -3,10 +3,24 @@ cmake_minimum_required(VERSION 2.6)
 # include_directories("/usr/local/opencv-3.3.0/include")
 project(ml)
 include_directories(include)
-file(GLOB headers include/andres/* include/andres/ml/* include/edge/* include/tools/* include/ObjectDetector/*)
+include_directories(3rdparty)
+file(GLOB headers include/andres/* include/andres/ml/* 3rdparty/GLRenderer/include/* 3rdparty/POSEST/include/* 3rdparty/POSEST/include/levmar/* 3rdparty/POSEST/include/mlsl/* include/edge/* include/tools/* include/ObjectDetector/*)
 enable_testing()
 
 aux_source_directory(./src/  SRC_LIST)
+aux_source_directory(./3rdparty/GLRenderer/src/ SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/ SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/mlsl/ SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/EdgeDistanceFieldTraking.cpp SRC_LIST)
+
+aux_source_directory(./3rdparty/POSEST/src/levmar/Axb.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/expfit.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/lmbc.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/lmblec.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/lmbleic.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/mestimators.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/misc.c SRC_LIST)
+
 # aux_source_directory(./src/DT.cpp  SRC_LIST)
 
 set( CMAKE_CXX_COMPILER "g++" )
@@ -99,9 +113,10 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 # targets
 ##############################################################################
 # 
-# add_executable(test-Edge-detector src/unittest/test-obj-detector.cpp ${headers} ${SRC_LIST})
-# add_test(test-Edge-detector test-Edge-detector)
-# target_link_libraries( test-Edge-detector ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY}) # exe 链接 OpenCV
+add_executable(test-obj-detector src/unittest/test-obj-detector.cpp ${headers} ${SRC_LIST})
+add_test(test-obj-detector test-obj-detector)
+target_link_libraries( test-obj-detector  ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}   ${Sophus_LIBRARIES} glog::glog   -O2 blas lapack
+) # exe 链接 OpenCV
 
 
 # add_executable(test-DT src/unittest/test-DT.cpp ${headers} ${SRC_LIST})
@@ -110,13 +125,15 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable(test-model src/unittest/test-model.cpp ${headers} ${SRC_LIST})
 add_test(test-model test-Edge-detector)
-target_link_libraries( test-model ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}     ${Sophus_LIBRARIES} glog::glog) # exe 链接 OpenCV
+target_link_libraries( test-model ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}     ${Sophus_LIBRARIES} glog::glog     -O2 blas lapack
+) # exe 链接 OpenCV
 
 
 
 add_executable(test-optimizer src/unittest/test-optimizer.cpp ${headers} ${SRC_LIST})
 add_test(test-optimizer test-Edge-detector)
-target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}  ${Sophus_LIBRARIES} glog::glog) # exe 链接 OpenCV
+target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}  ${Sophus_LIBRARIES} glog::glog     -O2 blas lapack
+) # exe 链接 OpenCV
 
 # set( 
 #     THIRD_PARTY_LIBS

@@ -22,7 +22,7 @@ const float INIT_LAMDA =1;
 const float SIZE_A =1;
 const float INF =1e10;
 const float THREHOLD_DX= 1.0e17;
-
+const bool  USE_SOPHUS = 1;
 
 #define FACTOR_DEG_TO_RAD 0.01745329252222222222222222222222f
 #define PRIOR_MAX_DEVIATION_CAMERA_HEIGHT			0.5f
@@ -33,6 +33,16 @@ const float THREHOLD_DX= 1.0e17;
 #define SIMULATION_MAX_TRANSLATIONS				1
 #define SIMULATION_MAX_TRANSLATION_RATIO		0.5f
 typedef Eigen::Matrix<double,6,1> Vector6d;
+
+struct EDFTdata 
+{
+	double *K; // intrinsics
+	float *distMap; // distance map
+	double(*ctrPts3D)[3]; // contour points
+	int nCtrPts; // the number of contour points
+
+	int width, height; // the (width, height) of distMap
+};
 Optimizer::Optimizer(const Config& config, const Mat& initPose, bool is_writer)
 {
 
@@ -70,119 +80,6 @@ Optimizer::~Optimizer()
 cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat& locations, const int frameId)
 {
    int64 time0 = cv::getTickCount();
-   
-   {
-//        int64 time0 = cv::getTickCount();
-//   {
-//     _locations=(int *)locations.data;
-//     _col=frame.cols;
-//     _row=frame.rows;
-//     printMat("frame",frame);
-//     imshow("frame",frame);
-//     waitKey(0);
-//     cv::Mat A_I=cv::Mat::eye(6,6,CV_32FC1);
-//     float lamda=INIT_LAMDA;
-//     std::vector<cv::Point> nPoints;
-// 
-//     cv::Mat _prePose =prePose.clone();
-//     int itration_num=0;
-//     cv::Mat newPose=cv::Mat::zeros(1,6,CV_32FC1);
-//     cv::Mat _t_newPose=cv::Mat::zeros(1,6,CV_32FC1);
-// 
-//     Transformation new_T,pre_T;
-//     m_data.m_model->setVisibleLinesAtPose(_prePose);
-//     
-//     
-//     float e2 = computeEnergy(frame, _prePose);
-//     pre_T= Transformation(_prePose);
-// 
-//     while(++itration_num<MAX_ITERATIN_NUM){      
-//       
-//       cv::Mat A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1);
-//       if(e2<THREHOLD_ENERGY){
-// 	LOG(WARNING)<<"good init ,no need to optimize!";
-// 	return _prePose;
-//       }
-//       
-//       constructEnergyFunction(frame,prePose,A_I,lamda, A,b);
-//       
-//       LOG(WARNING)<<"A_I\n"<<A_I;
-//       LOG(WARNING)<<"lamda = "<<lamda;
-//       LOG(WARNING)<<"A\n"<<A;
-//       LOG(WARNING)<<"b\n"<<b;
-//     
-//       Mat A_inverse ;
-//       cv::invert(A,A_inverse);
-//      printMat("b",b);
-//       LOG(WARNING)<<"A_inverse\n"<<A_inverse;
-//       Mat dX = A_inverse*b*DX_SIZE;
-//       LOG(WARNING)<<"dX"<<dX;
-// 
-//       Eigen::Matrix3d R;
-//       cv::Mat R_mat = Transformation::getRotationMatrix(cv::Vec3f(_prePose.at<float>(0,0),_prePose.at<float>(0,1),_prePose.at<float>(0,2)));
-//       for(int i=0;i<3;i++){
-// 	for(int j=0;j<3;j++){
-// 	 R(i,j)=(double)R_mat.at<float>(i,j); 
-// 	}
-//       }
-//       double norm=sqrt(v3d[0]*v3d[0]+v3d[1]*v3d[1]+v3d[2]*v3d[2]);
-//       v3d/=norm;
-//       Sophus::SO3 SO3_r(R);
-//       Sophus::SO3 SO3_v((double)_prePose.at<float>(0,0),(double)_prePose.at<float>(0,1),(double)_prePose.at<float>(0,2));
-//       LOG(WARNING)<<"SO3_v\n"<<SO3_v.matrix();
-//       Eigen::Vector3d translationV3(_prePose.at<float>(0,3),_prePose.at<float>(0,4),_prePose.at<float>(0,5));
-//       Sophus::SE3 _SE3(SO3_r,translationV3);
-//       Vector6d se3_Update;
-//       for(int i=0;i<6;i++){
-// 	se3_Update(i,0)=(double)dX.at<float>(0,i);
-//       }
-//       _SE3=Sophus::SE3::exp(se3_Update)*_SE3;
-//       LOG(WARNING)<<"_SE3\n"<<_SE3.matrix();
-//       
-//       new_T.setPose(_prePose);
-// 
-//       UpdateStateLM(dX,_prePose,newPose);
-//       new_T.xTransformation(dX);
-//       new_T.setPose(pre_T.Pose());
-//       new_T.xTransformation(dX);
-//       new_T.setPoseFromTransformationMatrix(_SE3.matrix());
-//       LOG(WARNING)<<"Transformation"<<Transformation::getTransformationMatrix(newPose);
-//       LOG(WARNING)<<"new_T"<<new_T.transformationMatrix();
-// 
-// 
-//       std::vector<cv::Point> new_nPoints;
-//       float _e2_new = computeEnergy(frame, newPose);
-//       float e2_new = computeEnergy(frame, new_T.Pose());
-//       LOG(WARNING)<<"_SE3 e2_new = "<<e2_new<<" _e2_new = "<<_e2_new;
-//       new_T.setPose(newPose);
-//       _SE3.matrix();
-//       
-//       if(e2_new<e2){
-// 	LOG(WARNING)<<"good !To optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
-// 	A_I=A.clone();
-// 	computeEnergy(frame, new_T.Pose());
-// 	_prePose= new_T.Pose().clone();
-// 	e2= e2_new;
-// 	lamda=INIT_LAMDA;
-//       }else{
-// 	LOG(WARNING)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
-// 	lamda*=LM_STEP;
-//       }
-//       if(e2_new<THREHOLD_ENERGY){
-// 	printf("succees optimize!\n");
-// 	return  new_T.Pose();
-//       }
-//       
-//     }
-//     LOG(WARNING)<<"to much itration_num!";
-//     return _prePose;
-    
-  }
-  
-//   int64 teim0 = cv::getTickCount();
-  
-  //printf("solving time:%lf\n",(time_s1-time_s)/cv::getTickFrequency());
-//   }
   {
     LOG(WARNING)<<" ";
     LOG(WARNING)<<"frameId = "<<frameId;
@@ -202,73 +99,59 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
     Transformation newTransformation;
     m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());    
     float e2 = computeEnergy(frame, m_Transformation.Pose());
-    while(++itration_num<MAX_ITERATIN_NUM){      
-      	  
-      LOG(INFO)<<"a itration_num = " <<itration_num;
-
-      
-      cv::Mat _A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1),A= cv::Mat::zeros(6,6,CV_32FC1);
-      if(e2<THREHOLD_ENERGY){
+    if(e2<THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
 	return m_Transformation.Pose();
       }else{      	
 	LOG(WARNING)<<"to optimize with energy = "<<e2;	
-      }
-
+    }
+    while(++itration_num<MAX_ITERATIN_NUM){    
+      Sophus::SE3 T_SE3;	  
+      LOG(INFO)<<"a itration_num = " <<itration_num;
+      cv::Mat _A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1),A= cv::Mat::zeros(6,6,CV_32FC1);      
+      Mat A_inverse,dX ;
       constructEnergyFunction(frame,m_Transformation.Pose(),A_I,lamda, _A,b);
       _A/=abs(_A.at<float>(0,0));
-
       A=_A+A_I*lamda;
-      LOG(INFO)<<"A_I\n"<<A_I;
+      cv::invert(A,A_inverse);
+      //get dX
+      {
+	LOG(INFO)<<"A_I\n"<<A_I;
       LOG(INFO)<<"lamda = "<<lamda;
       LOG(INFO)<<"A\n"<<A;
-//       double norm=sqrt(v3d[0]*v3d[0]+v3d[1]*v3d[1]+v3d[2]*v3d[2]);
-//       v3d/=norm;
-//       
-      Eigen::Vector3d v3d(m_Transformation.Pose().at<float>(0,0),m_Transformation.Pose().at<float>(0,1),m_Transformation.Pose().at<float>(0,2));
-
-
-
-      
-      Eigen::Vector3d translationV3(m_Transformation.Pose().at<float>(0,3),m_Transformation.Pose().at<float>(0,4),m_Transformation.Pose().at<float>(0,5));
-      Sophus::SE3 T_SE3( Sophus::SO3::exp(v3d),translationV3); 
- 
-      
-      LOG(WARNING)<<"T_SE3\n"<<T_SE3.matrix();
-      LOG(WARNING)<<"T\n"<<m_Transformation.transformationMatrix();
-      Mat A_inverse ;
-      cv::invert(A,A_inverse);
-    //  printMat("b",b);
       b/=abs(b.at<float>(0,0));
       LOG(INFO)<<"A_inverse\n"<<A_inverse;      
       LOG(INFO)<<"b\n"<<b;
-      Mat dX = A_inverse*b*DX_SIZE;
-//       LOG(WARNING)<<"dX "<<dX;
+      dX = -A_inverse*b*DX_SIZE;
+      LOG(WARNING)<<"dX "<<dX;
+      }
+  
       
-      //use sophus 
-      {
+      float e2_new;
+      if(USE_SOPHUS)
+      {      
+	Eigen::Vector3d v3d(m_Transformation.Pose().at<float>(0,0),m_Transformation.Pose().at<float>(0,1),m_Transformation.Pose().at<float>(0,2));     
+	Eigen::Vector3d translationV3(m_Transformation.Pose().at<float>(0,3),m_Transformation.Pose().at<float>(0,4),m_Transformation.Pose().at<float>(0,5));     
+	T_SE3 =Sophus::SE3( Sophus::SO3::exp(v3d),translationV3); 
 	Vector6d se3_Update;
 	for(int i=0;i<3;i++){
 	  se3_Update(i,0)=(double)dX.at<float>(0,i+3);
 	  se3_Update(i+3,0)=(double)dX.at<float>(0,i);
 	}
-	
-	Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update);	      LOG(WARNING)<<"dX "<<dX;
+	Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
+	Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
+	newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
+	e2_new = computeEnergy(frame, newTransformation.Pose());
 
-	LOG(WARNING)<<"update_SE3.translation : "<<update_SE3.translation();
-	T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;
+      }else{
+	  UpdateStateLM(dX,m_Transformation.Pose(),newPose);
+	  newTransformation.setPose(newPose);
+	  e2_new = computeEnergy(frame, newPose);
       }
       
-//       m_Transformation.setPoseFromTransformationMatrix(T_SE3.matrix());
-//       float SE3_e2_new = computeEnergy(frame, m_Transformation.Pose());
       
       
-      UpdateStateLM(dX,m_Transformation.Pose(),newPose);
-      float e2_new = computeEnergy(frame, newPose);
       
-//       LOG(WARNING)<<"e2_new = "<<e2_new <<"SE3_e2_new = "<<SE3_e2_new;
-      LOG(WARNING)<<"_prePose "<<m_Transformation.Pose();
-
       while(e2_new>e2){	  
 	  LOG(INFO)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
 	  lamda*=LM_STEP;
@@ -280,24 +163,37 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
 // 	  LOG(INFO)<<"b\n"<<b;
 	  Mat dX = A_inverse*b*DX_SIZE;
 	  LOG(WARNING)<<"dX "<<dX;
-  	  UpdateStateLM(dX,m_Transformation.Pose(),newPose);	   
-//  	  UpdateStateLM(dX,m_Transformation.Pose(),newTransformation);
-// 	  LOG(INFO)<<"newPose_T\n"<<Transformation::getTransformationMatrix(newPose);
-	  float lastE2=e2_new;
-
-	  
- 	  e2_new = computeEnergy(frame, newPose);
-  	  LOG(WARNING)<<"newPose"<<newPose<<"  e2_new(newPose) = "<<e2_new;
+	  float lastE2;
 	  
 	  /*
  	  e2_new = computeEnergy(frame, newTransformation.Pose());
  	  LOG(WARNING)<<"newTransformation.Pose(): "<<newTransformation.Pose()<<" e2_new(newTransformation) = "<<e2_new;*/
-	  
-	  
+	  if(USE_SOPHUS)
+	  {
+	    Vector6d se3_Update;
+	    for(int i=0;i<3;i++){
+	      se3_Update(i,0)=(double)dX.at<float>(0,i+3);
+	      se3_Update(i+3,0)=(double)dX.at<float>(0,i);
+	    }
+	    Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
+	    Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
+	    newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
+	    e2_new = computeEnergy(frame, newTransformation.Pose());
+	  }else{
+	    UpdateStateLM(dX,m_Transformation.Pose(),newPose);	
+	    lastE2=e2_new;
+	    newTransformation.setPose(newPose);
+	    e2_new = computeEnergy(frame, newPose);
+	  }
+	  LOG(WARNING)<<"newPose"<<newTransformation.Pose()<<"  e2_new(newPose) = "<<e2_new;
+
 	  itration_num++;
-	  if(itration_num>MAX_ITERATIN_NUM/*||fabs(lastE2-e2_new)<1e-10*/){
+	  if(itration_num>MAX_ITERATIN_NUM){
 	    LOG(INFO)<<"to much itration_num!";
 	    return m_Transformation.Pose();    
+	  }
+	  if(fabs(e2-e2_new)<1e-5){
+	    return m_Transformation.Pose();  
 	  }
 	
       }
@@ -308,10 +204,10 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
       }else{      
 	LOG(WARNING)<<"good !To optimize! e2 :"<<e2<<" e2_new: "<<e2_new;
 	LOG(INFO)<<"dX "<<dX;
-	LOG(INFO)<<"newPose "<<newPose;
+	LOG(INFO)<<"newPose "<<newTransformation.Pose();
 	A_I=A.clone();
 	A_I/=abs(A_I.at<float>(0,0));
-	m_Transformation.setPose(newPose);         
+	m_Transformation.setPose(newTransformation.Pose());         
 //         m_Transformation.setPose(newTransformation.Pose());
 
 	e2= e2_new;
@@ -562,8 +458,8 @@ void Optimizer::UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Ma
 // 	Quaternionf q1, q2;
 // 	C1.ToQuaternion(q1.v0123());
   Quaternion q1,q2;
-  cv::Vec3f ea1(pose_Old.at<float>(0,0),pose_Old.at<float>(0,1),pose_Old.at<float>(0,2));
-  q1.SetEulerAngle(ea1);
+  cv::Vec3f rotV(pose_Old.at<float>(0,0),pose_Old.at<float>(0,1),pose_Old.at<float>(0,2));
+  q1.SetRotVec(rotV);
   
 // 	dq.v012x() = dx.v0123();
 // 	//dq X q1 ->q2
@@ -573,8 +469,8 @@ void Optimizer::UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Ma
   q2 =q1.dAxB(dq);
   
   
-//   cv::Vec3f ea2=q2.GetRotVec();
-   cv::Vec3f ea2=q2.GetEulerAngle();
+  cv::Vec3f rotV_New=q2.GetRotVec();
+//    cv::Vec3f ea2=q2.GetEulerAngle();
   
 
 // 	LA::AlignedVector3f t1, t2;
@@ -600,7 +496,7 @@ void Optimizer::UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Ma
   t2[2]+=dx.at<float>(0,5);
   
   for(int i=0;i<3;i++){
-    pose_New.at<float>(0,i)=ea2[i];
+    pose_New.at<float>(0,i)=rotV_New[i];
     pose_New.at<float>(0,i+3)=t2[i];
   }
 //   LOG(INFO)<<"pose_Old "<<pose_Old;

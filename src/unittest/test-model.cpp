@@ -7,7 +7,7 @@
 #include "edge/EdgeFeature.hpp"
 #include "edge/ReadImg.hpp"
 #include "edge/EdgeDetector.hpp"
-#include "tools/glm.h"
+#include "GLRenderer/include/glm.h"
 #include "ObjectDetector/Model_Config.h"
 #include "ObjectDetector//Render.h"
 #include "ObjectDetector/Model.h"

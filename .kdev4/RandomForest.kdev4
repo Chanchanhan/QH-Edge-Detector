@@ -153,7 +153,7 @@ pattern=__pycache__
 targets=2
 
 [Launch]
-Launch Configurations=Launch Configuration 1,Launch Configuration 2,Launch Configuration 7,Launch Configuration 0,Launch Configuration 3,Launch Configuration 4
+Launch Configurations=Launch Configuration 1,Launch Configuration 2,Launch Configuration 7,Launch Configuration 0,Launch Configuration 3,Launch Configuration 4,Launch Configuration 5
 
 [Launch][Launch Configuration 0]
 Configured Launch Modes=debug
@@ -233,6 +233,18 @@ Type=Native Application
 [Launch][Launch Configuration 4][Data]
 Configured from ProjectItem=RandomForest,test-DT
 Project Target=RandomForest,test-DT
+Working Directory=file:///home/qqh/projects/RandomForest/build/
+isExecutable=false
+
+[Launch][Launch Configuration 5]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=test-obj-detector
+Type=Native Application
+
+[Launch][Launch Configuration 5][Data]
+Configured from ProjectItem=RandomForest,test-obj-detector
+Project Target=RandomForest,test-obj-detector
 Working Directory=file:///home/qqh/projects/RandomForest/build/
 isExecutable=false
 

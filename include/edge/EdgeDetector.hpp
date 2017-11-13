@@ -56,10 +56,29 @@ void EdgeDetector::getDistanceTransform(const Mat &src, const float &mask, Mat& 
   weights.push_back(mask);	
   weights.push_back(mask);
 //   LOG(ERROR)<<"input: "<<std::endl<<input;
-  distanceTransform(input,dst,locations,weights);
-//     imshow("dst",dst/255);
-//waitKey(0);
-//   LOG(ERROR)<<"dst: "<<std::endl<<dst;
+  int imageHeight=dst.size().height;
+  int imageWidth=dst.size().width;
+
+  cv::Mat distMap;
+  distanceTransform(input,distMap,locations,weights);
+  dst = Mat::zeros(distMap.size(),CV_32FC1);
+  if (distMap.isContinuous()/* && distMap.depth()==CV_32FC1*/)
+  {
+    dst=distMap.clone();
+    /*memcpy(dst.data, distMap.data, imageHeight * imageWidth * sizeof(float));   */ 
+  }
+  else
+  {
+    for (int i = 0; i < imageHeight; i++)
+    {
+      float *rptr = distMap.ptr<float>(i);
+      for (int j = 0; j < imageWidth; j++)
+      {
+	dst.data[i*imageWidth + j] = rptr[j];	
+      }      
+    }    
+  }
+  
 }
 
 

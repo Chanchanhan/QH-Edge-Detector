@@ -64,8 +64,7 @@ Model::~Model()
 void Model::LoadGLMModel(const std::string& filename)
 {
 	m_model = glmReadOBJ(const_cast<char*>(filename.c_str()));
-	m_radius = glmMaxRadius(m_model);
-	
+	m_radius = glmMaxRadius(m_model);	
 	if(!m_model)
 		return;
 }

@@ -10,7 +10,7 @@
 #include "edge/EdgeFeature.hpp"
 #include "edge/ReadImg.hpp"
 #include "edge/EdgeDetector.hpp"
-#include "tools/glm.h"
+#include "GLRenderer/include/glm.h"
 #include "ObjectDetector/Model_Config.h"
 #include "ObjectDetector//Render.h"
 #include "ObjectDetector/Optimizer.h"
@@ -69,6 +69,7 @@ int main(int argc, char* argv[]) {
 //     optimizer.m_data.m_model->DisplayCV(pose,distanceFrame);
 
     //to test model  , get its point set ,and try to compute energy
+    
     imshow("curFrame",curFrame);
     waitKey(0);
     

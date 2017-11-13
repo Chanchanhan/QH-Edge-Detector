@@ -5,7 +5,7 @@
 // #include <gl/freeglut.h>
 #include <GL/freeglut.h>
 
-#include "tools/glm.h"
+#include "GLRenderer/include/glm.h"
 #include "ObjectDetector/CameraCalibration.h"
 #include <opencv2/core/core.hpp>
 using namespace OD;

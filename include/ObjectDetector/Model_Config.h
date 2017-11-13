@@ -3,13 +3,15 @@
 
 #include <string>
 
-#include "tools//glm.h"
+#include "GLRenderer/include/glm.h"
+#include "GLRenderer/include/cvCamera.h"
 #include "ObjectDetector/CameraCalibration.h"
 namespace OD
 {
   class Config
   {
   public:
+    Camera camera;
     GLMmodel* model;
     CameraCalibration camCalibration ;
     int width;
