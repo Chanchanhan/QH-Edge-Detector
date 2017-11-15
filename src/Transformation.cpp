@@ -1,5 +1,5 @@
 #include<glog/logging.h>
-
+#include<math.h>
 #include "ObjectDetector/Transformation.h"
 
 using namespace OD;
@@ -42,8 +42,15 @@ void Transformation::setPose(const cv::Mat& pose)
     std::cout<<"  "<<m_pose[i];
   }
 }
-void Transformation::setPose(const float pose[6])
+void Transformation::setPose(const float * pose,const bool check )
 {
+  if(check){
+    if(!toMove(pose))	{
+      LOG(WARNING)<<"Not allowed to move ,new T is too big!";
+      return;
+      
+    }
+  }
   memcpy(m_pose,pose,sizeof(float)*6);
 //   for(int i=0;i<6;i++){
 //    m_pose[i]=pose[i];
@@ -197,7 +204,6 @@ void Transformation::setPoseFromTransformationMatrix(const cv::Mat &T)
  x()=T.at<float>(0,3);
  y()=T.at<float>(1,3);
  z()=T.at<float>(2,3);
-//  LOG(INFO)<<"out T"<<transformationMatrix();
 }
 
 void Transformation::rotateWithZ(const float &angle)
@@ -288,20 +294,26 @@ cv::Mat Transformation::getTransformationMatrix(const float *pose)
 
   return T;
 }
-cv::Mat Transformation::getTransformationMatrix(const cv::Mat &pose)
+
+bool Transformation::toMove(const float* pose, const float maxTheta, const float maxTran)
 {
-
-  cv::Mat rotMat(3,3,CV_32FC1);
-  rotMat=getRotationMatrix(cv::Vec3f(pose.at<float>(0,0),pose.at<float>(0,1),pose.at<float>(0,2)));
-  cv::Mat T = cv::Mat::eye(4,4,CV_32FC1);
-  for(int c=0; c<3; c++)
-  {
-    for(int r=0; r<3; r++)
-    {
-      T.at<float>(r,c) = rotMat.at<float>(r,c);
-    }    
+  float theta,tran;
+  getSub2Pose(pose,theta,tran);
+  LOG(WARNING)<<"theta = "<<theta<<" tran = "<<tran;
+  if(std::isnan(theta)||std::isnan(tran)){
+    return false;
   }
-  T.at<float>(0,3)=pose.at<float>(0,3); T.at<float>(1,3)=pose.at<float>(0,4); T.at<float>(2,3) = pose.at<float>(0,5);
+  return (theta<maxTheta&&tran<maxTran);
+}
 
-  return T;
+void  Transformation::getSub2Pose(const float* pose, float &theta, float &tran)
+{
+  	
+  Eigen::Vector3d v3d1(m_pose[0],m_pose[1],m_pose[2]),v3d2(pose[0],pose[1],pose[2]),v3d;     
+
+  Sophus::SO3 S01=Sophus::SO3::exp(v3d1),S02=Sophus::SO3::exp(v3d2);
+  S01=S02.inverse()*S01;
+  v3d=S01.log();
+  theta = sqrt(v3d[0]*v3d[0]+v3d[1]*v3d[1]+v3d[2]*v3d[2]);
+  tran =sqrt(pow(m_pose[3]-pose[3],2)+pow(m_pose[4]-pose[4],2)+pow(m_pose[5]-pose[5],2));
 }

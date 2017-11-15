@@ -22,17 +22,18 @@ public:
   void setPoseFromTransformationMatrix(const Eigen::Matrix<double,4,4> &T);
 
   cv::Mat getDistortion(const cv::Mat &meanP);
-  static cv::Mat getTransformationMatrix(const cv::Mat &pose);
   static cv::Mat getRotationMatrix(const cv::Vec3f &parametrization);
   static cv::Mat getRotationParametrization(const cv::Mat &rotMat);
   static cv::Mat getRotationMatrixb_so3(const float &x,const float &y, const float &z,float &theta,cv::Mat &so_x);
   static cv::Mat getTransformationMatrix(const cv::Vec3f &YDR,const cv::Vec3f &translation);
   static cv::Mat getTransformationMatrix(const float *pose);
+  
   cv::Mat transformationMatrix() ;
   void xTransformation(Transformation &_T);
   void xTransformation(const cv::Mat &Dx);
   void setPose(const cv::Mat &pose);
-  void setPose(const float pose[6]);
+  void setPose(const float * pose,const bool check=false);
+  bool toMove(const float *pose,const float maxTheta = 1.f,const float maxTran =15.f);
   cv::Mat M_Pose();
   float &x();
   float &y();
@@ -44,6 +45,7 @@ public:
   const float* Pose();
   Quaternion &quaternion();
 private:
+  void  getSub2Pose(const float* pose, float &theta, float &tran);
   float *m_pose;
   Quaternion m_quaternion;
 };
