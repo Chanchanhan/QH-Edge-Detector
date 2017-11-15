@@ -31,7 +31,7 @@
 #include "opencv2/opencv_modules.hpp"
 #include "edge/DT.hpp"
 #include <algorithm>
-
+#define PERMIT_TO_SELF
 using namespace std;
 using namespace cv;
 
@@ -68,6 +68,8 @@ void distanceTransform1d(float *f, float *d, int *l, int n) {
 	z[1] = +inf;
 	
 	for (int q = 1; q <= n - 1; q++) {
+#ifdef PERMIT_TO_SELF
+
 		float s = ((f[q] + square(q)) - (f[v[k]] + square(v[k])))
 				/ (2 * q - 2 * v[k]);
 		while (s <= z[k]) {
@@ -80,7 +82,7 @@ void distanceTransform1d(float *f, float *d, int *l, int n) {
 		z[k] = s;
 		z[k + 1] = +inf;
 	}
-
+#endif
 	k = 0;
 	for (int q = 0; q <= n - 1; q++) {
 		while (z[k + 1] < q)
@@ -92,79 +94,6 @@ void distanceTransform1d(float *f, float *d, int *l, int n) {
 	delete[] v;
 	delete[] z;
 }
-//void distanceTransform2d(const Mat &inputMatrix, Mat &outputMatrix,
-//		Mat &locations) {
-//	// Distance transform along rows
-//	for (int row = 0; row < inputMatrix.size[0]; ++row) {
-//		int dataStart = row * inputMatrix.step[0] / 4;
-//		distanceTransform1d(inputMatrix, outputMatrix, locations, dataStart, 1);
-//	}
-//
-//	// Now do it along columns, taking as input, the previous result
-//	for (int col = 0; col < inputMatrix.size[1]; ++col) {
-//		int dataStart = col * inputMatrix.step[1] / 4;
-//		distanceTransform1d(outputMatrix, outputMatrix, locations, dataStart,
-//				0);
-//	}
-//
-//}
-/*
- * This would be the functions that perform a generalized distance transform on a 2, and 3
- * dimensional matrix. There's a pattern that enables us to perform it on matrices of
- * arbitrary dimension:
- * For each dimension, for each 1d slice on that dimension  perform a
- * 1d generalized distance transform.
- */
-//void distanceTransform2d(const Mat &inputMatrix, Mat &outputMatrix,
-//		Mat &locations) {
-//	// Distance transform along rows
-//	for (int row = 0; row < inputMatrix.size[0]; ++row) {
-//		int dataStart = row * inputMatrix.step[0] / 4;
-//		distanceTransform1d(inputMatrix, outputMatrix, locations, dataStart, 1);
-//	}
-//
-//	// Now do it along columns, taking as input, the previous result
-//	for (int col = 0; col < inputMatrix.size[1]; ++col) {
-//		int dataStart = col * inputMatrix.step[1] / 4;
-//		distanceTransform1d(outputMatrix, outputMatrix, locations, dataStart,
-//				0);
-//	}
-//
-//}
-//
-//void distanceTransform3d(const Mat &inputMatrix, Mat &outputMatrix,
-//		Mat &locations) {
-//	// Distance transform along X axis
-//	for (int z = 0; z < inputMatrix.size[0]; ++z) {
-//		for (int row = 0; row < inputMatrix.size[1]; ++row) {
-//			int dataStart = row * inputMatrix.step[1] / 4;
-//			dataStart += z * inputMatrix.step[0] / 4;
-//			distanceTransform1d(inputMatrix, outputMatrix, locations, dataStart,
-//					2);
-//		}
-//	}
-//
-//	// Y axis
-//	for (int z = 0; z < inputMatrix.size[0]; ++z) {
-//		for (int col = 0; col < inputMatrix.size[2]; ++col) {
-//			int dataStart = col * inputMatrix.step[2] / 4;
-//			dataStart += z * inputMatrix.step[0] / 4;
-//			distanceTransform1d(outputMatrix, outputMatrix, locations,
-//					dataStart, 1);
-//		}
-//	}
-//
-//	// Z axis
-//	for (int row = 0; row < inputMatrix.size[1]; ++row) {
-//		for (int col = 0; col < inputMatrix.size[2]; ++col) {
-//			int dataStart = col * inputMatrix.step[2] / 4;
-//			dataStart += row * inputMatrix.step[1] / 4;
-//			distanceTransform1d(outputMatrix, outputMatrix, locations,
-//					dataStart, 0);
-//		}
-//	}
-//
-//}
 
 // Parallel invoker
 class DistanceTransformInvoker: public ParallelLoopBody {

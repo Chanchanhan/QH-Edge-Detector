@@ -5,8 +5,6 @@
 
 
 
-#include "andres/marray.hxx"
-#include "andres/ml/decision-trees.hxx"
 #include "edge/EdgeFeature.hpp"
 #include "edge/ReadImg.hpp"
 #include "edge/EdgeDetector.hpp"
@@ -19,7 +17,7 @@
 ORD::Render g_render;
 OD::CameraCalibration g_calibration;
 
-const float mask =10.f;
+const float mask =5.f;
 int main(int argc, char* argv[]) {
   
   FLAGS_log_dir="/home/qqh/output/ObjTrackLog/";
@@ -64,7 +62,8 @@ int main(int argc, char* argv[]) {
     frameId++;
     Mat distanceFrame,locations;
     edgeDetector_.getDistanceTransform(curFrame,mask,distanceFrame,locations);
-    pose=optimizer.optimizingLM(pose,distanceFrame,locations,frameId);
+    pose=optimizer.optimizingLM(pose,curFrame,distanceFrame,locations,frameId);
+    LOG(WARNING)<<"result pose : "<<pose;
     optimizer.m_data.m_model->DisplayCV(pose,curFrame);
 //     optimizer.m_data.m_model->DisplayCV(pose,distanceFrame);
 

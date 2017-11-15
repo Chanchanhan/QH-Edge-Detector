@@ -14,7 +14,7 @@ using namespace OD;
 const int MAX_ITERATIN_NUM =50;
 const float THREHOLD_ENERGY = 160.0f;
 const float DX_SIZE = 1.f;
-const float NX_LENGTH = 0.01f;
+const float NX_LENGTH = 0.02f;
 const float ENERGY_SIZE = 1.0f;
 const float J_SIZE = 0.00001f;
 const float LM_STEP =10 ;
@@ -23,7 +23,7 @@ const float SIZE_A =1;
 const float INF =1e10;
 const float THREHOLD_DX= 1.0e17;
 const bool  USE_SOPHUS = 1;
-const bool  USE_MY_TRANSFORMATION = 1;
+const bool  USE_MY_TRANSFORMATION = 0;
 #define FACTOR_DEG_TO_RAD 0.01745329252222222222222222222222f
 #define PRIOR_MAX_DEVIATION_CAMERA_HEIGHT			0.5f
 #define PRIOR_MAX_DEVIATION_CAMERA_ROTATION_XY			5.0f
@@ -32,6 +32,7 @@ const bool  USE_MY_TRANSFORMATION = 1;
 #define SIMULATION_MAX_ROTATION_RATIO			0.3f
 #define SIMULATION_MAX_TRANSLATIONS				1
 #define SIMULATION_MAX_TRANSLATION_RATIO		0.5f
+#define DRAW_LINE_P2NP
 typedef Eigen::Matrix<double,6,1> Vector6d;
 
 struct EDFTdata 
@@ -43,6 +44,8 @@ struct EDFTdata
 
 	int width, height; // the (width, height) of distMap
 };
+
+
 Optimizer::Optimizer(const Config& config, const Mat& initPose, bool is_writer)
 {
 
@@ -68,6 +71,7 @@ Optimizer::Optimizer(const Config& config, const Mat& initPose, bool is_writer)
 //     }
 //   }
 }
+
 Optimizer::~Optimizer()
 {
   if(m_is_writer)
@@ -77,15 +81,16 @@ Optimizer::~Optimizer()
 }
 
 
-cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat& locations, const int frameId)
+cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const Mat& locations, const int frameId)
 {
    int64 time0 = cv::getTickCount();
   {
+    mFrame=curFrame;
     LOG(WARNING)<<" ";
     LOG(WARNING)<<"frameId = "<<frameId;
     _locations=(int *)locations.data;
-    _col=frame.cols;
-    _row=frame.rows;
+    _col=distFrame.cols;
+    _row=distFrame.rows;
 //     printMat("frame",frame);
 //     imshow("frame",frame);
 //     waitKey(0);
@@ -98,7 +103,7 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
     cv::Mat newPose=cv::Mat::zeros(1,6,CV_32FC1);  
     Transformation newTransformation;
     m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());    
-    float e2 = computeEnergy(frame, m_Transformation.Pose());
+    float e2 = computeEnergy(distFrame, m_Transformation.Pose());
     if(e2<THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
 	return m_Transformation.Pose();
@@ -106,11 +111,20 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
 	LOG(WARNING)<<"to optimize with energy = "<<e2;	
     }
     while(++itration_num<MAX_ITERATIN_NUM){    
-      Sophus::SE3 T_SE3;	  
+      Sophus::SE3 T_SE3;	      
       LOG(INFO)<<"a itration_num = " <<itration_num;
       cv::Mat _A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1),A= cv::Mat::zeros(6,6,CV_32FC1);      
       Mat A_inverse,dX ;
-      constructEnergyFunction(frame,m_Transformation.Pose(),A_I,lamda, _A,b);
+      float coarsePose[6]={0};
+//       coarsePose=m_Transformation.Pose().clone();
+       getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
+      LOG(WARNING)<<"pre pose"<<m_Transformation.Pose();
+//       m_Transformation.setPose(coarsePose);
+      LOG(WARNING)<<"coarse pose"<<m_Transformation.Pose();
+
+      return m_Transformation.Pose();
+
+      constructEnergyFunction(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
       _A/=abs(_A.at<float>(0,0));
       A=_A+A_I*lamda;
       cv::invert(A,A_inverse);
@@ -131,7 +145,7 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
       if(USE_MY_TRANSFORMATION){
 	newTransformation.setPose(m_Transformation.Pose());
 	newTransformation.xTransformation(dX);
-	e2_new = computeEnergy(frame, newTransformation.Pose());
+	e2_new = computeEnergy(distFrame, newTransformation.Pose());
       }
       else if(USE_SOPHUS)
       {      
@@ -146,12 +160,12 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
 	Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
 	Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
 	newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
-	e2_new = computeEnergy(frame, newTransformation.Pose());
+	e2_new = computeEnergy(distFrame, newTransformation.Pose());
 
       }else{
 	  UpdateStateLM(dX,m_Transformation.Pose(),newPose);
 	  newTransformation.setPose(newPose);
-	  e2_new = computeEnergy(frame, newPose);
+	  e2_new = computeEnergy(distFrame, newPose);
       }
       
       while(e2_new>e2){	  
@@ -173,7 +187,7 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
 	  if(USE_MY_TRANSFORMATION){
 	    newTransformation.setPose(m_Transformation.Pose());
 	    newTransformation.xTransformation(dX);
-	    e2_new = computeEnergy(frame, newTransformation.Pose());
+	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
 	  }
 	  else if(USE_SOPHUS)
 	  {
@@ -185,12 +199,12 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose, const Mat& frame, const Mat&
 	    Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
 	    Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
 	    newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
-	    e2_new = computeEnergy(frame, newTransformation.Pose());
+	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
 	  }else{
 	    UpdateStateLM(dX,m_Transformation.Pose(),newPose);	
 	    lastE2=e2_new;
 	    newTransformation.setPose(newPose);
-	    e2_new = computeEnergy(frame, newPose);
+	    e2_new = computeEnergy(distFrame, newPose);
 	  }
 	  LOG(WARNING)<<"newPose"<<newTransformation.Pose()<<"  e2_new(newPose) = "<<e2_new;
 
@@ -258,9 +272,13 @@ void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePos
   GLMmodel* model =m_data.m_model->GetObjModel();
   cv::Mat pos = m_data.m_model->getPos();
   int size=0;
-  
+#ifdef DRAW_LINE_P2NP
+  cv::Mat drawFrame/* = mFrame.clone()*/;
+
+     cv::cvtColor(frame/255.f, drawFrame, CV_GRAY2BGR);
+#endif
   for(int i=0;i<model->numLines;++i){
-    if(model->lines[i].visible){
+    if(model->lines[i].tovisit){
       int v0=model->lines[i].vindices[0],v1=model->lines[i].vindices[1];
       Point3f p1= Point3f(pos.at<float>(0,v0-1),pos.at<float>(1,v0-1),pos.at<float>(2,v0-1));
       Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
@@ -275,13 +293,23 @@ void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePos
       cv::Mat m_X(4,1,CV_32FC1),m_dX(4,1,CV_32FC1);
       m_X.at<float>(0,0)=X.x,m_X.at<float>(1,0)=X.y,m_X.at<float>(2,0)=X.z,m_X.at<float>(3,0)=1;
       m_dX.at<float>(0,0)=dx.x,m_dX.at<float>(1,0)=dx.y,m_dX.at<float>(2,0)=dx.z,m_dX.at<float>(3,0)=0;
-
+      
       for(int i=0;i<=Nx;++i,m_X+=m_dX){
 	cv::Mat W_X(4,1,CV_32FC1),C_X(4,1,CV_32FC1),P_x(3,1,CV_32FC1);
 	cv::Mat _j_X_Pose = cv::Mat::zeros(2,6,CV_32FC1);
 	cv::Mat _j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
 	C_X=extrinsic*m_X;
 	P_x=intrinsic*C_X;
+		
+	/*get nearestEdgeDistance ponit*/
+	Point point(P_x.at<float>(0,0)/P_x.at<float>(2,0),P_x.at<float>(1,0)/P_x.at<float>(2,0));
+	Point nearstPoint = getNearstPointLocation(point);
+	if(frame.at<float>(nearstPoint)==255){
+	  continue;
+	}
+#ifdef DRAW_LINE_P2NP	
+	m_data.m_model->DisplayLine(point,nearstPoint,drawFrame);
+ #endif
 	float _x=C_X.at<float>(0,0);
 	float _y=C_X.at<float>(0,1);
 	float _z=C_X.at<float>(0,2);
@@ -297,13 +325,10 @@ void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePos
 	_j_X_Pose.at<float>(1,2)=-m_calibration.fy()*_y/(_z*_z);    
 	_j_X_Pose.at<float>(1,3)=-m_calibration.fy()*(1+_y*_y*(1/(_z*_z)));
 	_j_X_Pose.at<float>(1,4)=-m_calibration.fy()*_x*_y/(_z*_z);
-	_j_X_Pose.at<float>(1,5)=m_calibration.fy()*_x/_z;
-    
+	_j_X_Pose.at<float>(1,5)=m_calibration.fy()*_x/_z;    
 		
-	/*get nearestEdgeDistance ponit*/
-	Point point(P_x.at<float>(0,0)/P_x.at<float>(2,0),P_x.at<float>(1,0)/P_x.at<float>(2,0));
-	Point nearstPoint = getNearstPointLocation(point);
-	printf("point: %d %d \n",point.x,point.y);
+
+	
 // 	_j_Energy_X.at<float>(0,0)=2*((point1.y-point2.y)*nearstPoint.x +
 // 				     ((point1.x*point2.y-point2.x*point1.y)+(point2.x-point1.y)*nearstPoint.y)*(point1.y-point2.y))
 // 				    * (1.f/(pow((point2.x-point1.x),2)+pow((point2.y-point1.y),2)));
@@ -312,8 +337,10 @@ void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePos
 // 	_j_Energy_X.at<float>(0,1)=2*((point2.x-point1.x)*nearstPoint.y +
 // 				     ((point1.x*point2.y-point2.x*point1.y)+(point1.x-point2.y)*nearstPoint.x)*(point2.x-point1.x))
 // 				    * (1.f/(pow((point2.x-point1.x),2)+pow((point2.y-point1.y),2)));
+	
+/*
 	_j_Energy_X.at<float>(0,0)=2*(point.x - nearstPoint.x);
-	_j_Energy_X.at<float>(0,1)=2*(point.y - nearstPoint.y);
+	_j_Energy_X.at<float>(0,1)=2*(point.y - nearstPoint.y);*/
 	_j_X_Pose*=J_SIZE;
 	_j_Energy_X*=J_SIZE;
 	
@@ -334,8 +361,18 @@ void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePos
     }
 
   } /*
+  
+  	
+
   LOG(WARNING)<<"_j_X_Pose\n"<<j_X_Pose;
   LOG(WARNING)<<"_j_Energy_X\n"<<j_Energy_X;*/
+#ifdef DRAW_LINE_P2NP
+LOG(WARNING)<<"to draw drawFrame";
+  m_data.m_model->DisplayCV(prePose,drawFrame);
+  imshow("DRAW_LINE_P2NP",drawFrame);
+//   imshow("distMap",frame/255.f);
+  waitKey(0);
+#endif
   Mat J(6,6,CV_32FC1),J_T(6,6,CV_32FC1);
   J=j_Energy_X*j_X_Pose *(1.0f/size)*(1.0f/size);  
 //   printMat("J",J);
@@ -354,6 +391,77 @@ float Optimizer::getDistanceToEdege(const Point& e0, const Point& e1, const Poin
 	  (pow((e1.x-e0.x),2)+pow((e1.y-e0.y),2));
 }
 
+void Optimizer::getCoarsePoseByPNP(const Mat &prePose, const Mat &distMap,float *coarsePose)
+{
+  m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
+  float energy =0;
+  int size =0;
+  Mat intrinsic = m_data.m_model->getIntrinsic();
+  Mat extrinsic = m_data.m_model->GetPoseMatrix(prePose);
+  GLMmodel* model =m_data.m_model->GetObjModel();
+  cv::Mat pos = m_data.m_model->getPos();
+  int lineNum=0;       
+  float meanDX=0;
+  std::vector<cv::Point2d> imagePoints ;
+  std::vector<cv::Point3d> objectPoints ;
+  for(int i=0;i<model->numLines;++i){
+    if(model->lines[i].tovisit){
+      
+      lineNum++;
+      int v0=model->lines[i].vindices[0],v1=model->lines[i].vindices[1];
+      Point3f p1= Point3f(pos.at<float>(0,v0-1),pos.at<float>(1,v0-1),pos.at<float>(2,v0-1));
+      Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
+
+      Point3f dX=(p2-p1);      
+      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/NX_LENGTH;
+
+      size+=Nx;
+      dX /=Nx;
+      Point3f X=p1;
+
+      Point point1= m_data.m_model->X_to_x(p1,extrinsic);
+      Point point2= m_data.m_model->X_to_x(p2,extrinsic);
+//       LOG(INFO)<< "v0:("<<v0<<") "<< point1.x<<" "<<point1.y<< " , v1:("<<v1<<") "<< point2.x<<" "<<point2.y<<std::endl;
+      if(point1.x<0||point1.y<0||point2.x<0||point2.y<0||point1.x>=distMap.size().width||point2.x>=distMap.size().width||point1.y>=distMap.size().height||point2.y>=distMap.size().height){
+	continue;
+      }
+      float meanE_LINE=0;
+      for(int i=0;i<=Nx;++i,X+=dX){
+	 Point point= m_data.m_model->X_to_x(X,extrinsic);	 	 
+	 Point nearst=getNearstPointLocation(point);
+	 objectPoints.push_back(Point3d(X.x,X.y,X.z));
+	 imagePoints.push_back(Point2d(nearst.x,nearst.y));
+      }  
+    }
+  }
+  cv::Mat distCoeffs(4,1,cv::DataType<double>::type);
+  distCoeffs.at<double>(0) = 0;
+  distCoeffs.at<double>(1) = 0;
+  distCoeffs.at<double>(2) = 0;
+  distCoeffs.at<double>(3) = 0;
+  cv::Mat rvec(3,1,cv::DataType<double>::type);
+  cv::Mat tvec(3,1,cv::DataType<double>::type);
+   std::cout<<"to init \n";
+   for(int i=0;i<3;i++){
+     rvec.at<double>(i,0)=(double)prePose.at<float>(0,i);
+     tvec.at<double>(i,0)=(double)prePose.at<float>(0,i+3);
+   }
+//   LOG(WARNING)<<"coarsePose in: "<<rvec <<tvec;
+
+  cv::Mat cameraMatrix(3,3,cv::DataType<double>::type);
+  cameraMatrix.at<double>(0,0)=m_calibration.fx();
+  cameraMatrix.at<double>(1,1)=m_calibration.fy();
+  cameraMatrix.at<double>(0,2)=m_calibration.cx();
+  cameraMatrix.at<double>(1,2)=m_calibration.cy();
+  cv::solvePnP(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec,true,cv::SOLVEPNP_EPNP);
+
+ for(int i=0;i<3;++i){
+    coarsePose[i]=(float)rvec.at<double>(i,0);
+    coarsePose[i+3]=(float)tvec.at<double>(i,0);
+  }
+   LOG(WARNING)<<"coarsePose out: "<<coarsePose[0]<<" "<<coarsePose[1]<<" "<<coarsePose[2]<<" "<<coarsePose[3]<<" "<<coarsePose[4]<<" "<<coarsePose[5]<<" ";
+
+}
 
 float Optimizer::computeEnergy(const cv::Mat& frame,const cv::Mat& pose)
 {
@@ -408,6 +516,10 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const cv::Mat& pose)
 	 Point nearst=getNearstPointLocation(point);
 	 
 	 float de2 = /*getDistance2ToEdege(point1,point2,nearst)+*/frame.at<float>(point);
+	 //enlarge influence of 255
+	 if(de2==255.f){
+	   de2*=10;
+	}
 	 float DX=pow(de2-meanE_LINE,2); 	
 	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << frame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" DX = "<<DX;	 
 //	 if(DX<THREHOLD_DX||DX<meanE_LINE*meanE_LINE){

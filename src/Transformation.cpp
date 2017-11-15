@@ -26,6 +26,13 @@ void Transformation::setPose(const cv::Mat& pose)
 {
   m_pose=pose.clone();
 }
+void Transformation::setPose(const float pose[6])
+{
+  
+  for(int i=0;i<6;i++){
+    m_pose.at<float>(i,0)=pose[i];
+  }
+}
 
 void Transformation::rotateWithR(const cv::Mat& Rotation)
 {

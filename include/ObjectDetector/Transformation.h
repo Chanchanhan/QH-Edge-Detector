@@ -31,6 +31,8 @@ public:
   void xTransformation(Transformation &_T);
   void xTransformation(const cv::Mat &Dx);
   void setPose(const cv::Mat &pose);
+  void setPose(const float pose[6]);
+
   float &x();
   float &y();
   float &z();
