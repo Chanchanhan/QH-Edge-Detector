@@ -27,12 +27,13 @@ public:
   static cv::Mat getRotationParametrization(const cv::Mat &rotMat);
   static cv::Mat getRotationMatrixb_so3(const float &x,const float &y, const float &z,float &theta,cv::Mat &so_x);
   static cv::Mat getTransformationMatrix(const cv::Vec3f &YDR,const cv::Vec3f &translation);
+  static cv::Mat getTransformationMatrix(const float *pose);
   cv::Mat transformationMatrix() ;
   void xTransformation(Transformation &_T);
   void xTransformation(const cv::Mat &Dx);
   void setPose(const cv::Mat &pose);
   void setPose(const float pose[6]);
-
+  cv::Mat M_Pose();
   float &x();
   float &y();
   float &z();
@@ -40,10 +41,10 @@ public:
   float &u2();
   float &u3();
 public:  
-  const cv::Mat &Pose();
+  const float* Pose();
   Quaternion &quaternion();
 private:
-  cv::Mat m_pose;
+  float *m_pose;
   Quaternion m_quaternion;
 };
 }

@@ -32,7 +32,7 @@ const bool  USE_MY_TRANSFORMATION = 0;
 #define SIMULATION_MAX_ROTATION_RATIO			0.3f
 #define SIMULATION_MAX_TRANSLATIONS				1
 #define SIMULATION_MAX_TRANSLATION_RATIO		0.5f
-#define DRAW_LINE_P2NP
+// #define DRAW_LINE_P2NP
 typedef Eigen::Matrix<double,6,1> Vector6d;
 
 struct EDFTdata 
@@ -46,7 +46,7 @@ struct EDFTdata
 };
 
 
-Optimizer::Optimizer(const Config& config, const Mat& initPose, bool is_writer)
+Optimizer::Optimizer(const Config& config, const float * initPose, bool is_writer)
 {
 
   m_data.m_model->generatePoints();
@@ -57,7 +57,7 @@ Optimizer::Optimizer(const Config& config, const Mat& initPose, bool is_writer)
 //   m_data.m_correspondence->m_lineBundle.create(R,2*L+1,CV_8UC3);
 //   m_data.m_correspondence->m_hsv.create(R,2*L+1,CV_8UC3);
   m_calibration = config.camCalibration;
-  m_data.m_model->InitPose(initPose);
+//   m_data.m_model->InitPose(initPose);
   m_is_writer = is_writer;
 //   if(is_writer)
 //   {
@@ -81,7 +81,7 @@ Optimizer::~Optimizer()
 }
 
 
-cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const Mat& locations, const int frameId)
+void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const cv::Mat &locations, const int frameId,float * _newPose )
 {
    int64 time0 = cv::getTickCount();
   {
@@ -102,11 +102,11 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const
     int itration_num=0;
     cv::Mat newPose=cv::Mat::zeros(1,6,CV_32FC1);  
     Transformation newTransformation;
-    m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());    
-    float e2 = computeEnergy(distFrame, m_Transformation.Pose());
+    m_data.m_model->setVisibleLinesAtPose(m_Transformation.M_Pose());    
+    float e2 = computeEnergy(distFrame, m_Transformation.M_Pose());
     if(e2<THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
-	return m_Transformation.Pose();
+	return ;
       }else{      	
 	LOG(WARNING)<<"to optimize with energy = "<<e2;	
     }
@@ -116,15 +116,13 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const
       cv::Mat _A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1),A= cv::Mat::zeros(6,6,CV_32FC1);      
       Mat A_inverse,dX ;
       float coarsePose[6]={0};
-//       coarsePose=m_Transformation.Pose().clone();
+//       coarsePose=m_Transformation.M_Pose().clone();
        getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
-      LOG(WARNING)<<"pre pose"<<m_Transformation.Pose();
-//       m_Transformation.setPose(coarsePose);
-      LOG(WARNING)<<"coarse pose"<<m_Transformation.Pose();
+      LOG(WARNING)<<"pre pose"<<m_Transformation.M_Pose();
+      m_Transformation.setPose(coarsePose);
+      LOG(WARNING)<<"coarse pose"<<m_Transformation.M_Pose();
 
-      return m_Transformation.Pose();
-
-      constructEnergyFunction(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
+      constructEnergyFunction(distFrame,m_Transformation.M_Pose(),A_I,lamda, _A,b);
       _A/=abs(_A.at<float>(0,0));
       A=_A+A_I*lamda;
       cv::invert(A,A_inverse);
@@ -143,14 +141,14 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const
       
       float e2_new;
       if(USE_MY_TRANSFORMATION){
-	newTransformation.setPose(m_Transformation.Pose());
+	newTransformation.setPose(m_Transformation.M_Pose());
 	newTransformation.xTransformation(dX);
-	e2_new = computeEnergy(distFrame, newTransformation.Pose());
+	e2_new = computeEnergy(distFrame, newTransformation.M_Pose());
       }
       else if(USE_SOPHUS)
       {      
-	Eigen::Vector3d v3d(m_Transformation.Pose().at<float>(0,0),m_Transformation.Pose().at<float>(0,1),m_Transformation.Pose().at<float>(0,2));     
-	Eigen::Vector3d translationV3(m_Transformation.Pose().at<float>(0,3),m_Transformation.Pose().at<float>(0,4),m_Transformation.Pose().at<float>(0,5));     
+	Eigen::Vector3d v3d(m_Transformation.M_Pose().at<float>(0,0),m_Transformation.M_Pose().at<float>(0,1),m_Transformation.M_Pose().at<float>(0,2));     
+	Eigen::Vector3d translationV3(m_Transformation.M_Pose().at<float>(0,3),m_Transformation.M_Pose().at<float>(0,4),m_Transformation.M_Pose().at<float>(0,5));     
 	T_SE3 =Sophus::SE3( Sophus::SO3::exp(v3d),translationV3); 
 	Vector6d se3_Update;
 	for(int i=0;i<3;i++){
@@ -160,10 +158,10 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const
 	Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
 	Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
 	newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
-	e2_new = computeEnergy(distFrame, newTransformation.Pose());
+	e2_new = computeEnergy(distFrame, newTransformation.M_Pose());
 
       }else{
-	  UpdateStateLM(dX,m_Transformation.Pose(),newPose);
+	  UpdateStateLM(dX,m_Transformation.M_Pose(),newPose);
 	  newTransformation.setPose(newPose);
 	  e2_new = computeEnergy(distFrame, newPose);
       }
@@ -182,12 +180,12 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const
 	  float lastE2;
 	  
 	  /*
- 	  e2_new = computeEnergy(frame, newTransformation.Pose());
- 	  LOG(WARNING)<<"newTransformation.Pose(): "<<newTransformation.Pose()<<" e2_new(newTransformation) = "<<e2_new;*/
+ 	  e2_new = computeEnergy(frame, newTransformation.M_Pose());
+ 	  LOG(WARNING)<<"newTransformation.M_Pose(): "<<newTransformation.M_Pose()<<" e2_new(newTransformation) = "<<e2_new;*/
 	  if(USE_MY_TRANSFORMATION){
-	    newTransformation.setPose(m_Transformation.Pose());
+	    newTransformation.setPose(m_Transformation.M_Pose());
 	    newTransformation.xTransformation(dX);
-	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
+	    e2_new = computeEnergy(distFrame, newTransformation.M_Pose());
 	  }
 	  else if(USE_SOPHUS)
 	  {
@@ -199,22 +197,25 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const
 	    Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
 	    Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
 	    newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
-	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
+	    e2_new = computeEnergy(distFrame, newTransformation.M_Pose());
 	  }else{
-	    UpdateStateLM(dX,m_Transformation.Pose(),newPose);	
+	    UpdateStateLM(dX,m_Transformation.M_Pose(),newPose);	
 	    lastE2=e2_new;
 	    newTransformation.setPose(newPose);
 	    e2_new = computeEnergy(distFrame, newPose);
 	  }
-	  LOG(WARNING)<<"newPose"<<newTransformation.Pose()<<"  e2_new(newPose) = "<<e2_new;
+	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
 
 	  itration_num++;
 	  if(itration_num>MAX_ITERATIN_NUM){
 	    LOG(INFO)<<"to much itration_num!";
-	    return m_Transformation.Pose();    
+	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+
+	    return /*m_Transformation.M_Pose()*/;    
 	  }
 	  if(fabs(e2-e2_new)<1e-5){
-	    return m_Transformation.Pose();  
+	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+	    return ;  
 	  }
 	
       }
@@ -225,24 +226,25 @@ cv::Mat Optimizer::optimizingLM(const Mat& prePose,const cv::Mat& curFrame,const
       }else{      
 	LOG(WARNING)<<"good !To optimize! e2 :"<<e2<<" e2_new: "<<e2_new;
 	LOG(INFO)<<"dX "<<dX;
-	LOG(INFO)<<"newPose "<<newTransformation.Pose();
+	LOG(INFO)<<"newPose "<<newTransformation.M_Pose();
 	A_I=A.clone();
 	A_I/=abs(A_I.at<float>(0,0));
-	m_Transformation.setPose(newTransformation.Pose());         
-//         m_Transformation.setPose(newTransformation.Pose());
+	m_Transformation.setPose(newTransformation.M_Pose());         
+//         m_Transformation.setPose(newTransformation.M_Pose());
 
 	e2= e2_new;
 	lamda=INIT_LAMDA;
       }
       if(e2_new<THREHOLD_ENERGY){
 	LOG(WARNING)<<"succees optimize!";
-	return m_Transformation.Pose();
+	memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+
+	return ;
 	
       }
       
     }
     LOG(INFO)<<"to much itration_num!";
-    return m_Transformation.Pose();
     
   }
   
@@ -368,7 +370,7 @@ void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePos
   LOG(WARNING)<<"_j_Energy_X\n"<<j_Energy_X;*/
 #ifdef DRAW_LINE_P2NP
 LOG(WARNING)<<"to draw drawFrame";
-  m_data.m_model->DisplayCV(prePose,drawFrame);
+  m_data.m_model->DisplayCV(/*prePose*/,drawFrame);
   imshow("DRAW_LINE_P2NP",drawFrame);
 //   imshow("distMap",frame/255.f);
   waitKey(0);
@@ -391,7 +393,7 @@ float Optimizer::getDistanceToEdege(const Point& e0, const Point& e1, const Poin
 	  (pow((e1.x-e0.x),2)+pow((e1.y-e0.y),2));
 }
 
-void Optimizer::getCoarsePoseByPNP(const Mat &prePose, const Mat &distMap,float *coarsePose)
+void Optimizer::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *coarsePose)
 {
   m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
   float energy =0;
@@ -442,11 +444,14 @@ void Optimizer::getCoarsePoseByPNP(const Mat &prePose, const Mat &distMap,float 
   cv::Mat rvec(3,1,cv::DataType<double>::type);
   cv::Mat tvec(3,1,cv::DataType<double>::type);
    std::cout<<"to init \n";
+      
+   LOG(WARNING)<<"coarsePose in: "<<prePose[0]<<" "<<prePose[1]<<" "<<prePose[2]<<" "<<prePose[3]<<" "<<prePose[4]<<" "<<prePose[5]<<" ";
+
    for(int i=0;i<3;i++){
-     rvec.at<double>(i,0)=(double)prePose.at<float>(0,i);
-     tvec.at<double>(i,0)=(double)prePose.at<float>(0,i+3);
+     rvec.at<double>(i,0)=(double)prePose[i];
+     tvec.at<double>(i,0)=(double)prePose[i+3];
    }
-//   LOG(WARNING)<<"coarsePose in: "<<rvec <<tvec;
+   LOG(WARNING)<<"coarsePose in: "<<rvec <<tvec;
 
   cv::Mat cameraMatrix(3,3,cv::DataType<double>::type);
   cameraMatrix.at<double>(0,0)=m_calibration.fx();

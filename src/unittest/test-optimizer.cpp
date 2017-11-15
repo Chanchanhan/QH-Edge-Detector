@@ -25,14 +25,16 @@ int main(int argc, char* argv[]) {
   FLAGS_stderrthreshold = 1;  // INFO: 0, WARNING: 1, ERROR: 2, FATAL: 3
 
   
-  cv::Mat pose(1,6,CV_32FC1);
+//   cv::Mat pose(1,6,CV_32FC1);
   OD::Config config;
   ED::EdgeDetector edgeDetector_;
-
+  float pose[6];
   /*** init parame
   /*** start Detectorters***/
-  pose.at<float>(0,0)=2.31772f; pose.at<float>(0,1)=0.0820299f; pose.at<float>(0,2)=0.681282f;
-  pose.at<float>(0,3)=-0.0581884f; pose.at<float>(0,4)=0.0586302f; pose.at<float>(0,5)=1.29788f; 
+//   pose.at<float>(0,0)=2.31772f; pose.at<float>(0,1)=0.0820299f; pose.at<float>(0,2)=0.681282f;
+//   pose.at<float>(0,3)=-0.0581884f; pose.at<float>(0,4)=0.0586302f; pose.at<float>(0,5)=1.29788f; 
+  pose[0]=2.31772f; pose[1]=0.0820299f; pose[2]=0.681282f;
+  pose[3]=-0.0581884f; pose[4]=0.0586302f; pose[5]=1.29788f; 
   config.filename = "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/openbox.obj";
   config.videoPath ="/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/video1/";
   config.camCalibration = OD::CameraCalibration(2666.67,2666.67,960,540);
@@ -62,7 +64,7 @@ int main(int argc, char* argv[]) {
     frameId++;
     Mat distanceFrame,locations;
     edgeDetector_.getDistanceTransform(curFrame,mask,distanceFrame,locations);
-    pose=optimizer.optimizingLM(pose,curFrame,distanceFrame,locations,frameId);
+    optimizer.optimizingLM(pose,curFrame,distanceFrame,locations,frameId,pose);
     LOG(WARNING)<<"result pose : "<<pose;
     optimizer.m_data.m_model->DisplayCV(pose,curFrame);
 //     optimizer.m_data.m_model->DisplayCV(pose,distanceFrame);

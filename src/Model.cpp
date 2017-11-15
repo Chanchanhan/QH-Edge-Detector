@@ -7,6 +7,7 @@
 #include <opencv/cv.h>
 #include <vector>
 #include "ObjectDetector/Render.h"
+#include "ObjectDetector/Transformation.h"
 #include <omp.h>
 #include<glog/logging.h>
 using namespace OD;
@@ -104,6 +105,30 @@ void Model::generatePoints()
 const vector< Line >& Model::getMyLines()
 {
   return myLines;
+}
+void Model::GetImagePoints(const float* prepose, PointSet& pointset)
+{
+	pointset.m_img_points.clear();
+	pointset.m_img_points_f.clear();	
+	cv::Mat extrinsic = GetPoseMatrix(prepose);
+	
+	cv::Mat result(3,m_model->numvertices,CV_32FC1);
+
+	result = intrinsic*extrinsic*pos;
+	/*
+	printf("samplePoints.size() =%d \n",samplePoints.size());*/
+	//normalize
+	for(int i=0; i<m_model->numvertices; i++)
+	{
+		float u = result.at<float>(0,i)/result.at<float>(2,i);
+		float v = result.at<float>(1,i)/result.at<float>(2,i);
+		if(u>=0 && u<m_width && v>=0 && v<m_height)
+		{
+// 			printf("u = %f, v= %f\n",u,v);
+			pointset.m_img_points.push_back(cv::Point(u,v));
+			pointset.m_img_points_f.push_back(cv::Point2f(u,v));
+		}
+	}
 }
 
 void Model::GetImagePoints(const cv::Mat& pose, PointSet& pointset)
@@ -322,7 +347,28 @@ const cv::Mat& Model::getIntrinsic() const
 {
   return intrinsic;
 }
+void Model::setVisibleLinesAtPose(const float * pose)
+{
+  cv::Mat extrinsic = Transformation::getTransformationMatrix(pose);
+  cv::Mat pos(4,m_model->numvertices,CV_32FC1);
+  PointSet pointset;
+  GetImagePoints(pose,pointset);
+  for(int i=0;i<m_model->numLines;i++){
+    if(m_model->lines[i].visible){
+      cv::Point v1=pointset.m_img_points[m_model->lines[i].vindices[0]-1];
+      cv::Point v2=pointset.m_img_points[m_model->lines[i].vindices[1]-1];
 
+      m_model->lines[i].tovisit=isLineVisible(v1,v2,pointset);
+
+      if((m_model->lines[i].vindices[0]==8&&m_model->lines[i].vindices[1]==4) ||m_model->lines[i].vindices[0]==5||m_model->lines[i].vindices[1]==5){
+	m_model->lines[i].tovisit=false;
+      }
+    }else{
+      m_model->lines[i].tovisit=false;
+    }
+  }
+  
+}
 void Model::setVisibleLinesAtPose(const Mat pose)
 {
   cv::Mat extrinsic = GetPoseMatrix(pose);
@@ -370,11 +416,11 @@ void Model::DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame)
     cv::line(frame,p1,p2,cv::Scalar(0,255,0),1,CV_AA);
 //   }
 }
-void Model::DisplayCV(const cv::Mat& pose, cv::Mat& frame)
+void Model::DisplayCV(const float * pose, cv::Mat& frame)
 {
   
 	//camera extrinsic
-	cv::Mat extrinsic = GetPoseMatrix(pose);
+	cv::Mat extrinsic = Transformation::getTransformationMatrix(pose);
 
 	//extract the points which can be visible or in the edge of object
 	std::vector<cv::Point> vertexIndexs;
@@ -541,6 +587,26 @@ cv::Mat Model::GetPoseMatrix()
 	T.at<float>(0,3)=m_tvec.at<float>(0,0); T.at<float>(1,3)=m_tvec.at<float>(1,0); T.at<float>(2,3) = m_tvec.at<float>(2,0);
 	return T;
 }
+Mat Model::GetPoseMatrix(const float* pose)
+{
+  cv::Mat roV(3,1,CV_32FC1);
+  roV.at<float>(0,0) = pose[0]; 
+  roV.at<float>(1,0) = pose[1]; 
+  roV.at<float>(2,0) = pose[2];
+  cv::Mat rotMat(3,3,CV_32FC1);
+  cv::Mat T = cv::Mat::eye(4,4,CV_32FC1);
+  cv::Rodrigues(roV,rotMat);
+  for(int c=0; c<3; c++)
+  {
+    for(int r=0; r<3; r++)
+    {
+      T.at<float>(r,c) = rotMat.at<float>(r,c);
+    }    
+  }
+  T.at<float>(0,3)=pose[3]; T.at<float>(1,3)=pose[4]; T.at<float>(2,3) = pose[5];
+  return T;
+}
+
 Mat Model::GetPoseMatrix(cv::Mat pose)
 {
   cv::Mat roV(3,1,CV_32FC1);

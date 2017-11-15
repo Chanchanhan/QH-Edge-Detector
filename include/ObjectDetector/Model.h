@@ -28,8 +28,10 @@ namespace OD
 		void LoadGLMModel(const std::string& filename);
 		PointSet& GetVisibleModelPointsCV(const cv::Mat& prepose, int pointnum);
 		void GetImagePoints(const cv::Mat& prepose, PointSet& pointset);
+		void GetImagePoints(const float * prepose, PointSet& pointset);
+
 		void setPointSet();
-		void DisplayCV(const cv::Mat& pose, cv::Mat& frame);
+		void DisplayCV(const float * pose, cv::Mat& frame);
 		void DisplayGL(const cv::Mat& pose);
 		void DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame);
 		void computeExtrinsicByEuler(cv::Mat* mvMatrix, float& _x, float& _y, float& _z, float& _rx, float &_ry, float &_rz);
@@ -39,6 +41,7 @@ namespace OD
 		void getIntrinsic(cv::Mat& intrinsic) const;
 		void generatePoints();	 
 		void setVisibleLinesAtPose(const cv::Mat pose);
+		void setVisibleLinesAtPose(const float * pose);
 		const cv::Mat& getIntrinsic()  const;
 		const std::vector<Line> & getMyLines();
 		
@@ -48,6 +51,7 @@ namespace OD
 
 		cv::Mat GetPoseMatrix();
 		cv::Mat GetPoseMatrix(cv::Mat pose);
+		cv::Mat GetPoseMatrix(const float * pose);
 	public:
 
 		GLMmodel* GetObjModel();

@@ -4,12 +4,14 @@
 
 using namespace OD;
 Transformation::Transformation(){
-  m_pose=cv::Mat::zeros(1,6,CV_32FC1);
+  m_pose=new float[6];
 }
 Transformation::Transformation(const cv::Mat& _pose)
 {
-  m_pose=cv::Mat::zeros(1,6,CV_32FC1);
-  m_pose=_pose.clone();
+  m_pose=new float[6];
+  for(int i =0;i<6;i++){
+    m_pose[i]=_pose.at<float>(i,0);
+  }
 }
 void Transformation::translationWith(const float& _x, const float& _y, const float& _z)
 {
@@ -17,20 +19,34 @@ void Transformation::translationWith(const float& _x, const float& _y, const flo
   y()+=_y;
   z()+=_z;
 }
+cv::Mat Transformation::M_Pose()
+{
+  cv::Mat pose(1,6,CV_32FC1);
+  for(int i=0;i<6;i++){
+    pose.at<float>(0,i)=m_pose[i];
+  }
+  return pose;
+}
 
-const cv::Mat& Transformation::Pose()
+const float* Transformation::Pose()
 {
   return m_pose;
 }
+
 void Transformation::setPose(const cv::Mat& pose)
 {
-  m_pose=pose.clone();
+//   m_pose=pose.clone();
+  std::cout<<"setPose";
+  for(int i =0;i<6;i++){
+    m_pose[i]=pose.at<float>(i,0);
+    std::cout<<"  "<<m_pose[i];
+  }
 }
 void Transformation::setPose(const float pose[6])
 {
   
   for(int i=0;i<6;i++){
-    m_pose.at<float>(i,0)=pose[i];
+   m_pose[i]=pose[i];
   }
 }
 
@@ -113,27 +129,33 @@ Quaternion& Transformation::quaternion()
 }
 float& Transformation::u1()
 {
-  return m_pose.at<float>(0,0);
+//   return m_pose.at<float>(0,0);
+   return m_pose[0];
 }
 float& Transformation::u2()
 {
-  return m_pose.at<float>(0,1);
+  return m_pose[1];
+//   return m_pose.at<float>(0,1);
 }
 float& Transformation::u3()
 {
-  return m_pose.at<float>(0,2);
+   return m_pose[2];
+//   return m_pose.at<float>(0,2);
 }
 float& Transformation::x()
 {
-  return m_pose.at<float>(0,3);
+   return m_pose[3];
+//   return m_pose.at<float>(0,3);
 }
 float& Transformation::y()
 {
-  return m_pose.at<float>(0,4);
+   return m_pose[4];
+//   return m_pose.at<float>(0,4);
 }
 float& Transformation::z()
 {
-  return m_pose.at<float>(0,5);
+   return m_pose[5];
+//   return m_pose.at<float>(0,5);
 }
 void Transformation::setPoseFromTransformationMatrix(const Eigen::Matrix< double, int(4), int(4) >& T)
 {
@@ -249,6 +271,23 @@ cv::Mat Transformation::getTransformationMatrix(const cv::Vec3f& parametrization
 }
 
 
+cv::Mat Transformation::getTransformationMatrix(const float *pose)
+{
+
+  cv::Mat rotMat(3,3,CV_32FC1);
+  rotMat=getRotationMatrix(cv::Vec3f(pose[0],pose[1],pose[2]));
+  cv::Mat T = cv::Mat::eye(4,4,CV_32FC1);
+  for(int c=0; c<3; c++)
+  {
+    for(int r=0; r<3; r++)
+    {
+      T.at<float>(r,c) = rotMat.at<float>(r,c);
+    }    
+  }
+  T.at<float>(0,3)=pose[3]; T.at<float>(1,3)=pose[4]; T.at<float>(2,3) = pose[5];
+
+  return T;
+}
 cv::Mat Transformation::getTransformationMatrix(const cv::Mat &pose)
 {
 

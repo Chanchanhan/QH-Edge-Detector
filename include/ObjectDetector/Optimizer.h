@@ -32,10 +32,10 @@ namespace OD
 	class Optimizer
 	{
 	public:
-		Optimizer(const Config& config, const cv::Mat& initPose, bool is_writer);
+		Optimizer(const Config& config, const float */* const cv::Mat& */initPose, bool is_writer);
 		~Optimizer();
 	public:
-		cv::Mat optimizingLM(const cv::Mat& prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const cv::Mat &locations, const int frameId);
+		void optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const cv::Mat &locations, const int frameId,float * _newPose );
 	      
 	private:
 		static void lm(double *p, double* x, int m, int n, void* data);	
@@ -46,10 +46,11 @@ namespace OD
 		float nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint ,const bool printP=false);
 		void UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Mat &pose_New);
 		void UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, Transformation &transformation_New);
-		void getCoarsePoseByPNP(const cv::Mat &prePose,const cv::Mat &distMap,float *coarsePose);
+		void getCoarsePoseByPNP(const float *prePose,const cv::Mat &distMap,float *coarsePose);
 		void getMk();
 		float getDistanceToEdege(const cv::Point& e1,const cv::Point& e2,const cv::Point& v);
 		cv::Point getNearstPointLocation(const cv::Point &point);
+		
 	public:
 		Data m_data;	
 	private:
