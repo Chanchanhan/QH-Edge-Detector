@@ -27,7 +27,6 @@ namespace OD
 	public:
 		void LoadGLMModel(const std::string& filename);
 		PointSet& GetVisibleModelPointsCV(const cv::Mat& prepose, int pointnum);
-		void GetImagePoints(const cv::Mat& prepose, PointSet& pointset);
 		void GetImagePoints(const float * prepose, PointSet& pointset);
 
 		void setPointSet();
@@ -37,10 +36,7 @@ namespace OD
 		void computeExtrinsicByEuler(cv::Mat* mvMatrix, float& _x, float& _y, float& _z, float& _rx, float &_ry, float &_rz);
 		void FilterModel(const cv::Mat& prepose,int pointnum);
 		void getVisitLines(const cv::Mat pose);
-		void InitPose(const cv::Mat& initPose);
 		void getIntrinsic(cv::Mat& intrinsic) const;
-		void generatePoints();	 
-		void setVisibleLinesAtPose(const cv::Mat pose);
 		void setVisibleLinesAtPose(const float * pose);
 		const cv::Mat& getIntrinsic()  const;
 		const std::vector<Line> & getMyLines();

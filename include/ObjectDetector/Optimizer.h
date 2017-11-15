@@ -40,12 +40,12 @@ namespace OD
 	private:
 		static void lm(double *p, double* x, int m, int n, void* data);	
 		static void jaclm(double *p, double *jac, int m, int n, void* data);
-		void constructEnergyFunction(const cv::Mat frame, const cv::Mat prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
+		void constructEnergyFunction(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
 		void solveEnergyFunction();
-		float computeEnergy(const cv::Mat& frame,const cv::Mat& pose);
+		float computeEnergy(const cv::Mat& frame,const float * pose);
 		float nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint ,const bool printP=false);
-		void UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Mat &pose_New);
-		void UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, Transformation &transformation_New);
+		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, float * pose_New);
+		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New);
 		void getCoarsePoseByPNP(const float *prePose,const cv::Mat &distMap,float *coarsePose);
 		void getMk();
 		float getDistanceToEdege(const cv::Point& e1,const cv::Point& e2,const cv::Point& v);

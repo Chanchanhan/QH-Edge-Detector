@@ -32,7 +32,7 @@ const bool  USE_MY_TRANSFORMATION = 0;
 #define SIMULATION_MAX_ROTATION_RATIO			0.3f
 #define SIMULATION_MAX_TRANSLATIONS				1
 #define SIMULATION_MAX_TRANSLATION_RATIO		0.5f
-// #define DRAW_LINE_P2NP
+//  #define DRAW_LINE_P2NP
 typedef Eigen::Matrix<double,6,1> Vector6d;
 
 struct EDFTdata 
@@ -49,7 +49,6 @@ struct EDFTdata
 Optimizer::Optimizer(const Config& config, const float * initPose, bool is_writer)
 {
 
-  m_data.m_model->generatePoints();
 
   m_data.m_model = new Model(config);
   //m_data.m_model->LoadGLMModel(config.filename.c_str());
@@ -102,8 +101,8 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
     int itration_num=0;
     cv::Mat newPose=cv::Mat::zeros(1,6,CV_32FC1);  
     Transformation newTransformation;
-    m_data.m_model->setVisibleLinesAtPose(m_Transformation.M_Pose());    
-    float e2 = computeEnergy(distFrame, m_Transformation.M_Pose());
+    m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());    
+    float e2 = computeEnergy(distFrame, m_Transformation.Pose());
     if(e2<THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
 	return ;
@@ -122,7 +121,7 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
       m_Transformation.setPose(coarsePose);
       LOG(WARNING)<<"coarse pose"<<m_Transformation.M_Pose();
 
-      constructEnergyFunction(distFrame,m_Transformation.M_Pose(),A_I,lamda, _A,b);
+      constructEnergyFunction(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
       _A/=abs(_A.at<float>(0,0));
       A=_A+A_I*lamda;
       cv::invert(A,A_inverse);
@@ -141,14 +140,14 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
       
       float e2_new;
       if(USE_MY_TRANSFORMATION){
-	newTransformation.setPose(m_Transformation.M_Pose());
+	newTransformation.setPose(m_Transformation.Pose());
 	newTransformation.xTransformation(dX);
-	e2_new = computeEnergy(distFrame, newTransformation.M_Pose());
+	e2_new = computeEnergy(distFrame, newTransformation.Pose());
       }
       else if(USE_SOPHUS)
       {      
-	Eigen::Vector3d v3d(m_Transformation.M_Pose().at<float>(0,0),m_Transformation.M_Pose().at<float>(0,1),m_Transformation.M_Pose().at<float>(0,2));     
-	Eigen::Vector3d translationV3(m_Transformation.M_Pose().at<float>(0,3),m_Transformation.M_Pose().at<float>(0,4),m_Transformation.M_Pose().at<float>(0,5));     
+	Eigen::Vector3d v3d(m_Transformation.u1(),m_Transformation.u2(),m_Transformation.u3());     
+	Eigen::Vector3d translationV3(m_Transformation.x(),m_Transformation.y(),m_Transformation.z());     
 	T_SE3 =Sophus::SE3( Sophus::SO3::exp(v3d),translationV3); 
 	Vector6d se3_Update;
 	for(int i=0;i<3;i++){
@@ -158,13 +157,13 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 	Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
 	Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
 	newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
-	e2_new = computeEnergy(distFrame, newTransformation.M_Pose());
+	e2_new = computeEnergy(distFrame, newTransformation.Pose());
 
-      }else{
+      }/*else{
 	  UpdateStateLM(dX,m_Transformation.M_Pose(),newPose);
 	  newTransformation.setPose(newPose);
 	  e2_new = computeEnergy(distFrame, newPose);
-      }
+      }*/
       
       while(e2_new>e2){	  
 	  LOG(INFO)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
@@ -183,9 +182,9 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
  	  e2_new = computeEnergy(frame, newTransformation.M_Pose());
  	  LOG(WARNING)<<"newTransformation.M_Pose(): "<<newTransformation.M_Pose()<<" e2_new(newTransformation) = "<<e2_new;*/
 	  if(USE_MY_TRANSFORMATION){
-	    newTransformation.setPose(m_Transformation.M_Pose());
+	    newTransformation.setPose(m_Transformation.Pose());
 	    newTransformation.xTransformation(dX);
-	    e2_new = computeEnergy(distFrame, newTransformation.M_Pose());
+	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
 	  }
 	  else if(USE_SOPHUS)
 	  {
@@ -197,13 +196,13 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 	    Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
 	    Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
 	    newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
-	    e2_new = computeEnergy(distFrame, newTransformation.M_Pose());
-	  }else{
+	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
+	  }/*else{
 	    UpdateStateLM(dX,m_Transformation.M_Pose(),newPose);	
 	    lastE2=e2_new;
 	    newTransformation.setPose(newPose);
 	    e2_new = computeEnergy(distFrame, newPose);
-	  }
+	  }*/
 	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
 
 	  itration_num++;
@@ -229,7 +228,7 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 	LOG(INFO)<<"newPose "<<newTransformation.M_Pose();
 	A_I=A.clone();
 	A_I/=abs(A_I.at<float>(0,0));
-	m_Transformation.setPose(newTransformation.M_Pose());         
+	m_Transformation.setPose(newTransformation.Pose());         
 //         m_Transformation.setPose(newTransformation.M_Pose());
 
 	e2= e2_new;
@@ -264,13 +263,12 @@ cv::Point Optimizer::getNearstPointLocation(const cv::Point &point){
 //    cout<<"End to: x "<<x<<" y: "<<y<<endl;
    return Point(y,x);
 }
-void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePose,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b){
+void Optimizer::constructEnergyFunction(const cv::Mat frame,const float* prePose,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b){
  cv::Mat j_X_Pose= cv::Mat::zeros(2,6,CV_32FC1);
   cv::Mat j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
-//   cv::Mat W_to_C= m_data.m_model->GetPoseMatrix(prePose);
   
   Mat intrinsic = m_data.m_model->getIntrinsic();
-  Mat extrinsic = m_data.m_model->GetPoseMatrix(prePose);
+  Mat extrinsic = Transformation::getTransformationMatrix(prePose);
   GLMmodel* model =m_data.m_model->GetObjModel();
   cv::Mat pos = m_data.m_model->getPos();
   int size=0;
@@ -370,7 +368,7 @@ void Optimizer::constructEnergyFunction(const cv::Mat frame,const cv::Mat prePos
   LOG(WARNING)<<"_j_Energy_X\n"<<j_Energy_X;*/
 #ifdef DRAW_LINE_P2NP
 LOG(WARNING)<<"to draw drawFrame";
-  m_data.m_model->DisplayCV(/*prePose*/,drawFrame);
+  m_data.m_model->DisplayCV(prePose,drawFrame);
   imshow("DRAW_LINE_P2NP",drawFrame);
 //   imshow("distMap",frame/255.f);
   waitKey(0);
@@ -468,13 +466,13 @@ void Optimizer::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,floa
 
 }
 
-float Optimizer::computeEnergy(const cv::Mat& frame,const cv::Mat& pose)
+float Optimizer::computeEnergy(const cv::Mat& frame,const float * pose)
 {
  m_data.m_model->GetImagePoints(pose, m_data.m_pointset);
   float energy =0;
   int size =0;
   Mat intrinsic = m_data.m_model->getIntrinsic();
-  Mat extrinsic = m_data.m_model->GetPoseMatrix(pose);
+  Mat extrinsic = Transformation::getTransformationMatrix(pose);
   GLMmodel* model =m_data.m_model->GetObjModel();
   cv::Mat pos = m_data.m_model->getPos();
   int lineNum=0;       
@@ -565,7 +563,7 @@ float Optimizer::nearestEdgeDistance(const cv::Point & point,const std::vector<m
   }
   return ENERGY_SIZE*nearstD; 
 }
-void Optimizer::UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, Transformation &transformation_New)
+void Optimizer::UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New)
 {
   
   transformation_New.setPose(pose_Old);  
@@ -576,13 +574,13 @@ void Optimizer::UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, Transf
 }
 
 //update C1+dx ->  C2
-void Optimizer::UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Mat &pose_New)
+void Optimizer::UpdateStateLM(const cv::Mat &dx, const float * pose_Old, float * pose_New)
 {
 // 	SkewSymmetricMatrixf dq;
 // 	Quaternionf q1, q2;
 // 	C1.ToQuaternion(q1.v0123());
   Quaternion q1,q2;
-  cv::Vec3f rotV(pose_Old.at<float>(0,0),pose_Old.at<float>(0,1),pose_Old.at<float>(0,2));
+  cv::Vec3f rotV(pose_Old[0],pose_Old[1],pose_Old[2]);
   q1.SetRotVec(rotV);
   
 // 	dq.v012x() = dx.v0123();
@@ -602,7 +600,7 @@ void Optimizer::UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Ma
 // 	t2 = t1;
 // 
   cv::Vec3f t1,t2;
-  t1= cv::Vec3f(pose_Old.at<float>(0,3),pose_Old.at<float>(0,4),pose_Old.at<float>(0,5));
+  t1= cv::Vec3f(pose_Old[3],pose_Old[4],pose_Old[5]);
   t2=t1;
   
 // 	SkewSymmetricMatrixf::AddATBTo(dq, t1, t2);
@@ -620,8 +618,8 @@ void Optimizer::UpdateStateLM(const cv::Mat &dx, const cv::Mat &pose_Old, cv::Ma
   t2[2]+=dx.at<float>(0,5);
   
   for(int i=0;i<3;i++){
-    pose_New.at<float>(0,i)=rotV_New[i];
-    pose_New.at<float>(0,i+3)=t2[i];
+    pose_New[i]=rotV_New[i];
+    pose_New[i+3]=t2[i];
   }
 //   LOG(INFO)<<"pose_Old "<<pose_Old;
 //   LOG(INFO)<<"pose_New "<<pose_New;

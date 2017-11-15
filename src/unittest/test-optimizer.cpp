@@ -31,8 +31,6 @@ int main(int argc, char* argv[]) {
   float pose[6];
   /*** init parame
   /*** start Detectorters***/
-//   pose.at<float>(0,0)=2.31772f; pose.at<float>(0,1)=0.0820299f; pose.at<float>(0,2)=0.681282f;
-//   pose.at<float>(0,3)=-0.0581884f; pose.at<float>(0,4)=0.0586302f; pose.at<float>(0,5)=1.29788f; 
   pose[0]=2.31772f; pose[1]=0.0820299f; pose[2]=0.681282f;
   pose[3]=-0.0581884f; pose[4]=0.0586302f; pose[5]=1.29788f; 
   config.filename = "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/openbox.obj";
@@ -67,7 +65,6 @@ int main(int argc, char* argv[]) {
     optimizer.optimizingLM(pose,curFrame,distanceFrame,locations,frameId,pose);
     LOG(WARNING)<<"result pose : "<<pose;
     optimizer.m_data.m_model->DisplayCV(pose,curFrame);
-//     optimizer.m_data.m_model->DisplayCV(pose,distanceFrame);
 
     //to test model  , get its point set ,and try to compute energy
     

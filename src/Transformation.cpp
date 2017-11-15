@@ -44,10 +44,10 @@ void Transformation::setPose(const cv::Mat& pose)
 }
 void Transformation::setPose(const float pose[6])
 {
-  
-  for(int i=0;i<6;i++){
-   m_pose[i]=pose[i];
-  }
+  memcpy(m_pose,pose,sizeof(float)*6);
+//   for(int i=0;i<6;i++){
+//    m_pose[i]=pose[i];
+//   }
 }
 
 void Transformation::rotateWithR(const cv::Mat& Rotation)
