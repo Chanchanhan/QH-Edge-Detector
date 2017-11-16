@@ -27,6 +27,15 @@ cv::Mat Transformation::M_Pose()
   }
   return pose;
 }
+cv::Mat Transformation::getMatPose(const float* pose)
+{
+
+  cv::Mat Mat_Pose(1,6,CV_32FC1);
+  for(int i=0;i<6;i++){
+    Mat_Pose.at<float>(0,i)=pose[i];
+  }
+  return Mat_Pose;
+}
 
 const float* Transformation::Pose()
 {

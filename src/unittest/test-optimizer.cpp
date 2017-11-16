@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
     //to test model  , get its point set ,and try to compute energy
     
     imshow("curFrame",curFrame);
-    waitKey(0);
+    waitKey(1);
     
     }
     int64 time1 = cv::getTickCount();

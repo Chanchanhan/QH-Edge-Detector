@@ -8,7 +8,8 @@
 #include<Eigen/Geometry>
 #include"sophus/so3.h"
 #include"sophus/se3.h"
-
+#include "POSEST/include/posest_edft.h"
+#include "POSEST/include/posest.h"
 #include "ObjectDetector/Optimizer.h"
 using namespace OD;
 const int MAX_ITERATIN_NUM =15;
@@ -33,6 +34,7 @@ const bool  USE_MY_TRANSFORMATION = 1;
 #define SIMULATION_MAX_TRANSLATIONS				1
 #define SIMULATION_MAX_TRANSLATION_RATIO		0.5f
 #define USE_PNP
+// #define EDF_TRAKER
 //  #define DRAW_LINE_P2NP
 typedef Eigen::Matrix<double,6,1> Vector6d;
 
@@ -47,11 +49,12 @@ struct EDFTdata
 };
 
 
-Optimizer::Optimizer(const Config& config, const float * initPose, bool is_writer)
+Optimizer::Optimizer(const Config& config, const float * initPose, bool is_writer):imgHeight( config.height), imgWidth(config.width),  m_calibration ( config.camCalibration),m_is_writer(is_writer)
 {
   m_data.m_model = new Model(config);
-  m_calibration = config.camCalibration;
-  m_is_writer = is_writer;
+  dist = (float *)malloc(imgHeight* imgWidth * sizeof(float)); 
+  final_e = 1E9;
+
 }
 
 Optimizer::~Optimizer()
@@ -71,18 +74,13 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
     LOG(WARNING)<<" ";
     LOG(WARNING)<<"frameId = "<<frameId;
     _locations=(int *)locations.data;
-    _col=distFrame.cols;
-    _row=distFrame.rows;
-//     printMat("frame",frame);
-//     imshow("frame",frame);
-//     waitKey(0);
+    imgHeight=distFrame.cols;
+    imgWidth=distFrame.rows;
     cv::Mat A_I=cv::Mat::eye(6,6,CV_32FC1);
     float lamda=INIT_LAMDA;
     std::vector<cv::Point> nPoints;
     m_Transformation.setPose(prePose);
-//     cv::Mat _prePose =prePose.clone();
     int itration_num=0;
-    cv::Mat newPose=cv::Mat::zeros(1,6,CV_32FC1);  
     Transformation newTransformation;
     m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());    
     float e2 = computeEnergy(distFrame, m_Transformation.Pose());
@@ -148,8 +146,8 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 	  newTransformation.setPose(newPose);
 	  e2_new = computeEnergy(distFrame, newPose);
       }*/
-      
-      while(e2_new>e2){	  
+#ifndef EDF_TRAKER
+      while(e2_new>e2){	 
 	  LOG(WARNING)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
 	  lamda*=LM_STEP;
 	  A=_A+A_I*lamda;
@@ -205,10 +203,24 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 	  }
 	
       }
-      	     
+#else
+  int cstfunc = POSEST_EDFT_ERR_NLN;
+  float newPose[6];
+  int ret=edfTracker(m_Transformation.Pose(), distFrame,cstfunc,newPose);
+  newTransformation.setPose(newPose);
+  e2_new = computeEnergy(distFrame, newTransformation.Pose());
+  LOG(WARNING)<<"ret = "<<ret<<" Pose : "<<newTransformation.M_Pose()<<" energy = "<<e2_new;
+#endif
+    	     
       if(e2_new>=e2){
+#ifndef EDF_TRAKER
+
+
 	lamda*=LM_STEP;
 	continue;
+#else
+	
+#endif
       }else{      
 	LOG(WARNING)<<"good !To optimize! e2 :"<<e2<<" e2_new: "<<e2_new;
 	LOG(INFO)<<"dX "<<dX;
@@ -228,10 +240,9 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 	return ;
 	
       }
-      
+     
     }
     LOG(INFO)<<"to much itration_num!";
-    
   }
   
   int64 teim0 = cv::getTickCount();
@@ -242,9 +253,9 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 cv::Point Optimizer::getNearstPointLocation(const cv::Point &point){
   int x= point.y;
   int y= point.x;   			
-  while(_locations[y + _col * x]!=x||_locations[_row*_col+y + _col * x]!=y){
-    x=_locations[y + _col * x];
-    y=_locations[_row*_col+y + _col* x];
+  while(_locations[y + imgHeight * x]!=x||_locations[imgWidth*imgHeight+y + imgHeight * x]!=y){
+    x=_locations[y + imgHeight * x];
+    y=_locations[imgWidth*imgHeight+y + imgHeight* x];
 //      cout<<"move to: "<<x<<" y: "<<y<<endl;
    }
 //    cout<<"End to: x "<<x<<" y: "<<y<<endl;
@@ -347,9 +358,9 @@ void Optimizer::constructEnergyFunction(const cv::Mat distFrame,const float* pre
     }
 
   } 
-  
+  /*
   LOG(WARNING)<<"_j_X_Pose\n"<<j_X_Pose;
-  LOG(WARNING)<<"_j_Energy_X\n"<<j_Energy_X;
+  LOG(WARNING)<<"_j_Energy_X\n"<<j_Energy_X;*/
   
 #ifdef DRAW_LINE_P2NP
 LOG(WARNING)<<"to draw drawFrame";
@@ -375,6 +386,77 @@ float Optimizer::getDistanceToEdege(const Point& e0, const Point& e1, const Poin
 {
   return pow((e0.y-e1.y)*v.x +(e1.x-e0.x)*v.y+(e0.x*e1.y-e1.x*e0.y),2)/
 	  (pow((e1.x-e0.x),2)+pow((e1.y-e0.y),2));
+}
+int Optimizer::edfTracker(const float* prePose, const Mat& distMap,const  int NLrefine, float* newPose)
+{
+  Mat _distMap=distMap.clone();
+  if (_distMap.isContinuous()/* && distMap.depth()==CV_32FC1*/)
+  {
+    memcpy(dist, _distMap.data, imgHeight * imgWidth * sizeof(float));    
+  }
+  else
+  {
+    for (int i = 0; i < imgHeight; ++i)
+    {
+      float *rptr =_distMap.ptr<float>(i);
+      for (int j = 0; j < imgWidth; ++j)
+      {
+	dist[i*imgWidth + j] = rptr[j];	
+      }      
+    }    
+  }
+  
+  
+  
+  m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
+  float energy =0;
+  int size =0;
+  Mat intrinsic = m_data.m_model->getIntrinsic();
+  Mat extrinsic = m_data.m_model->GetPoseMatrix(prePose);
+  GLMmodel* model =m_data.m_model->GetObjModel();
+  cv::Mat pos = m_data.m_model->getPos();
+  int lineNum=0;       
+  float meanDX=0;
+  std::vector<cv::Point3d> contourPoints ;
+  for(int i=0;i<model->numLines;++i){
+    if(model->lines[i].tovisit){
+      
+      lineNum++;
+      int v0=model->lines[i].vindices[0],v1=model->lines[i].vindices[1];
+      Point3f p1= Point3f(pos.at<float>(0,v0-1),pos.at<float>(1,v0-1),pos.at<float>(2,v0-1));
+      Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
+      Point3f dX=(p2-p1);      
+      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/NX_LENGTH;
+      dX /=Nx;
+      Point3f X=p1;
+      Point point1= m_data.m_model->X_to_x(p1,extrinsic);
+      Point point2= m_data.m_model->X_to_x(p2,extrinsic);
+      if(point1.x<0||point1.y<0||point2.x<0||point2.y<0||point1.x>=imgWidth||point2.x>=imgWidth||point1.y>=imgHeight||point2.y>=imgHeight){
+	continue;
+      }
+      float meanE_LINE=0;
+      for(int i=0;i<=Nx;++i,X+=dX){
+	 contourPoints.push_back(Point3d(X.x,X.y,X.z));
+      }  
+    }
+  }
+  double(*ctrPts3D)[3];
+  int nCtrPts=contourPoints.size();
+  ctrPts3D = (double(*)[3])malloc(nCtrPts*sizeof(double[3]));
+  for (int i = 0; i < nCtrPts; ++i)
+  {
+    ctrPts3D[i][0] = contourPoints[i].x;
+    ctrPts3D[i][1] = contourPoints[i].y;
+    ctrPts3D[i][2] = contourPoints[i].z;    
+  }
+  double K[9] = { m_calibration.fx(), 0, m_calibration.cx(), 0, m_calibration.fy(), m_calibration.cy(), 0, 0, 1 };
+  double _newPose[6];
+  int ret = posest_edft(dist, ctrPts3D, nCtrPts,
+		imgWidth, imgHeight, K, _newPose, 6, NLrefine, 1, &final_e);
+  for(int i=0;i<6;i++){
+    newPose[i]=_newPose[i];
+  }
+  return ret;
 }
 
 void Optimizer::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *coarsePose)

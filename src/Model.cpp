@@ -23,16 +23,12 @@ static void printMat(std::string name, cv::Mat M){
     printf("\n");
   }
 }
-Model::Model(const Config& config) : m_bb_points(4,8,CV_32FC1)
+Model::Model(const Config& config) : m_bb_points(4,8,CV_32FC1),m_model( config.model),m_radius ( glmMaxRadius(m_model)),m_calibration ( config.camCalibration),	m_width ( config.width),
+	m_height ( config.height)
 {
-	m_model = config.model;
-	m_radius = glmMaxRadius(m_model);
 
-	m_calibration = config.camCalibration;
-	m_width = config.width;
-	m_height = config.height;
-	m_rvec.create(3,1,CV_32FC1);
-	m_tvec.create(3,1,CV_32FC1);
+
+
 	getVisibleLines();
 	
 	intrinsic=cv::Mat(3,4,CV_32FC1);
@@ -40,13 +36,13 @@ Model::Model(const Config& config) : m_bb_points(4,8,CV_32FC1)
 	intrinsic.at<float>(1,0)=0; intrinsic.at<float>(1,1)=m_calibration.fy(); intrinsic.at<float>(1,2)=m_calibration.cy(); intrinsic.at<float>(1,3)=0;
 	intrinsic.at<float>(2,0)=0; intrinsic.at<float>(2,1)=0; intrinsic.at<float>(2,2)=1; intrinsic.at<float>(2,3)=0;
 	
-	pos =cv::Mat (4,m_model->numvertices,CV_32FC1);
+	modelPos =cv::Mat (4,m_model->numvertices,CV_32FC1);
 	for(int i=1; i<=m_model->numvertices; i++)
 	{
-	  pos.at<float>(0,i-1) = m_model->vertices[3*(i)+0];
-	  pos.at<float>(1,i-1) = m_model->vertices[3*(i)+1];
-	  pos.at<float>(2,i-1) = m_model->vertices[3*(i)+2];
-	  pos.at<float>(3,i-1) = 1;
+	  modelPos.at<float>(0,i-1) = m_model->vertices[3*(i)+0];
+	  modelPos.at<float>(1,i-1) = m_model->vertices[3*(i)+1];
+	  modelPos.at<float>(2,i-1) = m_model->vertices[3*(i)+2];
+	  modelPos.at<float>(3,i-1) = 1;
 	}
 	
 	//camera intrinsic
@@ -87,7 +83,7 @@ void Model::GetImagePoints(const float* prepose, PointSet& pointset)
 	
 	cv::Mat result(3,m_model->numvertices,CV_32FC1);
 
-	result = intrinsic*extrinsic*pos;
+	result = intrinsic*extrinsic*modelPos;
 	/*
 	printf("samplePoints.size() =%d \n",samplePoints.size());*/
 	//normalize
@@ -286,6 +282,91 @@ const cv::Mat& Model::getIntrinsic() const
 {
   return intrinsic;
 }
+
+
+void Model::getVisualableVertices(const float * pose, cv::Mat& vis_vertices) {
+  using namespace cv;
+  cv::Mat pt_in_cam(3, m_model->numvertices+1, CV_32FC1);
+
+	cv::Mat extinsic(3, 4, CV_32FC1);
+	extinsic= Transformation::getTransformationMatrix(pose);
+	pt_in_cam = extinsic * modelPos;
+
+	float u[3], v[3], n[3], c[3];
+	for (size_t i = 0; i < m_model->numtriangles; i++) {
+		//compute the norm of the triangles
+		u[0] = pt_in_cam.at<float>(0, m_model->triangles[i].vindices[1]) - pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]);
+		u[1] = pt_in_cam.at<float>(1, m_model->triangles[i].vindices[1]) - pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]);
+		u[2] = pt_in_cam.at<float>(2, m_model->triangles[i].vindices[1]) - pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]);
+
+		v[0] = pt_in_cam.at<float>(0, m_model->triangles[i].vindices[2]) - pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]);
+		v[1] = pt_in_cam.at<float>(1, m_model->triangles[i].vindices[2]) - pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]);
+		v[2] = pt_in_cam.at<float>(2, m_model->triangles[i].vindices[2]) - pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]);
+
+		glmCross(u, v, n);
+		glmNormalize(n);
+
+		//center of triangle
+		c[0] = 0.25f*pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]) + 0.25f*pt_in_cam.at<float>(0, m_model->triangles[i].vindices[1]) + 0.5f*pt_in_cam.at<float>(0, m_model->triangles[i].vindices[2]);
+		c[1] = 0.25f*pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]) + 0.25f*pt_in_cam.at<float>(1, m_model->triangles[i].vindices[1]) + 0.5f*pt_in_cam.at<float>(1, m_model->triangles[i].vindices[2]);
+		c[2] = 0.25f*pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]) + 0.25f*pt_in_cam.at<float>(2, m_model->triangles[i].vindices[1]) + 0.5f*pt_in_cam.at<float>(2, m_model->triangles[i].vindices[2]);
+
+		glmNormalize(c);
+
+		//judge the whether the line is visible or not
+		float cross = n[0] * c[0] + n[1] * c[1] + n[2] * c[2];
+		if (cross < 0.0f) {
+			if (m_model->lines[m_model->triangles[i].lindices[0]].e1 == 1)
+				m_model->lines[m_model->triangles[i].lindices[0]].e2 = 1;
+			else
+				m_model->lines[m_model->triangles[i].lindices[0]].e1 = 1;
+
+			if (m_model->lines[m_model->triangles[i].lindices[1]].e1 == 1)
+				m_model->lines[m_model->triangles[i].lindices[1]].e2 = 1;
+			else
+				m_model->lines[m_model->triangles[i].lindices[1]].e1 = 1;
+
+			if (m_model->lines[m_model->triangles[i].lindices[2]].e1 == 1)
+				m_model->lines[m_model->triangles[i].lindices[2]].e2 = 1;
+			else
+				m_model->lines[m_model->triangles[i].lindices[2]].e1 = 1;
+
+			
+		}
+	}
+
+	int visualable_line_count = 0;
+	for (size_t i = 0; i<m_model->numLines; i++) {
+		if ((m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 0) || (m_model->lines[i].e1 == 0 && m_model->lines[i].e2 == 1) || (m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 1)) {
+			visualable_line_count++;
+		}
+	}
+
+	cv::Mat pos(4, visualable_line_count*2, CV_32FC1);
+	int vis_line_index = 0;
+	for (size_t i = 0; i<m_model->numLines; i++) {
+		if ((m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 0) || (m_model->lines[i].e1 == 0 && m_model->lines[i].e2 == 1) || (m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 1)) {
+			GLuint v0 = m_model->lines[i].vindices[0];
+			GLuint v1 = m_model->lines[i].vindices[1];
+
+			pos.at<float>(0, 2*vis_line_index) = m_model->vertices[3 * v0];
+			pos.at<float>(1, 2*vis_line_index) = m_model->vertices[3 * v0 + 1];
+			pos.at<float>(2, 2*vis_line_index) = m_model->vertices[3 * v0 + 2];
+			pos.at<float>(3, 2*vis_line_index) = 1;
+
+			pos.at<float>(0, 2*vis_line_index+1) = m_model->vertices[3 * v1];
+			pos.at<float>(1, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 1];
+			pos.at<float>(2, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 2];
+			pos.at<float>(3, 2*vis_line_index+1) = 1;
+			
+			vis_line_index++;
+		}
+		m_model->lines[i].e1 = 0; m_model->lines[i].e2 = 0;
+	}
+
+	vis_vertices = pos;
+}
+
 void Model::setVisibleLinesAtPose(const float * pose)
 {
   cv::Mat extrinsic = Transformation::getTransformationMatrix(pose);
@@ -352,8 +433,8 @@ void Model::DisplayCV(const float * pose, cv::Mat& frame)
 		GLuint v1 = m_model->lines[i].vindices[1];
 		
 		
-		Point3f p1= Point3f(pos.at<float>(0,v0-1),pos.at<float>(1,v0-1),pos.at<float>(2,v0-1));
-		Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
+		Point3f p1= Point3f(modelPos.at<float>(0,v0-1),modelPos.at<float>(1,v0-1),modelPos.at<float>(2,v0-1));
+		Point3f p2= Point3f(modelPos.at<float>(0,v1-1),modelPos.at<float>(1,v1-1),modelPos.at<float>(2,v1-1));
 
 		points_3d.push_back(p1);
 		points_3d.push_back(p2);
@@ -408,7 +489,6 @@ void Model::DisplayGL(const cv::Mat& prepose)
 	float x = prepose.at<float>(0,0); float y = prepose.at<float>(0,1); float z = prepose.at<float>(0,2);
 	float rx = prepose.at<float>(0,3); float ry = prepose.at<float>(0,4); float rz = prepose.at<float>(0,5);
 
-#ifdef MY
 	//camera extrinsic
 	cv::Mat extrinsic(4,4,CV_32FC1);
 	const float pi = 3.1415926f;
@@ -417,9 +497,6 @@ void Model::DisplayGL(const cv::Mat& prepose)
 	extrinsic.at<float>(2,0)=-cos(rz)*sin(ry); extrinsic.at<float>(2,1)=cos(ry)*sin(rx)+cos(rx)*sin(ry)*sin(rz); extrinsic.at<float>(2,2)=cos(rx)*cos(ry)-sin(rx)*sin(ry)*sin(rz); extrinsic.at<float>(2,3)=z;
 	extrinsic.at<float>(3,0)=0; extrinsic.at<float>(3,1)=0; extrinsic.at<float>(3,2)=0; extrinsic.at<float>(3,3)=1;
 
-#else
-	cv::Mat extrinsic = GetPoseMatrix();
-#endif
 
 	ORD::ShapePoseInfo shapePoseInfo;
 	shapePoseInfo.m_shape = m_model;
@@ -485,25 +562,10 @@ bool Model::isSameNormal(const float* n1, const float* n2)
 }
 const Mat& Model::getPos() const
 {
-  return pos;
+  return modelPos;
 }
 
-cv::Mat Model::GetPoseMatrix()
-{
-	cv::Mat rotMat(3,3,CV_32FC1);
-	cv::Mat T = cv::Mat::eye(4,4,CV_32FC1);
 
-	cv::Rodrigues(m_rvec,rotMat);
-	for(int c=0; c<3; c++)
-	{
-		for(int r=0; r<3; r++)
-		{
-			T.at<float>(r,c) = rotMat.at<float>(r,c);
-		}
-	}
-	T.at<float>(0,3)=m_tvec.at<float>(0,0); T.at<float>(1,3)=m_tvec.at<float>(1,0); T.at<float>(2,3) = m_tvec.at<float>(2,0);
-	return T;
-}
 Mat Model::GetPoseMatrix(const float* pose)
 {
   cv::Mat roV(3,1,CV_32FC1);

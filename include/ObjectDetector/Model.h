@@ -38,6 +38,7 @@ namespace OD
 		void getVisitLines(const cv::Mat pose);
 		void getIntrinsic(cv::Mat& intrinsic) const;
 		void setVisibleLinesAtPose(const float * pose);
+		void getVisualableVertices(const float * pose, cv::Mat& vis_vertices);
 		const cv::Mat& getIntrinsic()  const;
 		const std::vector<Line> & getMyLines();
 		
@@ -51,10 +52,8 @@ namespace OD
 	public:
 
 		GLMmodel* GetObjModel();
-		cv::Mat m_rvec;
-		cv::Mat m_tvec;
 	private:
-		cv::Mat pos;
+		cv::Mat modelPos;
 		std::vector<Line> myLines;
 		GLMmodel* m_model;
 		OD::CameraCalibration m_calibration;
@@ -73,6 +72,8 @@ namespace OD
 		bool isLineVisible(const cv::Point &v1,const cv::Point &v2,const PointSet &point_set);
 		bool isPointVisible(const cv::Point &v1,const PointSet &point_set);
 		bool isSameNormal(const float *n1,const float *n2);
+		
+
 	};
 }
 #endif

@@ -38,8 +38,7 @@ namespace OD
 		void optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const cv::Mat &locations, const int frameId,float * _newPose );
 	      
 	private:
-		static void lm(double *p, double* x, int m, int n, void* data);	
-		static void jaclm(double *p, double *jac, int m, int n, void* data);
+		int edfTracker(const float * prePose,const cv::Mat& distFrame,const  int NLrefine, float* newPose);
 		void constructEnergyFunction(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
 		void solveEnergyFunction();
 		float computeEnergy(const cv::Mat& frame,const float * pose);
@@ -55,9 +54,10 @@ namespace OD
 		Data m_data;	
 	private:
 		int *_locations;
-		int _col;
-		int _row;
+		float* dist;
+		int imgHeight,imgWidth;
 		cv::Mat mFrame;
+		double final_e;
 		bool m_is_writer;
 		std::ofstream m_outPose;
 		Transformation m_Transformation;

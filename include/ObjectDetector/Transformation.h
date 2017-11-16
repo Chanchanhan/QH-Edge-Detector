@@ -27,7 +27,8 @@ public:
   static cv::Mat getRotationMatrixb_so3(const float &x,const float &y, const float &z,float &theta,cv::Mat &so_x);
   static cv::Mat getTransformationMatrix(const cv::Vec3f &YDR,const cv::Vec3f &translation);
   static cv::Mat getTransformationMatrix(const float *pose);
-  
+  static cv::Mat getMatPose(const float *pose);
+
   cv::Mat transformationMatrix() ;
   void xTransformation(Transformation &_T);
   void xTransformation(const cv::Mat &Dx);
