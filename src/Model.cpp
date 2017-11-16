@@ -380,9 +380,9 @@ void Model::setVisibleLinesAtPose(const float * pose)
 
       m_model->lines[i].tovisit=isLineVisible(v1,v2,pointset);
 
-      if((m_model->lines[i].vindices[0]==8&&m_model->lines[i].vindices[1]==4) ||m_model->lines[i].vindices[0]==5||m_model->lines[i].vindices[1]==5){
-	m_model->lines[i].tovisit=false;
-      }
+//       if((m_model->lines[i].vindices[0]==8&&m_model->lines[i].vindices[1]==4) ||m_model->lines[i].vindices[0]==5||m_model->lines[i].vindices[1]==5){
+// 	m_model->lines[i].tovisit=false;
+//       }
     }else{
       m_model->lines[i].tovisit=false;
     }

@@ -25,6 +25,7 @@ const float INF =1e10;
 const float THREHOLD_DX= 1.0e17;
 const bool  USE_SOPHUS = 0;
 const bool  USE_MY_TRANSFORMATION = 1;
+const float MAX_VALIAD_DISTANCE = 10.f;
 #define FACTOR_DEG_TO_RAD 0.01745329252222222222222222222222f
 #define PRIOR_MAX_DEVIATION_CAMERA_HEIGHT			0.5f
 #define PRIOR_MAX_DEVIATION_CAMERA_ROTATION_XY			5.0f
@@ -585,6 +586,7 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const float * pose)
 	 Point nearst=getNearstPointLocation(point);
 	 
 	 float de2 = /*getDistance2ToEdege(point1,point2,nearst)+*/frame.at<float>(point);
+	 float dist2Edge=getDistanceToEdege(point1,point2,nearst);
 	 //enlarge influence of 255
 	 if(de2==255.f){
 	   de2*=10;
