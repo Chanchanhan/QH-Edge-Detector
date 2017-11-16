@@ -403,16 +403,12 @@ Point Model::X_to_x(Point3f X,Mat extrisic)
   
 }
 
-void Model::DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame)
+void Model::DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame,const float &radius)
 {
-//   int u1=p1.y,v1=p1.x,v2=p2.y,u2=p2.x;
-/*  if(u1 >=0 && u1<frame.cols && v1 >=0 && v1<=frame.rows && u2 >=0 && u2<frame.cols && v2>=0 && v2<=frame.rows)
-  {
-    LOG(INFO)<< "v0:"<< u1<<" "<<v1<< " , v1:"<< u2<<" "<<v2<<std::endl;*/ 
-    cv::circle(frame,p1,10,Scalar(0,0,255));  
 
-    cv::line(frame,p1,p2,cv::Scalar(0,255,0),1,CV_AA);
-//   }
+  float drawRadius = radius<3?3:drawRadius;
+  cv::circle(frame,p1,drawRadius,Scalar(0,0,255));  
+  cv::line(frame,p1,p2,cv::Scalar(0,255,0),1,CV_AA);
 }
 void Model::DisplayCV(const float * pose, cv::Mat& frame)
 {

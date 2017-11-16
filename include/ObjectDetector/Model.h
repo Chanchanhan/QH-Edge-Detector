@@ -32,7 +32,7 @@ namespace OD
 		void setPointSet();
 		void DisplayCV(const float * pose, cv::Mat& frame);
 		void DisplayGL(const cv::Mat& pose);
-		void DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame);
+		void DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame,const float &radius);
 		void computeExtrinsicByEuler(cv::Mat* mvMatrix, float& _x, float& _y, float& _z, float& _rx, float &_ry, float &_rz);
 		void FilterModel(const cv::Mat& prepose,int pointnum);
 		void getVisitLines(const cv::Mat pose);

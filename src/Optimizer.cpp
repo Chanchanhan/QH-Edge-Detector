@@ -25,7 +25,7 @@ const float INF =1e10;
 const float THREHOLD_DX= 1.0e17;
 const bool  USE_SOPHUS = 0;
 const bool  USE_MY_TRANSFORMATION = 1;
-const float MAX_VALIAD_DISTANCE = 10.f;
+const float MAX_VALIAD_DISTANCE = 100.f;
 #define FACTOR_DEG_TO_RAD 0.01745329252222222222222222222222f
 #define PRIOR_MAX_DEVIATION_CAMERA_HEIGHT			0.5f
 #define PRIOR_MAX_DEVIATION_CAMERA_ROTATION_XY			5.0f
@@ -302,11 +302,15 @@ void Optimizer::constructEnergyFunction(const cv::Mat distFrame,const float* pre
 	/*get nearestEdgeDistance ponit*/
 	Point point(P_x.at<float>(0,0)/P_x.at<float>(2,0),P_x.at<float>(1,0)/P_x.at<float>(2,0));
 	Point nearstPoint = getNearstPointLocation(point);
-	if(distFrame.at<float>(nearstPoint)==255){
+		
+	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
+
+	if(distFrame.at<float>(nearstPoint)>=254||dist2Edge>MAX_VALIAD_DISTANCE){
 	  continue;
 	}
 #ifdef DRAW_LINE_P2NP	
-	m_data.m_model->DisplayLine(point,nearstPoint,drawFrame);
+
+	m_data.m_model->DisplayLine(point,nearstPoint,drawFrame,sqrt(dist2Edge));
  #endif
 	float _x=C_X.at<float>(0,0);
 	float _y=C_X.at<float>(0,1);
@@ -570,17 +574,7 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const float * pose)
 	return INF;
       }
       float meanE_LINE=0;
-      for(int i=0;i<=Nx;++i,X+=dX){
-	 Point point= m_data.m_model->X_to_x(X,extrinsic);	 	 
-	 Point nearst=getNearstPointLocation(point);
-	 float de2 = frame.at<float>(point);
-	 meanE_LINE+=de2;
-//  	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " <<" Distance energy2: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" nEnergy = "<<frame.at<float>(nearst);	 
-       }
-       model->lines[i].energy=meanE_LINE;
-       meanE_LINE/=Nx;
-       LOG(INFO)<<"meanE_LINE = "<<meanE_LINE;
-       X=p1;
+
        for(int i=0;i<=Nx;++i,X+=dX){
 	 Point point= m_data.m_model->X_to_x(X,extrinsic);	 	 
 	 Point nearst=getNearstPointLocation(point);
@@ -589,12 +583,11 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const float * pose)
 	 float dist2Edge=getDistanceToEdege(point1,point2,nearst);
 	 //enlarge influence of 255
 	 if(de2==255.f){
-	   de2*=10;
-	}
-	 float DX=pow(de2-meanE_LINE,2); 	
-	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << frame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" DX = "<<DX;	 
+	    de2*=10;
+	 }
+	 
+	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << frame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" dist2Edge ="<< dist2Edge;	 
 //	 if(DX<THREHOLD_DX||DX<meanE_LINE*meanE_LINE){
-	  meanDX+=DX;
 	  energy+=de2;
 //	 }
   
@@ -604,9 +597,7 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const float * pose)
   } 
 
 	
-  meanDX*=1.0f/size;
   energy*=1.0f/size;
-  LOG(INFO)<<"meanDX = "<<meanDX;
   LOG(INFO)<<"Total mean Energy = "<<energy;
 
   return energy;
