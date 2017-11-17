@@ -18,7 +18,8 @@ namespace OD
     int height;
     double fps;
     std::string videoPath;
-    std::string filename;    
+    std::string filename;  
+    std::string gtFile;  
   };
 }
 

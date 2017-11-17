@@ -71,6 +71,7 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 {
    int64 time0 = cv::getTickCount();
   {
+    _frameId=frameId;
     mFrame=curFrame;
     LOG(WARNING)<<" ";
     LOG(WARNING)<<"frameId = "<<frameId;
@@ -99,10 +100,13 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
       float coarsePose[6]={0};
 //       coarsePose=m_Transformation.M_Pose().clone();
 #ifdef USE_PNP
+      
        getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
       LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
-      m_Transformation.setPose(coarsePose);
-      LOG(INFO)<<"coarse pose"<<m_Transformation.M_Pose();
+//       if(computeEnergy(distFrame,coarsePose)<computeEnergy(distFrame,m_Transformation.Pose())){
+	  m_Transformation.setPose(coarsePose,true);	  
+// 	  LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
+//       }
 #endif
       constructEnergyFunction(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
       _A/=abs(_A.at<float>(0,0));
@@ -149,6 +153,7 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
       }*/
 #ifndef EDF_TRAKER
       while(e2_new>e2){	 
+	  
 	  LOG(WARNING)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
 	  lamda*=LM_STEP;
 	  A=_A+A_I*lamda;
@@ -309,7 +314,7 @@ void Optimizer::constructEnergyFunction(const cv::Mat distFrame,const float* pre
 	  continue;
 	}
 #ifdef DRAW_LINE_P2NP	
-
+      
 	m_data.m_model->DisplayLine(point,nearstPoint,drawFrame,sqrt(dist2Edge));
  #endif
 	float _x=C_X.at<float>(0,0);
@@ -370,9 +375,11 @@ void Optimizer::constructEnergyFunction(const cv::Mat distFrame,const float* pre
 #ifdef DRAW_LINE_P2NP
 LOG(WARNING)<<"to draw drawFrame";
   m_data.m_model->DisplayCV(prePose,drawFrame);
-  imshow("DRAW_LINE_P2NP",drawFrame);
-//   imshow("distMap",frame/255.f);
-  waitKey(0);
+  if(_frameId%10==0){
+    imshow("DRAW_LINE_P2NP",drawFrame);
+  //   imshow("distMap",frame/255.f);
+    waitKey(0);
+  }
 #endif
   
   Mat J(6,6,CV_32FC1),J_T(6,6,CV_32FC1);
@@ -500,8 +507,12 @@ void Optimizer::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,floa
       }
       float meanE_LINE=0;
       for(int i=0;i<=Nx;++i,X+=dX){
-	 Point point= m_data.m_model->X_to_x(X,extrinsic);	 	 
-	 Point nearst=getNearstPointLocation(point);
+	Point point= m_data.m_model->X_to_x(X,extrinsic);
+	Point nearst=getNearstPointLocation(point);
+	float dist2Edge=getDistanceToEdege(point1,point2,nearst);
+// 	if(distMap.at<float>(nearst)>=254/*||dist2Edge>MAX_VALIAD_DISTANCE*/){
+// 	  continue;
+// 	}
 	 objectPoints.push_back(Point3d(X.x,X.y,X.z));
 	 imagePoints.push_back(Point2d(nearst.x,nearst.y));
       }  
@@ -585,7 +596,11 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const float * pose)
 	 if(de2==255.f){
 	    de2*=10;
 	 }
-	 
+// 	 if(dist2Edge>MAX_VALIAD_DISTANCE){
+// 	   size--;
+// 	   continue;
+// 	 }
+// 	 de2*=(1-pow( dist2Edge/MAX_VALIAD_DISTANCE,2));
 	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << frame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" dist2Edge ="<< dist2Edge;	 
 //	 if(DX<THREHOLD_DX||DX<meanE_LINE*meanE_LINE){
 	  energy+=de2;

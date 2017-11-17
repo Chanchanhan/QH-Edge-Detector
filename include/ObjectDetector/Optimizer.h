@@ -53,6 +53,7 @@ namespace OD
 	public:
 		Data m_data;	
 	private:
+		int _frameId;
 		int *_locations;
 		float* dist;
 		int imgHeight,imgWidth;
