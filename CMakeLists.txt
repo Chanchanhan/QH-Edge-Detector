@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.6)
 project(ml)
 include_directories(include)
 include_directories(3rdparty)
-file(GLOB headers include/andres/* include/andres/ml/* 3rdparty/GLRenderer/include/* 3rdparty/POSEST/include/*  3rdparty/POSEST/include/levmar/* 3rdparty/POSEST/include/mlsl/* include/edge/* include/tools/* include/ObjectDetector/*)
+file(GLOB headers include/andres/* include/andres/ml/* 3rdparty/GLRenderer/include/* 3rdparty/POSEST/include/*  3rdparty/POSEST/include/levmar/* 3rdparty/POSEST/include/mlsl/* include/edge/* include/tools/* include/Traker/*)
 enable_testing()
 
 aux_source_directory(./src/  SRC_LIST)
@@ -114,19 +114,19 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 # targets
 ##############################################################################
 # 
-add_executable(test-obj-detector src/unittest/test-obj-detector.cpp ${headers} ${SRC_LIST})
-add_test(test-obj-detector test-obj-detector)
-target_link_libraries( test-obj-detector  ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}   ${Sophus_LIBRARIES} glog::glog   -O2 blas lapack
-) # exe 链接 OpenCV
+# add_executable(test-obj-detector src/unittest/test-obj-detector.cpp ${headers} ${SRC_LIST})
+# add_test(test-obj-detector test-obj-detector)
+# target_link_libraries( test-obj-detector  ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}   ${Sophus_LIBRARIES} glog::glog   -O2 blas lapack
+# ) # exe 链接 OpenCV
 
 
 # add_executable(test-DT src/unittest/test-DT.cpp ${headers} ${SRC_LIST})
 # add_test(test-DT test-Edge-detector)
 # target_link_libraries( test-DT ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY} glog::glog) # exe 链接 OpenCV
 
-add_executable(test-model src/unittest/test-model.cpp ${headers} ${SRC_LIST})
-add_test(test-model test-Edge-detector)
-target_link_libraries( test-model ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}     ${Sophus_LIBRARIES} glog::glog     -O2 blas lapack
+add_executable(test-particle src/unittest/test-particle.cpp ${headers} ${SRC_LIST})
+add_test(test-particle test-particle)
+target_link_libraries( test-particle ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}     ${Sophus_LIBRARIES} glog::glog     -O2 blas lapack
 ) # exe 链接 OpenCV
 
 

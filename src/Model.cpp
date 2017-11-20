@@ -1,13 +1,13 @@
 #include <iostream>
-#include "ObjectDetector/Model.h"
+#include "Traker/Model.h"
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgproc.hpp>
 #include "opencv2/opencv.hpp"
 #include <Eigen/Dense>
 #include <opencv/cv.h>
 #include <vector>
-#include "ObjectDetector/Render.h"
-#include "ObjectDetector/Transformation.h"
+#include "Traker/Render.h"
+#include "Traker/Transformation.h"
 #include <omp.h>
 #include<glog/logging.h>
 using namespace OD;
@@ -23,8 +23,8 @@ static void printMat(std::string name, cv::Mat M){
     printf("\n");
   }
 }
-Model::Model(const Config& config) : m_bb_points(4,8,CV_32FC1),m_model( config.model),m_radius ( glmMaxRadius(m_model)),m_calibration ( config.camCalibration),	m_width ( config.width),
-	m_height ( config.height)
+Model::Model(const Config& config) : m_bb_points(4,8,CV_32FC1),m_model( config.model),m_radius ( glmMaxRadius(m_model)),m_calibration ( config.camCalibration),	m_width ( config.VIDEO_WIDTH),
+	m_height ( config.VIDEO_HEIGHT)
 {
 
 

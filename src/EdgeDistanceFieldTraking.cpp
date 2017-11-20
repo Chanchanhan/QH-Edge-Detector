@@ -11,14 +11,14 @@
 
 #include "POSEST/include/posest_edft.h"
 #include "POSEST/include/posest.h"
-#include "ObjectDetector/EdgeDistanceFieldTraking.h"
+#include "Traker/EdgeDistanceFieldTraking.h"
 #include "edge/EdgeDetector.hpp"
 
 using namespace OD;
 
 
 EdgeDistanceFieldTraking::EdgeDistanceFieldTraking(const Config& config, const Mat& initPose, bool is_writer)
-	:imgHeight( config.height), imgWidth(config.width), 
+	:imgHeight( config.VIDEO_HEIGHT), imgWidth(config.VIDEO_WIDTH), 
 	nCtrPts(0), nReservedCtrPts(2 * (imgHeight + imgWidth)),m_is_writer(is_writer),m_calibration(config.camCalibration)
 {
 

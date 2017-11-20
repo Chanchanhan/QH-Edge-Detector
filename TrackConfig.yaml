@@ -1,13 +1,13 @@
 %YAML:1.0
 
 # MAIN
-Init_Frame_Index: 120
+Init_Frame_Index: 0
 USE_GT_DATA: 0
 Calib_FX: 2666.67
 Calib_FY: 2666.67
 Calib_CX: 960
 Calib_CY: 540
-DIST_MASK_SIZE: 10
+DIST_MASK_SIZE: 5
 # Input/Output directories and Sets
 LOG_Threshold :1
 Input.Directory.LOG_DIR: "/home/qqh/output/ObjTrackLog/"
@@ -18,9 +18,9 @@ Input.Directory.GroudTruth: "/home/qqh/DataSets/3D Rigid Tracking from RGB Image
 
 #View
 CV_CIRCLE_RADIUS: 3
-CV_LINE_P2NP: 1
+CV_LINE_P2NP: 0
 #Optimize
-MAX_ITERATIN_NUM: 8
+MAX_ITERATIN_NUM: 15
 THREHOLD_ENERGY: 170.0
 DX_SIZE: 1.0
 NX_LENGTH: 0.02
@@ -34,3 +34,7 @@ USE_SOPHUS: 1
 USE_MY_TRANSFORMATION: 1 
 MAX_VALIAD_DISTANCE: 100
 USE_PNP: 1
+
+#Particle
+PARTICLE_ROTATION_GAUSSIAN_STD: 0.05  #  rotation noise
+PARTICLE_TRANSLATION_GAUSSIAN_STD: 0.5   # translation noise

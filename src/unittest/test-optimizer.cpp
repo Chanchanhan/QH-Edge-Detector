@@ -9,10 +9,10 @@
 #include "edge/ReadImg.hpp"
 #include "edge/EdgeDetector.hpp"
 #include "GLRenderer/include/glm.h"
-#include "ObjectDetector/Config.h"
-#include "ObjectDetector//Render.h"
-#include "ObjectDetector/Optimizer.h"
-#include "ObjectDetector/Model.h"
+#include "Traker/Config.h"
+#include "Traker//Render.h"
+#include "Traker/Traker.h"
+#include "Traker/Model.h"
 #include "tools/OcvYamlConfig.h"
 // ORD::Render g_render;
 const float mask =5.f;
@@ -39,8 +39,8 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
   
   Frames = ED::FileSys::getFiles(Config::configInstance().videoPath,".png");
   cv::Mat frame = cv::imread(Config::configInstance().videoPath+Frames[0]);
-  Config::configInstance().width = frame.size().width;
-  Config::configInstance().height = frame.size().height;
+  Config::configInstance().VIDEO_WIDTH = frame.size().width;
+  Config::configInstance().VIDEO_HEIGHT = frame.size().height;
   frame.release(); 
   starframeId=Config::configInstance().START_INDEX;
   int k=0;
@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
   
   init_MAIN(argc,argv,config,Frames,prePose,starframeId,gtData);
 
-  auto optimizer = std::make_unique<OD::Optimizer>(prePose,true); 
+  auto traker = std::make_unique<OD::Traker>(prePose,true); 
   for(/*auto frameFile :Frames*/int frameId=starframeId;frameId<Frames.size();frameId++){
     int64 time0 = cv::getTickCount();	
     //to do
@@ -114,10 +114,11 @@ int main(int argc, char* argv[]) {
       cv::Mat curFrame = cv::imread(Config::configInstance().videoPath+frameFile);
       if(!Config::configInstance().USE_GT){
 	Mat distanceFrame,locations;
+	float finalE2;
 	edgeDetector_->getDistanceTransform(curFrame,mask,distanceFrame,locations);
-	optimizer->optimizingLM(prePose,curFrame,distanceFrame,locations,frameId,prePose);
+	traker->optimizingLM(prePose,curFrame,distanceFrame,locations,frameId,prePose,finalE2);
       }
-      optimizer->m_data.m_model->DisplayCV(prePose,curFrame);
+      traker->m_data.m_model->DisplayCV(prePose,curFrame);
 
       //to test model  , get its point set ,and try to compute energy
       

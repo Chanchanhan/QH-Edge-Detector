@@ -1,4 +1,4 @@
-#include "ObjectDetector/CameraCalibration.h"
+#include "Traker/CameraCalibration.h"
 using namespace OD;
 CameraCalibration::CameraCalibration() : m_intrinsic(3,3,CV_32FC1), m_extrinsic(4,4,CV_32FC1)
 {
