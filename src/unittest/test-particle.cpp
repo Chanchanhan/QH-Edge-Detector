@@ -10,11 +10,10 @@
 #include "edge/EdgeDetector.hpp"
 #include "GLRenderer/include/glm.h"
 #include "Traker/Config.h"
-#include "Traker/Render.h"
+#include "Traker//Render.h"
 #include "Traker/Traker.h"
 #include "Traker/Model.h"
 #include "tools/OcvYamlConfig.h"
-// #include "Traker/Particle.h"
 // ORD::Render g_render;
 const float mask =5.f;
 
@@ -40,8 +39,8 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
   
   Frames = ED::FileSys::getFiles(Config::configInstance().videoPath,".png");
   cv::Mat frame = cv::imread(Config::configInstance().videoPath+Frames[0]);
-  Config::configInstance().width = frame.size().width;
-  Config::configInstance().height = frame.size().height;
+  Config::configInstance().VIDEO_WIDTH = frame.size().width;
+  Config::configInstance().VIDEO_HEIGHT = frame.size().height;
   frame.release(); 
   starframeId=Config::configInstance().START_INDEX;
   int k=0;
@@ -89,12 +88,6 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
     Config::configInstance().CV_CIRCLE_RADIUS=config.value_f("CV_CIRCLE_RADIUS");
     Config::configInstance().CV_LINE_P2NP=std::lround(config.value_f("CV_LINE_P2NP"))== 1;;
   }
-  //parameters for Particle
-  {
-    Config::configInstance().PARTICLE_ROTATION_GAUSSIAN_STD=config.value_f("PARTICLE_ROTATION_GAUSSIAN_STD");
-    Config::configInstance().PARTICLE_TRANSLATION_GAUSSIAN_STD=config.value_f("PARTICLE_TRANSLATION_GAUSSIAN_STD");
-  }
-  
 }
 int main(int argc, char* argv[]) {
      
@@ -120,10 +113,10 @@ int main(int argc, char* argv[]) {
       auto frameFile=Frames[frameId];
       cv::Mat curFrame = cv::imread(Config::configInstance().videoPath+frameFile);
       if(!Config::configInstance().USE_GT){
-	float finalE2;
 	Mat distanceFrame,locations;
+	float finalE2;
 	edgeDetector_->getDistanceTransform(curFrame,mask,distanceFrame,locations);
-	traker->optimizingLM(prePose,curFrame,distanceFrame,locations,frameId,prePose,finalE2);
+	traker->toTrack(prePose,curFrame,frameId,prePose,finalE2);
       }
       traker->m_data.m_model->DisplayCV(prePose,curFrame);
 

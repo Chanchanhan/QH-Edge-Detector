@@ -16,6 +16,7 @@ public:
   CameraCalibration();
   CameraCalibration(float fx, float fy, float cx, float cy);
   CameraCalibration(float fx, float fy, float cx, float cy, float distortionCoeff[5]);
+  ~CameraCalibration();
   float& fx();
   float& fy();
   float& cx();

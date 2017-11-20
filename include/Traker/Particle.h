@@ -5,7 +5,7 @@
 
 #include "POSEST/include/rngs.h"
 namespace OD{
-class Tracker;
+class Traker;
 class GLRenderer;
 
 /**
@@ -74,10 +74,10 @@ public:
 	Update particles by some method,
 	for 3d tracking, refine the states by 3d pose tracker
 	*/
-	void update(Tracker *tracker, cv::Mat frame, cv::Mat prevFrame, float K[9], int NLrefine,
-		GLRenderer &renderer);
+	void update(Traker *tracker, cv::Mat frame, cv::Mat prevFrame, float K[9],
+	int frame_id, GLRenderer &renderer);
 
-	void update2(Tracker *tracker, cv::Mat frame, cv::Mat prevFrame, float K[9], int NLrefine,
+	void update2(Traker *tracker, cv::Mat frame, cv::Mat prevFrame, float K[9], int NLrefine,
 		GLRenderer &renderer); // this method for reducing repeatable computation in tracking
 
 	/**

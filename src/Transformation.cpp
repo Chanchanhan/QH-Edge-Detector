@@ -13,6 +13,11 @@ Transformation::Transformation(const cv::Mat& _pose)
     m_pose[i]=_pose.at<float>(i,0);
   }
 }
+Transformation::~Transformation()
+{
+  free(m_pose);
+}
+
 void Transformation::translationWith(const float& _x, const float& _y, const float& _z)
 {
   x()+=_x;

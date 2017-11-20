@@ -76,6 +76,12 @@ GL/freeglut.h
 
 ../3rdparty/POSEST/include/posest_edft.h
 
+../3rdparty/POSEST/include/rngs.h
+stdint.h
+-
+
+../3rdparty/POSEST/include/sam.h
+
 ../include/Traker/CameraCalibration.h
 opencv2/core.hpp
 -
@@ -127,6 +133,12 @@ Traker/PointSet.hpp
 ../include/Traker/Traker/PointSet.hpp
 GLRenderer/include/glm.h
 ../include/Traker/GLRenderer/include/glm.h
+
+../include/Traker/Particle.h
+opencv2/opencv.hpp
+-
+POSEST/include/rngs.h
+../include/Traker/POSEST/include/rngs.h
 
 ../include/Traker/PointSet.hpp
 opencv2/core/core.hpp
@@ -619,6 +631,28 @@ opencv2/opencv.hpp
 -
 
 /home/qqh/projects/RandomForest/src/Particle.cpp
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+math.h
+-
+Traker/Particle.h
+/home/qqh/projects/RandomForest/src/Traker/Particle.h
+Traker/Traker.h
+/home/qqh/projects/RandomForest/src/Traker/Traker.h
+GLRenderer/include/glRenderer.h
+/home/qqh/projects/RandomForest/src/GLRenderer/include/glRenderer.h
+POSEST/include/sam.h
+/home/qqh/projects/RandomForest/src/POSEST/include/sam.h
+Traker/Config.h
+/home/qqh/projects/RandomForest/src/Traker/Config.h
+../GLRenderer/include/timer.h
+/home/qqh/projects/RandomForest/GLRenderer/include/timer.h
+fstream
+-
 
 /home/qqh/projects/RandomForest/src/Quaternion.cpp
 Traker/Quaternion.h

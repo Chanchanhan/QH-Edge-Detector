@@ -14,12 +14,8 @@
 #include "Traker/Traker.h"
 #include "edge/EdgeDetector.hpp"
 
-// const float /Config::configInstance().J_SIZE = 1e-2;
-
 const float INF =1e10;
 
-// #define EDF_TRAKER
-//  #define DRAW_LINE_P2NP
 typedef Eigen::Matrix<double,6,1> Vector6d;
 
 struct EDFTdata 
@@ -41,7 +37,7 @@ Traker::Traker(const float * initPose, bool is_writer):imgHeight( Config::config
   m_data.m_model = new Model(Config::configInstance());
   dist = (float *)malloc(imgHeight* imgWidth * sizeof(float)); 
   final_e = 1E9;
-   m_frameId=-1;
+  m_frameId=-1;
 }
 
 Traker::~Traker()
@@ -50,10 +46,16 @@ Traker::~Traker()
   {
     m_outPose.close();    
   }
+  free(_locations);
+  free(dist);
+  free(mFrame.data);
+  free(locationsMat.data);
+  free(distFrame.data);
+  
 }
 
 
-void Traker::optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const cv::Mat &locations, const int frameId,float * _newPose,float &fianlE2 )
+int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & frameId,float * _newPose,float &finalE2 )
 {
   
    int64 time0 = cv::getTickCount();
@@ -80,8 +82,8 @@ void Traker::optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv
     float e2 = computeEnergy(distFrame, m_Transformation.Pose());
     if(e2<Config::configInstance().THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
-	fianlE2 =e2;
-	return ;
+	finalE2 =e2;
+	return 1;
       }else{      	
 	LOG(WARNING)<<"to optimize with energy = "<<e2<<" Config::configInstance().THREHOLD_ENERGY = "<<Config::configInstance().THREHOLD_ENERGY;	
     }
@@ -121,7 +123,14 @@ void Traker::optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv
       updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);
 
 #ifndef EDF_TRAKER
-      while(e2_new>e2){	 
+      while(e2_new>e2){	 	
+	  if(itration_num>Config::configInstance().MAX_ITERATIN_NUM){
+	    LOG(INFO)<<"to much itration_num!";
+	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+	    finalE2= computeEnergy(distFrame, _newPose);
+
+	    return -1;    
+	  }
 	  
 	  LOG(WARNING)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
 
@@ -142,15 +151,10 @@ void Traker::optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv
 	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
 
 	  itration_num++;
-	  if(itration_num>Config::configInstance().MAX_ITERATIN_NUM){
-	    LOG(INFO)<<"to much itration_num!";
-	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
-	    fianlE2 =computeEnergy(distFrame, m_Transformation.Pose());
 
-	    return /*m_Transformation.M_Pose()*/;    
-	  }
 	  if(fabs(lastE2-e2_new)<1e-5){
 	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+
 	    continue ;  
 	  }
 	
@@ -188,13 +192,18 @@ void Traker::optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv
       if(e2_new<Config::configInstance().THREHOLD_ENERGY){
 	LOG(WARNING)<<"succees optimize!";
 	memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+	finalE2 =computeEnergy(distFrame, _newPose);
 
-	return ;
+	return 1;
 	
       }
      
     }
+
+        memcpy(_newPose,prePose,sizeof(float)*6);
+    finalE2= computeEnergy(distFrame, _newPose);
     LOG(INFO)<<"to much itration_num!";
+    return -1;
   }
   
   int64 teim0 = cv::getTickCount();
@@ -332,10 +341,11 @@ float Traker::getDistanceToEdege(const Point& e0, const Point& e1, const Point& 
   return pow((e0.y-e1.y)*v.x +(e1.x-e0.x)*v.y+(e0.x*e1.y-e1.x*e0.y),2)/
 	  (pow((e1.x-e0.x),2)+pow((e1.y-e0.y),2));
 }
+/*
 int Traker::edfTracker(const float* prePose, const Mat& distMap,const  int NLrefine, float* newPose)
 {
   Mat _distMap=distMap.clone();
-  if (_distMap.isContinuous()/* && distMap.depth()==CV_32FC1*/)
+  if (_distMap.isContinuous())
   {
     memcpy(dist, _distMap.data, imgHeight * imgWidth * sizeof(float));    
   }
@@ -403,7 +413,7 @@ int Traker::edfTracker(const float* prePose, const Mat& distMap,const  int NLref
   }
   return ret;
 }
-
+*/
 void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *coarsePose)
 {
   m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);

@@ -12,6 +12,7 @@ namespace OD{
 class Transformation{
 public:
   Transformation();
+  ~Transformation();
   Transformation(const cv::Mat &_pose);
   void rotateWithX(const float &angle);
   void rotateWithY(const float &angle);

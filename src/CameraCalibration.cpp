@@ -6,6 +6,11 @@ CameraCalibration::CameraCalibration() : m_intrinsic(3,3,CV_32FC1), m_extrinsic(
   m_distortion1 = cv::Matx<float,5,1>::zeros();
 
 }
+CameraCalibration::~CameraCalibration()
+{
+//   free(m_intrinsic.data);
+//   m_distortion.clear();
+}
 
 CameraCalibration::CameraCalibration(float _fx, float _fy, float _cx, float _cy) : m_intrinsic(3,3,CV_32FC1), m_extrinsic(4,4,CV_32FC1)
 {

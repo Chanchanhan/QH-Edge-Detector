@@ -116,7 +116,7 @@ int main(int argc, char* argv[]) {
 	Mat distanceFrame,locations;
 	float finalE2;
 	edgeDetector_->getDistanceTransform(curFrame,mask,distanceFrame,locations);
-	traker->optimizingLM(prePose,curFrame,distanceFrame,locations,frameId,prePose,finalE2);
+	traker->toTrack(prePose,curFrame,frameId,prePose,finalE2);
       }
       traker->m_data.m_model->DisplayCV(prePose,curFrame);
 

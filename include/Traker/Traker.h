@@ -33,7 +33,7 @@ namespace OD
 		Traker(/*const Config& config,*/ const float */* const cv::Mat& */initPose, bool is_writer);
 		~Traker();
 	public:
-		void optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const cv::Mat &locations, const int frameId,float * _newPose ,float &fianlE2);
+		int toTrack(const float * prePose,const cv::Mat& curFrame, const int & frameId,float * _newPose ,float &finalE2);
 	      
 	private:
 		int edfTracker(const float * prePose,const cv::Mat& distFrame,const  int NLrefine, float* newPose);
