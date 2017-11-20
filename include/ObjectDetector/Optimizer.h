@@ -32,7 +32,7 @@ namespace OD
 	class Optimizer
 	{
 	public:
-		Optimizer(const Config& config, const float */* const cv::Mat& */initPose, bool is_writer);
+		Optimizer(/*const Config& config,*/ const float */* const cv::Mat& */initPose, bool is_writer);
 		~Optimizer();
 	public:
 		void optimizingLM(const float * prePose,const cv::Mat& curFrame,const cv::Mat& distFrame, const cv::Mat &locations, const int frameId,float * _newPose );

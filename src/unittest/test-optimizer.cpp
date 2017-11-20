@@ -24,26 +24,26 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
   google::InitGoogleLogging(argv[0]);    //
   FLAGS_stderrthreshold = 1;  // INFO: 0, WARNING: 1, ERROR: 2, FATAL: 3
   
-  G_CONFIG.objFile = config.text("Input.Directory.Obj");;
-  G_CONFIG.videoPath =config.text("Input.Directory.Video");
-  G_CONFIG.gtFile= config.text("Input.Directory.GroudTruth");
-  G_CONFIG.camCalibration = OD::CameraCalibration(config.value_f("Calib_FX"),config.value_f("Calib_FY"),config.value_f("Calib_CX"),config.value_f("Calib_CY"));
-  G_CONFIG.model = glmReadOBJ(const_cast<char*>(G_CONFIG.objFile.c_str()));
-  G_CONFIG.START_INDEX=std::lround(config.value_f("Init_Frame_Index"));
-  G_CONFIG.DIST_MASK_SIZE=config.value_f("DIST_MASK_SIZE");
-  G_CONFIG.USE_GT=std::lround(config.value_f("USE_GT_DATA"));
+  Config::configInstance().objFile = config.text("Input.Directory.Obj");;
+  Config::configInstance().videoPath =config.text("Input.Directory.Video");
+  Config::configInstance().gtFile= config.text("Input.Directory.GroudTruth");
+  Config::configInstance().camCalibration = OD::CameraCalibration(config.value_f("Calib_FX"),config.value_f("Calib_FY"),config.value_f("Calib_CX"),config.value_f("Calib_CY"));
+  Config::configInstance().model = glmReadOBJ(const_cast<char*>(Config::configInstance().objFile.c_str()));
+  Config::configInstance().START_INDEX=std::lround(config.value_f("Init_Frame_Index"));
+  Config::configInstance().DIST_MASK_SIZE=config.value_f("DIST_MASK_SIZE");
+  Config::configInstance().USE_GT=std::lround(config.value_f("USE_GT_DATA"));
 
-  gtData=ifstream(G_CONFIG.gtFile);  
+  gtData=ifstream(Config::configInstance().gtFile);  
 
   
   
   
     /*** load first frame to init***/
   
-  Frames = ED::FileSys::getFiles(G_CONFIG.videoPath,".png");
-  cv::Mat frame = cv::imread(G_CONFIG.videoPath+Frames[0]);
-  G_CONFIG.width = frame.size().width;
-  G_CONFIG.height = frame.size().height;
+  Frames = ED::FileSys::getFiles(Config::configInstance().videoPath,".png");
+  cv::Mat frame = cv::imread(Config::configInstance().videoPath+Frames[0]);
+  Config::configInstance().width = frame.size().width;
+  Config::configInstance().height = frame.size().height;
 //   g_render.init(config.camCalibration,config.width,config.height,argc,argv);
   frame.release(); 
   
@@ -71,21 +71,23 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
 
   //parameter for optimize
   {
-    G_CONFIG.MAX_ITERATIN_NUM=std::lround(config.value_f("MAX_ITERATIN_NUM"));
-    G_CONFIG.THREHOLD_ENERGY=config.value_f("THREHOLD_ENERGY");
-    G_CONFIG.DX_SIZE=config.value_f("DX_SIZE");
-    G_CONFIG.NX_LENGTH=config.value_f("NX_LENGTH");
-    G_CONFIG.ENERGY_SIZE=config.value_f("ENERGY_SIZE");
-    G_CONFIG.LM_STEP=config.value_f("LM_STEP");
-    G_CONFIG.INIT_LAMDA=config.value_f("INIT_LAMDA");
-    G_CONFIG.SIZE_A=config.value_f("SIZE_A");   
-    G_CONFIG.THREHOLD_DX=config.value_f("THREHOLD_DX");
-    G_CONFIG.USE_SOPHUS=std::lround(config.value_f("USE_SOPHUS"))== 1;;
-    G_CONFIG.USE_MY_TRANSFORMATION=std::lround(config.value_f("USE_MY_TRANSFORMATION"))== 1;
-    G_CONFIG.MAX_VALIAD_DISTANCE=config.value_f("MAX_VALIAD_DISTANCE");
+    Config::configInstance().MAX_ITERATIN_NUM=std::lround(config.value_f("MAX_ITERATIN_NUM"));
+    Config::configInstance().THREHOLD_ENERGY=config.value_f("THREHOLD_ENERGY");
+    LOG(WARNING)<<"Config::configInstance().THREHOLD_ENERGY = "<<Config::configInstance().THREHOLD_ENERGY;
+    Config::configInstance().DX_SIZE=config.value_f("DX_SIZE");
+    Config::configInstance().NX_LENGTH=config.value_f("NX_LENGTH");
+    Config::configInstance().ENERGY_SIZE=config.value_f("ENERGY_SIZE");
+    Config::configInstance().LM_STEP=config.value_f("LM_STEP");
+    Config::configInstance().INIT_LAMDA=config.value_f("INIT_LAMDA");
+    Config::configInstance().SIZE_A=config.value_f("SIZE_A");   
+    Config::configInstance().THREHOLD_DX=config.value_f("THREHOLD_DX");
+    Config::configInstance().USE_SOPHUS=std::lround(config.value_f("USE_SOPHUS"))== 1;;
+    Config::configInstance().USE_PNP=std::lround(config.value_f("USE_PNP"))== 1;;
+    Config::configInstance().USE_MY_TRANSFORMATION=std::lround(config.value_f("USE_MY_TRANSFORMATION"))== 1;
+    Config::configInstance().MAX_VALIAD_DISTANCE=config.value_f("MAX_VALIAD_DISTANCE");
     
-    G_CONFIG.USE_SOPHUS=std::lround(config.value_f("USE_SOPHUS"))== 1;;
-    G_CONFIG.USE_MY_TRANSFORMATION=std::lround(config.value_f("USE_MY_TRANSFORMATION"))== 1;;
+    Config::configInstance().USE_SOPHUS=std::lround(config.value_f("USE_SOPHUS"))== 1;;
+    Config::configInstance().USE_MY_TRANSFORMATION=std::lround(config.value_f("USE_MY_TRANSFORMATION"))== 1;;
   }
 }
 int main(int argc, char* argv[]) {
@@ -104,12 +106,12 @@ int main(int argc, char* argv[]) {
   /*** start Detectorters***/
 
   
-  int starframeId = G_CONFIG.START_INDEX;
+  int starframeId = Config::configInstance().START_INDEX;
   
   ifstream gtData/*(config.gtFile)*/;  
   init_MAIN(argc,argv,config,Frames,prePose,starframeId,gtData);
 
-  OD::Optimizer optimizer(G_CONFIG,prePose,true);
+  OD::Optimizer optimizer(/*Config::configInstance(),*/prePose,true);
   /***load  optimization ***/
  
  
@@ -118,7 +120,7 @@ int main(int argc, char* argv[]) {
     //to do
     {
       auto frameFile=Frames[frameId];
-      cv::Mat curFrame = cv::imread(G_CONFIG.videoPath+frameFile);
+      cv::Mat curFrame = cv::imread(Config::configInstance().videoPath+frameFile);
 #if USE_GT_POSE==0
       Mat distanceFrame,locations;
       edgeDetector_.getDistanceTransform(curFrame,mask,distanceFrame,locations);

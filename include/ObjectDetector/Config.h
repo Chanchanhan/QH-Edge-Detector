@@ -33,13 +33,20 @@ namespace OD
     float INF;
     float THREHOLD_DX;
     bool  USE_SOPHUS ;
+    bool  USE_PNP;
     bool  USE_MY_TRANSFORMATION ;
     float MAX_VALIAD_DISTANCE ;
     std::string videoPath;
     std::string objFile;  
     std::string gtFile;  
+  public:
+    static Config& configInstance(){
+      static Config G_CONFIG;
+      return G_CONFIG;
+    }
   };
-  static Config G_CONFIG;
+    
+  
 
 }
 #endif

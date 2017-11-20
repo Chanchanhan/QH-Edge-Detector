@@ -1,3 +1,4 @@
+
 #include <fstream>      //C++
 #include <iostream>
 #include<glog/logging.h>
@@ -11,30 +12,11 @@
 #include "POSEST/include/posest_edft.h"
 #include "POSEST/include/posest.h"
 #include "ObjectDetector/Optimizer.h"
-using namespace OD;
-const int MAX_ITERATIN_NUM =15;
-const float THREHOLD_ENERGY = 170.0f;
-const float DX_SIZE = 1.f;
-const float NX_LENGTH = 0.02f;
-const float ENERGY_SIZE = 1.0f;
 const float J_SIZE = 0.00001f;
-const float LM_STEP =10 ;
-const float INIT_LAMDA =1;
-const float SIZE_A =1;
+
 const float INF =1e10;
-const float THREHOLD_DX= 1.0e17;
-const bool  USE_SOPHUS = 0;
-const bool  USE_MY_TRANSFORMATION = 1;
-const float MAX_VALIAD_DISTANCE = 100.f;
-#define FACTOR_DEG_TO_RAD 0.01745329252222222222222222222222f
-#define PRIOR_MAX_DEVIATION_CAMERA_HEIGHT			0.5f
-#define PRIOR_MAX_DEVIATION_CAMERA_ROTATION_XY			5.0f
-#define PRIOR_MAX_DEVIATION_CAMERA_ROTATION_Z			30.0f
-#define SIMULATION_MAX_ROTATIONS				3
-#define SIMULATION_MAX_ROTATION_RATIO			0.3f
-#define SIMULATION_MAX_TRANSLATIONS				1
-#define SIMULATION_MAX_TRANSLATION_RATIO		0.5f
-#define USE_PNP
+#define USE_PNP 1
+
 // #define EDF_TRAKER
 //  #define DRAW_LINE_P2NP
 typedef Eigen::Matrix<double,6,1> Vector6d;
@@ -49,10 +31,11 @@ struct EDFTdata
 	int width, height; // the (width, height) of distMap
 };
 
-
-Optimizer::Optimizer(const Config& config, const float * initPose, bool is_writer):imgHeight( config.height), imgWidth(config.width),  m_calibration ( config.camCalibration),m_is_writer(is_writer)
+using namespace OD;
+namespace OD{
+Optimizer::Optimizer(/*const Config& config, */const float * initPose, bool is_writer):imgHeight( Config::configInstance().height), imgWidth(Config::configInstance().width),  m_calibration ( Config::configInstance().camCalibration),m_is_writer(is_writer)
 {
-  m_data.m_model = new Model(config);
+  m_data.m_model = new Model(Config::configInstance());
   dist = (float *)malloc(imgHeight* imgWidth * sizeof(float)); 
   final_e = 1E9;
 
@@ -79,35 +62,34 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
     imgHeight=distFrame.cols;
     imgWidth=distFrame.rows;
     cv::Mat A_I=cv::Mat::eye(6,6,CV_32FC1);
-    float lamda=INIT_LAMDA;
+    float lamda=Config::configInstance().INIT_LAMDA;
     std::vector<cv::Point> nPoints;
     m_Transformation.setPose(prePose);
     int itration_num=0;
     Transformation newTransformation;
     m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());    
     float e2 = computeEnergy(distFrame, m_Transformation.Pose());
-    if(e2<THREHOLD_ENERGY){
+    if(e2<Config::configInstance().THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
 	return ;
       }else{      	
-	LOG(WARNING)<<"to optimize with energy = "<<e2;	
+	LOG(WARNING)<<"to optimize with energy = "<<e2<<" Config::configInstance().THREHOLD_ENERGY = "<<Config::configInstance().THREHOLD_ENERGY;	
     }
-    while(++itration_num<MAX_ITERATIN_NUM){    
+    while(++itration_num<Config::configInstance().MAX_ITERATIN_NUM){    
       Sophus::SE3 T_SE3;	      
       LOG(INFO)<<"a itration_num = " <<itration_num;
       cv::Mat _A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1),A= cv::Mat::zeros(6,6,CV_32FC1);      
       Mat A_inverse,dX ;
       float coarsePose[6]={0};
 //       coarsePose=m_Transformation.M_Pose().clone();
-#ifdef USE_PNP
-      
        getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
       LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
 //       if(computeEnergy(distFrame,coarsePose)<computeEnergy(distFrame,m_Transformation.Pose())){
 	  m_Transformation.setPose(coarsePose,true);	  
 // 	  LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
 //       }
-#endif
+      
+
       constructEnergyFunction(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
       _A/=abs(_A.at<float>(0,0));
       A=_A+A_I*lamda;
@@ -120,18 +102,18 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
       b/=abs(b.at<float>(0,0));
       LOG(INFO)<<"A_inverse\n"<<A_inverse;      
       LOG(INFO)<<"b\n"<<b;
-      dX =- A_inverse*b*DX_SIZE;
+      dX =- A_inverse*b*Config::configInstance().DX_SIZE;
       LOG(WARNING)<<"dX "<<dX;
       }
   
 
       float e2_new;
-      if(USE_MY_TRANSFORMATION){
+      if(Config::configInstance().USE_MY_TRANSFORMATION){
 	newTransformation.setPose(m_Transformation.Pose());
 	newTransformation.xTransformation(dX);
 	e2_new = computeEnergy(distFrame, newTransformation.Pose());
       }
-      else if(USE_SOPHUS)
+      else if(Config::configInstance().USE_SOPHUS)
       {      
 	Eigen::Vector3d v3d(m_Transformation.u1(),m_Transformation.u2(),m_Transformation.u3());     
 	Eigen::Vector3d translationV3(m_Transformation.x(),m_Transformation.y(),m_Transformation.z());     
@@ -155,26 +137,26 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
       while(e2_new>e2){	 
 	  
 	  LOG(WARNING)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
-	  lamda*=LM_STEP;
+	  lamda*=Config::configInstance().LM_STEP;
 	  A=_A+A_I*lamda;
 	  cv::invert(A,A_inverse);
 	  
 	  b/=abs(b.at<float>(0,0));
 // 	  LOG(INFO)<<"A_inverse\n"<<A_inverse;      
 // 	  LOG(INFO)<<"b\n"<<b;
-	  Mat dX =- A_inverse*b*DX_SIZE;
+	  Mat dX =- A_inverse*b*Config::configInstance().DX_SIZE;
 	  LOG(WARNING)<<"dX "<<dX;
 	  float lastE2;
 	  
 	  /*
  	  e2_new = computeEnergy(frame, newTransformation.M_Pose());
  	  LOG(WARNING)<<"newTransformation.M_Pose(): "<<newTransformation.M_Pose()<<" e2_new(newTransformation) = "<<e2_new;*/
-	  if(USE_MY_TRANSFORMATION){
+	  if(Config::configInstance().USE_MY_TRANSFORMATION){
 	    newTransformation.setPose(m_Transformation.Pose(),true);
 	    newTransformation.xTransformation(dX);
 	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
 	  }
-	  else if(USE_SOPHUS)
+	  else if(Config::configInstance().USE_SOPHUS)
 	  {
 	    Vector6d se3_Update;
 	    for(int i=0;i<3;i++){
@@ -197,7 +179,7 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
 
 	  itration_num++;
-	  if(itration_num>MAX_ITERATIN_NUM){
+	  if(itration_num>Config::configInstance().MAX_ITERATIN_NUM){
 	    LOG(INFO)<<"to much itration_num!";
 	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
 
@@ -222,7 +204,7 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 #ifndef EDF_TRAKER
 
 
-	lamda*=LM_STEP;
+	lamda*=Config::configInstance().LM_STEP;
 	continue;
 #else
 	
@@ -237,9 +219,9 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
 //         m_Transformation.setPose(newTransformation.M_Pose());
 
 	e2= e2_new;
-	lamda=INIT_LAMDA;
+	lamda=Config::configInstance().INIT_LAMDA;
       }
-      if(e2_new<THREHOLD_ENERGY){
+      if(e2_new<Config::configInstance().THREHOLD_ENERGY){
 	LOG(WARNING)<<"succees optimize!";
 	memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
 
@@ -286,7 +268,7 @@ void Optimizer::constructEnergyFunction(const cv::Mat distFrame,const float* pre
       Point3f p1= Point3f(pos.at<float>(0,v0-1),pos.at<float>(1,v0-1),pos.at<float>(2,v0-1));
       Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
       Point3f dx=(p2-p1);
-      int Nx=sqrt(dx.x*dx.x+dx.y*dx.y+dx.z*dx.z)/NX_LENGTH;
+      int Nx=sqrt(dx.x*dx.x+dx.y*dx.y+dx.z*dx.z)/Config::configInstance().NX_LENGTH;
 //       printf(" Nx= %d \n",Nx);
       Point point1= m_data.m_model->X_to_x(p1,extrinsic);
       Point point2= m_data.m_model->X_to_x(p2,extrinsic);
@@ -310,7 +292,7 @@ void Optimizer::constructEnergyFunction(const cv::Mat distFrame,const float* pre
 		
 	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
 
-	if(distFrame.at<float>(nearstPoint)>=254||dist2Edge>MAX_VALIAD_DISTANCE){
+	if(distFrame.at<float>(nearstPoint)>=254||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE){
 	  continue;
 	}
 #ifdef DRAW_LINE_P2NP	
@@ -350,7 +332,7 @@ void Optimizer::constructEnergyFunction(const cv::Mat distFrame,const float* pre
 	_j_Energy_X.at<float>(0,1)=2*(point.y - nearstPoint.y);
 	_j_X_Pose*=J_SIZE;
 	_j_Energy_X*=J_SIZE;
-	
+	LOG(WARNING)<<"J_SIZE = "<<J_SIZE;
 // 	_j_X_Pose*=(1.f/Nx);
 // 	_j_Energy_X*=(1.f/Nx);
 	Mat _J=_j_Energy_X*_j_X_Pose;
@@ -388,7 +370,7 @@ LOG(WARNING)<<"to draw drawFrame";
   cv::transpose(J,J_T);
 //   float norm = A.diag();
   A= J_T*J+lastA*lamda;//6*6
-  A*=SIZE_A;
+  A*=Config::configInstance().SIZE_A;
 //   printMat("A",A);
 
   
@@ -438,7 +420,7 @@ int Optimizer::edfTracker(const float* prePose, const Mat& distMap,const  int NL
       Point3f p1= Point3f(pos.at<float>(0,v0-1),pos.at<float>(1,v0-1),pos.at<float>(2,v0-1));
       Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
       Point3f dX=(p2-p1);      
-      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/NX_LENGTH;
+      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/Config::configInstance().NX_LENGTH;
       dX /=Nx;
       Point3f X=p1;
       Point point1= m_data.m_model->X_to_x(p1,extrinsic);
@@ -493,7 +475,7 @@ void Optimizer::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,floa
       Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
 
       Point3f dX=(p2-p1);      
-      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/NX_LENGTH;
+      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/Config::configInstance().NX_LENGTH;
 
       size+=Nx;
       dX /=Nx;
@@ -510,7 +492,7 @@ void Optimizer::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,floa
 	Point point= m_data.m_model->X_to_x(X,extrinsic);
 	Point nearst=getNearstPointLocation(point);
 	float dist2Edge=getDistanceToEdege(point1,point2,nearst);
-// 	if(distMap.at<float>(nearst)>=254/*||dist2Edge>MAX_VALIAD_DISTANCE*/){
+// 	if(distMap.at<float>(nearst)>=254/*||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE*/){
 // 	  continue;
 // 	}
 	 objectPoints.push_back(Point3d(X.x,X.y,X.z));
@@ -569,7 +551,7 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const float * pose)
 //       printf("P1 : %f %f %f\n",p1.x,p1.y,p1.z);
 
       Point3f dX=(p2-p1);      
-      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/NX_LENGTH;
+      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/Config::configInstance().NX_LENGTH;
 
 //       float Nx=100.f*norm;
       size+=Nx;
@@ -596,13 +578,13 @@ float Optimizer::computeEnergy(const cv::Mat& frame,const float * pose)
 	 if(de2==255.f){
 	    de2*=10;
 	 }
-// 	 if(dist2Edge>MAX_VALIAD_DISTANCE){
+// 	 if(dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE){
 // 	   size--;
 // 	   continue;
 // 	 }
-// 	 de2*=(1-pow( dist2Edge/MAX_VALIAD_DISTANCE,2));
+// 	 de2*=(1-pow( dist2Edge/Config::configInstance().MAX_VALIAD_DISTANCE,2));
 	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << frame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" dist2Edge ="<< dist2Edge;	 
-//	 if(DX<THREHOLD_DX||DX<meanE_LINE*meanE_LINE){
+//	 if(DX<Config::configInstance().THREHOLD_DX||DX<meanE_LINE*meanE_LINE){
 	  energy+=de2;
 //	 }
   
@@ -635,7 +617,7 @@ float Optimizer::nearestEdgeDistance(const cv::Point & point,const std::vector<m
       }
     }
   }
-  return ENERGY_SIZE*nearstD; 
+  return Config::configInstance().ENERGY_SIZE*nearstD; 
 }
 void Optimizer::UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New)
 {
@@ -700,3 +682,4 @@ void Optimizer::UpdateStateLM(const cv::Mat &dx, const float * pose_Old, float *
 }
 
 
+}
