@@ -30,7 +30,7 @@ namespace OD
 	class Traker
 	{
 	public:
-		Traker(/*const Config& config,*/ const float */* const cv::Mat& */initPose, bool is_writer);
+		Traker( const float *initPose,const bool is_writer);
 		~Traker();
 	public:
 		int toTrack(const float * prePose,const cv::Mat& curFrame, const int & frameId,float * _newPose ,float &finalE2);

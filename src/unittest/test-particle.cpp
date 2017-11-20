@@ -14,24 +14,17 @@
 #include "Traker/Traker.h"
 #include "Traker/Model.h"
 #include "tools/OcvYamlConfig.h"
+#include "Traker/Particle.h"
 // ORD::Render g_render;
 const float mask =5.f;
 
 void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std::string> &Frames,float *prePose,int &starframeId,ifstream &gtData ){
   
   google::InitGoogleLogging(argv[0]);
-  
+  Config::configInstance().loadConfig(config);
   FLAGS_log_dir=config.text("Input.Directory.LOG_DIR");     
   FLAGS_stderrthreshold = std::lround(config.value_f("LOG_Threshold"));  // INFO: 0, WARNING: 1, ERROR: 2, FATAL: 3
-  ////parameters for init
-  Config::configInstance().objFile = config.text("Input.Directory.Obj");;
-  Config::configInstance().videoPath =config.text("Input.Directory.Video");
-  Config::configInstance().gtFile= config.text("Input.Directory.GroudTruth");
-  Config::configInstance().camCalibration = OD::CameraCalibration(config.value_f("Calib_FX"),config.value_f("Calib_FY"),config.value_f("Calib_CX"),config.value_f("Calib_CY"));
-  Config::configInstance().model = glmReadOBJ(const_cast<char*>(Config::configInstance().objFile.c_str()));
-  Config::configInstance().START_INDEX=std::lround(config.value_f("Init_Frame_Index"));
-  Config::configInstance().DIST_MASK_SIZE=config.value_f("DIST_MASK_SIZE");
-  Config::configInstance().USE_GT=std::lround(config.value_f("USE_GT_DATA"));
+
 
   gtData=ifstream(Config::configInstance().gtFile);    
   
@@ -65,29 +58,6 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
     memcpy(prePose,gtPose,sizeof(float)*6);
   }
 
-  //parameters for optimize
-  {
-    Config::configInstance().MAX_ITERATIN_NUM=std::lround(config.value_f("MAX_ITERATIN_NUM"));
-    Config::configInstance().THREHOLD_ENERGY=config.value_f("THREHOLD_ENERGY");
-    Config::configInstance().DX_SIZE=config.value_f("DX_SIZE");
-    Config::configInstance().NX_LENGTH=config.value_f("NX_LENGTH");
-    Config::configInstance().ENERGY_SIZE=config.value_f("ENERGY_SIZE");
-    Config::configInstance().LM_STEP=config.value_f("LM_STEP");
-    Config::configInstance().INIT_LAMDA=config.value_f("INIT_LAMDA");
-    Config::configInstance().SIZE_A=config.value_f("SIZE_A");   
-    Config::configInstance().THREHOLD_DX=config.value_f("THREHOLD_DX");
-    Config::configInstance().USE_PNP=std::lround(config.value_f("USE_PNP"))== 1;;
-    Config::configInstance().USE_MY_TRANSFORMATION=std::lround(config.value_f("USE_MY_TRANSFORMATION"))== 1;
-    Config::configInstance().MAX_VALIAD_DISTANCE=config.value_f("MAX_VALIAD_DISTANCE");
-    Config::configInstance().J_SIZE=config.value_f("J_SIZE");
-    Config::configInstance().USE_SOPHUS=std::lround(config.value_f("USE_SOPHUS"))== 1;;
-    Config::configInstance().USE_MY_TRANSFORMATION=std::lround(config.value_f("USE_MY_TRANSFORMATION"))== 1;;
-  }
-  //parameters for View
-  {
-    Config::configInstance().CV_CIRCLE_RADIUS=config.value_f("CV_CIRCLE_RADIUS");
-    Config::configInstance().CV_LINE_P2NP=std::lround(config.value_f("CV_LINE_P2NP"))== 1;;
-  }
 }
 int main(int argc, char* argv[]) {
      
@@ -105,20 +75,32 @@ int main(int argc, char* argv[]) {
   
   init_MAIN(argc,argv,config,Frames,prePose,starframeId,gtData);
 
-  auto traker = std::make_unique<OD::Traker>(prePose,true); 
+  
+
+  auto particlesFilter=std::make_unique<OD::ParticleFilter>(Config::configInstance().PARTICLE_NUM, Config::configInstance().PARTICLE_ARParam, Config::configInstance().PARTICLE_USE_AR, Config::configInstance().PARTICLE_NoiseRateLow, Config::configInstance().PARTICLE_NoiseRateHigh);
+  
+  
+  OD::Traker traker(prePose,true); 
+  particlesFilter->init(prePose);
   for(/*auto frameFile :Frames*/int frameId=starframeId;frameId<Frames.size();frameId++){
     int64 time0 = cv::getTickCount();	
     //to do
     {
+      
+      particlesFilter->transit();
+     
       auto frameFile=Frames[frameId];
+      cv::Mat preFrame;
       cv::Mat curFrame = cv::imread(Config::configInstance().videoPath+frameFile);
-      if(!Config::configInstance().USE_GT){
-	Mat distanceFrame,locations;
-	float finalE2;
-	edgeDetector_->getDistanceTransform(curFrame,mask,distanceFrame,locations);
-	traker->toTrack(prePose,curFrame,frameId,prePose,finalE2);
+      if(frameId==starframeId){
+	preFrame=curFrame.clone();
       }
-      traker->m_data.m_model->DisplayCV(prePose,curFrame);
+      if(!Config::configInstance().USE_GT){
+	  particlesFilter->update(traker, curFrame, preFrame,frameId);
+
+      }
+
+      traker.m_data.m_model->DisplayCV(prePose,curFrame);
 
       //to test model  , get its point set ,and try to compute energy
       
@@ -141,6 +123,7 @@ int main(int argc, char* argv[]) {
 	if(!isnan(gtPose[0])){
 	  memcpy(prePose,gtPose,sizeof(float)*6);
 	}
+	preFrame=curFrame.clone();
     }
 
     }

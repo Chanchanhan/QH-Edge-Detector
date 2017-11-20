@@ -22,7 +22,7 @@ int particleCmp(const void* p1, const void* p2)
 	return 0;
 }
 
-ParticleFilter::ParticleFilter(int numParticle, float arParam, bool useAR, float noiseRateLow, float noiseRateHigh)
+ParticleFilter::ParticleFilter(const int &numParticle ,const  float &arParam ,const  bool &useAR ,const  float &noiseRateLow ,const  float &noiseRateHigh )
 	:m_numParticle(numParticle), m_arParam(arParam), m_useAR(useAR), m_noiseRateLow(noiseRateLow), m_noiseRateHigh(noiseRateHigh)
 {
 	m_particles = (Particle *)malloc(m_numParticle*sizeof(Particle));
@@ -55,7 +55,7 @@ ParticleFilter::~ParticleFilter()
 Creates an initial distribution of particles by sampling from a Gaussian
 distribution around the specific se(3)
 */
-static void init_(Particle *p, float rt[6], float w)
+static void init_(Particle *p,const  float rt[6],const  float w)
 {
 	memcpy(p->rt, rt, 6 * sizeof(float));
 	memset(p->arVel, 0, 6 * sizeof(float));
@@ -63,7 +63,7 @@ static void init_(Particle *p, float rt[6], float w)
 	memcpy(p->ort, rt, 6 * sizeof(float));
 	p->w = w;
 }
-void ParticleFilter::init(float rt[6])
+void ParticleFilter::init(const float *rt)
 {
 	register int i;
 	float weight = 1.0/m_numParticle;
@@ -211,8 +211,7 @@ Update particles by some method,
 for 3d tracking, refine the states by 3d pose tracker
 */
 static float max_e = 1000;
-static void update_(Particle *p, Traker *tracker, cv::Mat frame, cv::Mat prevFrame, float K[9],
-	int frame_id, GLRenderer &renderer, bool useAR)
+static void update_(Particle *p, Traker &tracker, cv::Mat frame, cv::Mat prevFrame,	int frame_id,  bool useAR)
 {
 	register float *rt = p->rt;
 	register float *trt = p->trt;
@@ -221,7 +220,7 @@ static void update_(Particle *p, Traker *tracker, cv::Mat frame, cv::Mat prevFra
 
 	// refine the transited rt by 3d tracking method
 	float e2 = 1E12;
-	int ret = tracker->toTrack(trt,frame,frame_id,ort, e2);
+	int ret = tracker.toTrack(trt,frame,frame_id,ort, e2);
 
 	// ret==0 is OK, ret==-1 is failure
 #if CALC_IN_SE3
@@ -262,29 +261,16 @@ static void update_(Particle *p, Traker *tracker, cv::Mat frame, cv::Mat prevFra
 		p->w = 0;
 	}
 }
-void ParticleFilter::update(Traker *tracker, cv::Mat frame, cv::Mat prevFrame, float K[9],
-	int frame_id, GLRenderer &renderer)
+void ParticleFilter::update(Traker& tracker,const cv::Mat &curFrame,const cv::Mat &preFrame,const int &frame_id)
 {
 	register int i;
 	for (i = 0; i < m_numParticle; ++i)
 	{
-		update_(m_particles + i, tracker, frame, prevFrame, K, frame_id, renderer, m_useAR);
+		update_(m_particles + i, tracker, curFrame, preFrame, frame_id, m_useAR);
 	}
 }
 
 
-#if OUT_INTER_RESULTS
-#include "../GLRenderer/include/timer.h"
-static Timer timer;
-static int frame_id = 0;
-#include<fstream>
-static std::ofstream outTimeFile("pf_update_time.txt");
-static cv::VideoWriter outPFBeforeVideo("pf_before.avi", CV_FOURCC('L', 'A', 'G', 'S'), 30.0, cv::Size(640, 480));
-static cv::VideoWriter outPFAfterVideo("pf_after.avi", CV_FOURCC('L', 'A', 'G', 'S'), 30.0, cv::Size(640, 480));
-static cv::VideoWriter outPFBestBeforeVideo("pf_best_before.avi", CV_FOURCC('L', 'A', 'G', 'S'), 30.0, cv::Size(640, 480));
-static cv::VideoWriter outPFBestAfterVideo("pf_best_after.avi", CV_FOURCC('L', 'A', 'G', 'S'), 30.0, cv::Size(640, 480));
-static cv::VideoWriter outPFBestMixVideo("pf_best_mix.avi", CV_FOURCC('L', 'A', 'G', 'S'), 30.0, cv::Size(640, 480));
-#endif
 
 
 

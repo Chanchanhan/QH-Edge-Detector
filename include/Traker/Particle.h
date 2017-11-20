@@ -56,14 +56,14 @@ A particle filter is responsible for updating the state of particles.
 class ParticleFilter
 {
 public:
-	ParticleFilter(int numParticle = 1, float arParam = 0.01, bool useAR = false, float noiseRateLow = 1.0, float noiseRateHigh = 1.0);
+	ParticleFilter(const int &numParticle = 1,const  float &arParam = 0.01,const  bool &useAR = false,const  float &noiseRateLow = 1.0,const  float &noiseRateHigh = 1.0);
 	~ParticleFilter();
 
 	/**
 	Creates an initial distribution of particles by sampling from a Gaussian
 	distribution around the specific se(3)
 	*/
-	void init(float rt[6]);
+	void init(const float *rt);
 
 	/**
 	Transit particles by autoregressive dynamic, then add a Gaussian noise
@@ -74,11 +74,7 @@ public:
 	Update particles by some method,
 	for 3d tracking, refine the states by 3d pose tracker
 	*/
-	void update(Traker *tracker, cv::Mat frame, cv::Mat prevFrame, float K[9],
-	int frame_id, GLRenderer &renderer);
-
-	void update2(Traker *tracker, cv::Mat frame, cv::Mat prevFrame, float K[9], int NLrefine,
-		GLRenderer &renderer); // this method for reducing repeatable computation in tracking
+	void update(Traker& tracker,const cv::Mat &curFrame,const cv::Mat &preFrame,const int &frame_id);
 
 	/**
 	Normalizes particle weights so they sum to 1

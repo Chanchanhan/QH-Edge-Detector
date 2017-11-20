@@ -32,7 +32,7 @@ using namespace OD;
 
 namespace OD{
   
-Traker::Traker(const float * initPose, bool is_writer):imgHeight( Config::configInstance().VIDEO_HEIGHT), imgWidth(Config::configInstance().VIDEO_WIDTH),  m_calibration ( Config::configInstance().camCalibration),m_is_writer(is_writer)
+Traker::Traker(const float * initPose,const bool is_writer):imgHeight( Config::configInstance().VIDEO_HEIGHT), imgWidth(Config::configInstance().VIDEO_WIDTH),  m_calibration ( Config::configInstance().camCalibration),m_is_writer(is_writer)
 {
   m_data.m_model = new Model(Config::configInstance());
   dist = (float *)malloc(imgHeight* imgWidth * sizeof(float)); 
@@ -84,23 +84,24 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
 	finalE2 =e2;
 	return 1;
-      }else{      	
-	LOG(WARNING)<<"to optimize with energy = "<<e2<<" Config::configInstance().THREHOLD_ENERGY = "<<Config::configInstance().THREHOLD_ENERGY;	
+      }else{      
+	
+	LOG(WARNING)<<"to optimize with energy = "<<e2<<"m_Transformation : "<<m_Transformation.M_Pose()<<" Config::configInstance().THREHOLD_ENERGY = "<<Config::configInstance().THREHOLD_ENERGY;	
     }
     while(++itration_num<Config::configInstance().MAX_ITERATIN_NUM){    
       Sophus::SE3 T_SE3;	      
       LOG(INFO)<<"a itration_num = " <<itration_num;
       cv::Mat _A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1),A= cv::Mat::zeros(6,6,CV_32FC1);      
       Mat A_inverse,dX ;
+      if(Config::configInstance().USE_PNP){
       float coarsePose[6]={0};
-//       coarsePose=m_Transformation.M_Pose().clone();
-       getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
-      LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
-//       if(computeEnergy(distFrame,coarsePose)<computeEnergy(distFrame,m_Transformation.Pose())){
+	getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
+	LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
+//      if(computeEnergy(distFrame,coarsePose)<computeEnergy(distFrame,m_Transformation.Pose())){
 	  m_Transformation.setPose(coarsePose,true);	  
-// 	  LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
-//       }
-      
+// 	 LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
+
+      }
 
       constructEnergyFunction(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
       _A/=abs(_A.at<float>(0,0));
