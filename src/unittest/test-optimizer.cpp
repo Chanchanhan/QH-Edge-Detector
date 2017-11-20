@@ -73,7 +73,6 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
   {
     Config::configInstance().MAX_ITERATIN_NUM=std::lround(config.value_f("MAX_ITERATIN_NUM"));
     Config::configInstance().THREHOLD_ENERGY=config.value_f("THREHOLD_ENERGY");
-    LOG(WARNING)<<"Config::configInstance().THREHOLD_ENERGY = "<<Config::configInstance().THREHOLD_ENERGY;
     Config::configInstance().DX_SIZE=config.value_f("DX_SIZE");
     Config::configInstance().NX_LENGTH=config.value_f("NX_LENGTH");
     Config::configInstance().ENERGY_SIZE=config.value_f("ENERGY_SIZE");

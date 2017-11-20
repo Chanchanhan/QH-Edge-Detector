@@ -37,7 +37,7 @@ cv::Mat Transformation::getMatPose(const float* pose)
   return Mat_Pose;
 }
 
-const float* Transformation::Pose()
+const float* Transformation::Pose() const
 {
   return m_pose;
 }

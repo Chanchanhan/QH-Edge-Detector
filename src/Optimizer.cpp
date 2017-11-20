@@ -108,74 +108,27 @@ void Optimizer::optimizingLM(const float * prePose,const cv::Mat& curFrame,const
   
 
       float e2_new;
-      if(Config::configInstance().USE_MY_TRANSFORMATION){
-	newTransformation.setPose(m_Transformation.Pose());
-	newTransformation.xTransformation(dX);
-	e2_new = computeEnergy(distFrame, newTransformation.Pose());
-      }
-      else if(Config::configInstance().USE_SOPHUS)
-      {      
-	Eigen::Vector3d v3d(m_Transformation.u1(),m_Transformation.u2(),m_Transformation.u3());     
-	Eigen::Vector3d translationV3(m_Transformation.x(),m_Transformation.y(),m_Transformation.z());     
-	T_SE3 =Sophus::SE3( Sophus::SO3::exp(v3d),translationV3); 
-	Vector6d se3_Update;
-	for(int i=0;i<3;i++){
-	  se3_Update(i,0)=(double)dX.at<float>(0,i+3);
-	  se3_Update(i+3,0)=(double)dX.at<float>(0,i);
-	}
-	Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
-	Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
-	newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
-	e2_new = computeEnergy(distFrame, newTransformation.Pose());
+      updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);
 
-      }/*else{
-	  UpdateStateLM(dX,m_Transformation.M_Pose(),newPose);
-	  newTransformation.setPose(newPose);
-	  e2_new = computeEnergy(distFrame, newPose);
-      }*/
 #ifndef EDF_TRAKER
       while(e2_new>e2){	 
 	  
 	  LOG(WARNING)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
+
 	  lamda*=Config::configInstance().LM_STEP;
 	  A=_A+A_I*lamda;
-	  cv::invert(A,A_inverse);
-	  
+	  cv::invert(A,A_inverse);	  
 	  b/=abs(b.at<float>(0,0));
 // 	  LOG(INFO)<<"A_inverse\n"<<A_inverse;      
 // 	  LOG(INFO)<<"b\n"<<b;
 	  Mat dX =- A_inverse*b*Config::configInstance().DX_SIZE;
 	  LOG(WARNING)<<"dX "<<dX;
-	  float lastE2;
-	  
-	  /*
- 	  e2_new = computeEnergy(frame, newTransformation.M_Pose());
- 	  LOG(WARNING)<<"newTransformation.M_Pose(): "<<newTransformation.M_Pose()<<" e2_new(newTransformation) = "<<e2_new;*/
-	  if(Config::configInstance().USE_MY_TRANSFORMATION){
-	    newTransformation.setPose(m_Transformation.Pose(),true);
-	    newTransformation.xTransformation(dX);
-	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
-	  }
-	  else if(Config::configInstance().USE_SOPHUS)
-	  {
-	    Vector6d se3_Update;
-	    for(int i=0;i<3;i++){
-	      se3_Update(i,0)=(double)dX.at<float>(0,i+3);
-	      se3_Update(i+3,0)=(double)dX.at<float>(0,i);
-	    }
-	    Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
-	    Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
-	    newTransformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
-	    e2_new = computeEnergy(distFrame, newTransformation.Pose());
-	  }/*else{
-	    UpdateStateLM(dX,m_Transformation.M_Pose(),newPose);	
-	    newTransformation.setPose(newPose);
-	    e2_new = computeEnergy(distFrame, newPose);
-	  }*/
-	  	  
-	 
+	  float lastE2;	  
+	  updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);
 	  lastE2=e2_new;
 
+	  
+	  
 	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
 
 	  itration_num++;
@@ -332,7 +285,6 @@ void Optimizer::constructEnergyFunction(const cv::Mat distFrame,const float* pre
 	_j_Energy_X.at<float>(0,1)=2*(point.y - nearstPoint.y);
 	_j_X_Pose*=J_SIZE;
 	_j_Energy_X*=J_SIZE;
-	LOG(WARNING)<<"J_SIZE = "<<J_SIZE;
 // 	_j_X_Pose*=(1.f/Nx);
 // 	_j_Energy_X*=(1.f/Nx);
 	Mat _J=_j_Energy_X*_j_X_Pose;
@@ -619,6 +571,36 @@ float Optimizer::nearestEdgeDistance(const cv::Point & point,const std::vector<m
   }
   return Config::configInstance().ENERGY_SIZE*nearstD; 
 }
+void Optimizer::updateState(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new )
+{
+	  if(Config::configInstance().USE_MY_TRANSFORMATION){
+	    new_transformation.setPose(old_Transformation.Pose());
+	    new_transformation.xTransformation(dX);
+	    e2_new = computeEnergy(distFrame, new_transformation.Pose());
+	  }
+	  else if(Config::configInstance().USE_SOPHUS)
+	  {
+	    Sophus::SE3 T_SE3;
+	    Eigen::Vector3d v3d(m_Transformation.u1(),m_Transformation.u2(),m_Transformation.u3());     
+	    Eigen::Vector3d translationV3(m_Transformation.x(),m_Transformation.y(),m_Transformation.z());     
+	    T_SE3 =Sophus::SE3( Sophus::SO3::exp(v3d),translationV3); 
+	    Vector6d se3_Update;
+	    for(int i=0;i<3;i++){
+	      se3_Update(i,0)=(double)dX.at<float>(0,i+3);
+	      se3_Update(i+3,0)=(double)dX.at<float>(0,i);
+	    }
+	    Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
+	    Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
+	    new_transformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
+	    e2_new = computeEnergy(distFrame, new_transformation.Pose());
+	  }/*else{
+	    float newPose[6];
+	    UpdateStateLM(dX,m_Transformation.Pose(),newPose);	
+	    new_transformation.setPose(newPose);
+	    e2_new = computeEnergy(distFrame, new_transformation.Pose());
+	  }*/
+}
+
 void Optimizer::UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New)
 {
   

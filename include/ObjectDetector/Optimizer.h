@@ -47,6 +47,7 @@ namespace OD
 		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New);
 		void getCoarsePoseByPNP(const float *prePose,const cv::Mat &distMap,float *coarsePose);
 		void getMk();
+		void updateState(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new);
 		float getDistanceToEdege(const cv::Point& e1,const cv::Point& e2,const cv::Point& v);
 		cv::Point getNearstPointLocation(const cv::Point &point);
 		

@@ -43,7 +43,7 @@ public:
   float &u2();
   float &u3();
 public:  
-  const float* Pose();
+  const float* Pose() const;
   Quaternion &quaternion();
 private:
   void  getSub2Pose(const float* pose, float &theta, float &tran);
