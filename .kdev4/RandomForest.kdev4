@@ -181,7 +181,7 @@ Dependency Action=Nothing
 EnvironmentGroup=
 Executable=file:///home/qqh/projects/RandomForest/
 External Terminal=konsole --noclose --workdir %workdir -e %exe
-Project Target=RandomForest,test-Edge-detector
+Project Target=RandomForest,test-model
 Use External Terminal=false
 Working Directory=file:///home/qqh/projects/RandomForest/build/
 isExecutable=false
@@ -212,7 +212,7 @@ Name=test-optimizer
 Type=Native Application
 
 [Launch][Launch Configuration 3][Data]
-Arguments=
+Arguments=./../TrackConfig.yaml
 Configured from ProjectItem=RandomForest,test-optimizer
 Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
 Dependency Action=Nothing

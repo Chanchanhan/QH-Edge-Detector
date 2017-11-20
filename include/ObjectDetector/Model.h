@@ -4,7 +4,7 @@
 #include <string>
 #include <opencv2/core.hpp>
 #include "ObjectDetector/CameraCalibration.h"
-#include "ObjectDetector/Model_Config.h"
+#include "ObjectDetector/Config.h"
 #include "ObjectDetector/PointSet.hpp"
 #include "GLRenderer/include/glm.h"
 

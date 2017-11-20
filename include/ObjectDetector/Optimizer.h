@@ -3,7 +3,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/video/tracking.hpp>
 #include "ObjectDetector/PointSet.hpp"
-#include "ObjectDetector/Model_Config.h"
+#include "ObjectDetector/Config.h"
 #include "ObjectDetector/Model.h"
 #include "ObjectDetector/Quaternion.h"
 #include "ObjectDetector/Transformation.h"
