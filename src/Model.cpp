@@ -406,8 +406,13 @@ Point Model::X_to_x(Point3f X,Mat extrisic)
 void Model::DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame,const float &radius)
 {
 
-  float drawRadius = radius<3?3:drawRadius;
-  cv::circle(frame,p1,drawRadius,Scalar(0,0,255));  
+  
+  float drawRadius = radius<Config::configInstance().CV_CIRCLE_RADIUS?Config::configInstance().CV_CIRCLE_RADIUS:drawRadius;
+  if(radius<Config::configInstance().CV_CIRCLE_RADIUS){
+    cv::circle(frame,p1,drawRadius,Scalar(0,0,255));  
+  }else{
+    cv::circle(frame,p1,drawRadius,Scalar(255,0,0));  
+  } 
   cv::line(frame,p1,p2,cv::Scalar(0,255,0),1,CV_AA);
 }
 void Model::DisplayCV(const float * pose, cv::Mat& frame)

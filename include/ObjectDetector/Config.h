@@ -2,7 +2,7 @@
 #define _CONFIG_H
 
 #include <string>
-
+#include <glog/logging.h>
 #include "GLRenderer/include/glm.h"
 #include "GLRenderer/include/cvCamera.h"
 #include "ObjectDetector/CameraCalibration.h"
@@ -18,11 +18,12 @@ namespace OD
     int height;
     double fps;
     bool USE_GT;
-    bool START_INDEX;
+    int START_INDEX;
+    bool CV_LINE_P2NP;
     float DIST_MASK_SIZE;
     unsigned int MAX_ITERATIN_NUM;
     float THREHOLD_ENERGY;
-    
+    float CV_CIRCLE_RADIUS;
     float DX_SIZE ;
     float NX_LENGTH ;
     float ENERGY_SIZE ;
@@ -46,7 +47,6 @@ namespace OD
     }
   };
     
-  
 
 }
 #endif
