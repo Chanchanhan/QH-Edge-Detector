@@ -38,6 +38,8 @@ namespace OD
 	private:
 		int edfTracker(const float * prePose,const cv::Mat& distFrame,const  int NLrefine, float* newPose);
 		void constructEnergyFunction(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
+		void constructEnergyFunction2(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
+
 		void solveEnergyFunction();
 		float computeEnergy(const cv::Mat& distFrame,const float * pose);
 		float nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint ,const bool printP=false);
@@ -53,7 +55,7 @@ namespace OD
 	public:
 		Data m_data;	
 	private:
-	  
+		int N_Points;
 		int m_frameId;
 		int *_locations;
 		float* dist;

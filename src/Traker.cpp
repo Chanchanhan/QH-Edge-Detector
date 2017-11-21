@@ -103,7 +103,7 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
 
       }
 
-      constructEnergyFunction(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
+      constructEnergyFunction2(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
       _A/=abs(_A.at<float>(0,0));
       A=_A+A_I*lamda;
       cv::invert(A,A_inverse);
@@ -216,6 +216,159 @@ cv::Point Traker::getNearstPointLocation(const cv::Point &point){
 //    cout<<"End to: x "<<x<<" y: "<<y<<endl;
    return Point(y,x);
 }
+void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b)
+{
+  
+  Mat intrinsic = m_data.m_model->getIntrinsic();
+  Mat extrinsic = Transformation::getTransformationMatrix(prePose);
+  GLMmodel* model =m_data.m_model->GetObjModel();
+  cv::Mat pos = m_data.m_model->getPos();
+  int size=0;
+  cv::Mat drawFrame;
+  if(Config::configInstance().CV_LINE_P2NP){    
+    cv::cvtColor(distFrame/255.f, drawFrame, CV_GRAY2BGR);
+  }
+  
+        
+        
+  cv::Mat j_X_Pose= cv::Mat::zeros(2,6,CV_32FC1);
+  cv::Mat j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);  
+  cv::Mat mat_b(6, N_Points, CV_32FC1);   
+  cv::Mat J_X_Pose = cv::Mat::zeros(2*N_Points,6,CV_32FC1);
+  cv::Mat J_Energy_X=cv::Mat::zeros(1,2*N_Points,CV_32FC1);
+  for(int i=0;i<model->numLines;++i){
+    if(model->lines[i].tovisit){
+      int v0=model->lines[i].vindices[0],v1=model->lines[i].vindices[1];
+      Point3f p1= Point3f(pos.at<float>(0,v0-1),pos.at<float>(1,v0-1),pos.at<float>(2,v0-1));
+      Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
+      Point3f dx=(p2-p1);
+      int Nx=sqrt(dx.x*dx.x+dx.y*dx.y+dx.z*dx.z)/Config::configInstance().NX_LENGTH;
+//       printf(" Nx= %d \n",Nx);
+      Point point1= m_data.m_model->X_to_x(p1,extrinsic);
+      Point point2= m_data.m_model->X_to_x(p2,extrinsic);
+      dx /=Nx;
+      size+=Nx;
+      Point3f X=p1;
+      cv::Mat m_X(4,1,CV_32FC1),m_dX(4,1,CV_32FC1);
+      m_X.at<float>(0,0)=X.x,m_X.at<float>(1,0)=X.y,m_X.at<float>(2,0)=X.z,m_X.at<float>(3,0)=1;
+      m_dX.at<float>(0,0)=dx.x,m_dX.at<float>(1,0)=dx.y,m_dX.at<float>(2,0)=dx.z,m_dX.at<float>(3,0)=0;
+      
+
+      
+      
+      for(int lineIndex=0;lineIndex<=Nx;++lineIndex,m_X+=m_dX){
+	cv::Mat W_X(4,1,CV_32FC1),C_X(4,1,CV_32FC1),P_x(3,1,CV_32FC1);
+	cv::Mat _j_X_Pose = cv::Mat::zeros(2,6,CV_32FC1);
+	cv::Mat _j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
+	C_X=extrinsic*m_X;
+	P_x=intrinsic*C_X;
+		
+	/*get nearestEdgeDistance ponit*/
+	Point point(P_x.at<float>(0,0)/P_x.at<float>(2,0),P_x.at<float>(1,0)/P_x.at<float>(2,0));
+	Point nearstPoint = getNearstPointLocation(point);
+		
+	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
+
+	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE||
+	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD){
+	  continue;
+	}
+	if(Config::configInstance().CV_LINE_P2NP){      
+	  m_data.m_model->DisplayLine(point,nearstPoint,drawFrame,sqrt(dist2Edge));
+	}
+	//computeEnergy
+	{	  
+	  float _x=C_X.at<float>(0,0);
+	  float _y=C_X.at<float>(0,1);
+	  float _z=C_X.at<float>(0,2);
+	  
+	  //try compute another way 
+	  {	  
+	  J_X_Pose.at<float>(2*lineIndex,0)=m_calibration.fx()/_z; 
+	  J_X_Pose.at<float>(2*lineIndex,1)=0;
+	  J_X_Pose.at<float>(2*lineIndex,2)=-m_calibration.fx()*_x/(_z*_z);
+	  J_X_Pose.at<float>(2*lineIndex,3)=-m_calibration.fx()*_x*_y/(_z*_z);
+	  J_X_Pose.at<float>(2*lineIndex,4)=m_calibration.fx()*(1+_x*_x/(_z*_z));
+	  J_X_Pose.at<float>(2*lineIndex,5)=m_calibration.fx()*_y/_z;
+
+	  J_X_Pose.at<float>(2*lineIndex+1,0)=0;  
+	  J_X_Pose.at<float>(2*lineIndex+1,1)=m_calibration.fy()/_z;      
+	  J_X_Pose.at<float>(2*lineIndex+1,2)=-m_calibration.fy()*_y/(_z*_z);    
+	  J_X_Pose.at<float>(2*lineIndex+1,3)=-m_calibration.fy()*(1+_y*_y*(1/(_z*_z)));
+	  J_X_Pose.at<float>(2*lineIndex+1,4)=-m_calibration.fy()*_x*_y/(_z*_z);
+	  J_X_Pose.at<float>(2*lineIndex+1,5)=m_calibration.fy()*_x/_z; 
+	  
+	  J_Energy_X.at<float>(0,2*lineIndex+0)=2*(point.x - nearstPoint.x);
+	  J_Energy_X.at<float>(0,2*lineIndex+1)=2*(point.y - nearstPoint.y);
+
+	  }
+	  
+	  _j_X_Pose.at<float>(0,0)=m_calibration.fx()/_z; 
+	  _j_X_Pose.at<float>(0,1)=0;
+	  _j_X_Pose.at<float>(0,2)=-m_calibration.fx()*_x/(_z*_z);
+	  _j_X_Pose.at<float>(0,3)=-m_calibration.fx()*_x*_y/(_z*_z);
+	  _j_X_Pose.at<float>(0,4)=m_calibration.fx()*(1+_x*_x/(_z*_z));
+	  _j_X_Pose.at<float>(0,5)=m_calibration.fx()*_y/_z;
+
+	  _j_X_Pose.at<float>(1,0)=0;  
+	  _j_X_Pose.at<float>(1,1)=m_calibration.fy()/_z;      
+	  _j_X_Pose.at<float>(1,2)=-m_calibration.fy()*_y/(_z*_z);    
+	  _j_X_Pose.at<float>(1,3)=-m_calibration.fy()*(1+_y*_y*(1/(_z*_z)));
+	  _j_X_Pose.at<float>(1,4)=-m_calibration.fy()*_x*_y/(_z*_z);
+	  _j_X_Pose.at<float>(1,5)=m_calibration.fy()*_x/_z;    
+		  
+
+	  _j_Energy_X.at<float>(0,0)=2*(point.x - nearstPoint.x);
+	  _j_Energy_X.at<float>(0,1)=2*(point.y - nearstPoint.y);
+	  _j_X_Pose*=Config::configInstance().J_SIZE;
+	  _j_Energy_X*=Config::configInstance().J_SIZE;
+	  Mat _J=_j_Energy_X*_j_X_Pose;
+	  Mat _J_T;
+	  cv::transpose(_J,_J_T);
+//	  for(int i=0;i<6;i++){
+//	    mat_b.at<float>(i,lineIndex)=_J_T.at<float>(i,lineIndex)*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
+//	  }
+
+         b+=_J_T*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
+	}
+	
+
+
+	j_X_Pose+=_j_X_Pose;
+	j_Energy_X+=_j_Energy_X;  
+      }
+
+    }
+    
+
+
+// 	b+=_J_T*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
+// 	j_X_Pose+=_j_X_Pose;
+// 	j_Energy_X+=_j_Energy_X;  
+
+  } 
+  /*
+  LOG(WARNING)<<"_j_X_Pose\n"<<j_X_Pose;
+  LOG(WARNING)<<"_j_Energy_X\n"<<j_Energy_X;*/
+  
+  if(Config::configInstance().CV_LINE_P2NP){
+    LOG(WARNING)<<"to draw drawFrame";
+      m_data.m_model->DisplayCV(prePose,drawFrame);
+      if(m_frameId%10==0){
+	imshow("DRAW_LINE_P2NP",drawFrame);
+      //   imshow("distMap",frame/255.f);
+	waitKey(0);
+      }
+  }
+  Mat J=J_Energy_X*J_X_Pose*(1.0f/size)*(1.0f/size);
+  Mat J_T;  
+  cv::transpose(J,J_T);
+  A= J_T*J+lastA*lamda;//6*6
+  A*=Config::configInstance().SIZE_A;
+
+
+}
+
 void Traker::constructEnergyFunction(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b){
  cv::Mat j_X_Pose= cv::Mat::zeros(2,6,CV_32FC1);
   cv::Mat j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
@@ -549,7 +702,7 @@ float Traker::computeEnergy(const cv::Mat& distFrame,const float * pose)
     }
   } 
 
-	
+  N_Points=size;
   energy*=1.0f/size;
   LOG(INFO)<<"Total mean Energy = "<<energy;
 
