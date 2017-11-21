@@ -259,7 +259,8 @@ void Traker::constructEnergyFunction(const cv::Mat distFrame,const float* prePos
 		
 	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
 
-	if(distFrame.at<float>(nearstPoint)>=254||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE){
+	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE||
+	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD){
 	  continue;
 	}
 	if(Config::configInstance().CV_LINE_P2NP){      
@@ -447,9 +448,9 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
 	Point point= m_data.m_model->X_to_x(X,extrinsic);
 	Point nearst=getNearstPointLocation(point);
 	float dist2Edge=getDistanceToEdege(point1,point2,nearst);
-// 	if(distMap.at<float>(nearst)>=254/*||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE*/){
-// 	  continue;
-// 	}
+	if(distMap.at<float>(nearst)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD/*||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE*/){
+	  continue;
+	}
 	 objectPoints.push_back(Point3d(X.x,X.y,X.z));
 	 imagePoints.push_back(Point2d(nearst.x,nearst.y));
       }  

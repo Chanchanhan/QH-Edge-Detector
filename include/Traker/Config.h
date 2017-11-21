@@ -23,8 +23,11 @@ namespace OD
     bool CV_LINE_P2NP;
     float DIST_MASK_SIZE;
     unsigned int MAX_ITERATIN_NUM;
+    float OPTIMIZER_NEASTP_THREHOLD;
+    float OPTIMIZER_POINT_THREHOLD;
     float THREHOLD_ENERGY;
     float CV_CIRCLE_RADIUS;
+    float CV_DRAW_FRAME;
     float DX_SIZE ;
     float NX_LENGTH ;
     float ENERGY_SIZE ;
@@ -68,6 +71,8 @@ namespace OD
 
       //parameters for optimize
       {
+	Config::configInstance().OPTIMIZER_NEASTP_THREHOLD=config.value_f("OPTIMIZER_NEASTP_THREHOLD");
+	Config::configInstance().OPTIMIZER_POINT_THREHOLD=config.value_f("OPTIMIZER_POINT_THREHOLD");
 	Config::configInstance().MAX_ITERATIN_NUM=std::lround(config.value_f("MAX_ITERATIN_NUM"));
 	Config::configInstance().THREHOLD_ENERGY=config.value_f("THREHOLD_ENERGY");
 	Config::configInstance().DX_SIZE=config.value_f("DX_SIZE");
@@ -88,6 +93,7 @@ namespace OD
       {
 	Config::configInstance().CV_CIRCLE_RADIUS=config.value_f("CV_CIRCLE_RADIUS");
 	Config::configInstance().CV_LINE_P2NP=std::lround(config.value_f("CV_LINE_P2NP"))== 1;;
+	Config::configInstance().CV_DRAW_FRAME=std::lround(config.value_f("CV_DRAW_FRAME"))== 1;;
       }
       //parameters for Particle
       {

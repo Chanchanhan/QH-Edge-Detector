@@ -91,9 +91,10 @@ int main(int argc, char* argv[]) {
       traker->m_data.m_model->DisplayCV(prePose,curFrame);
 
       //to test model  , get its point set ,and try to compute energy
-      
-      imshow("curFrame",curFrame);
-      waitKey(1);
+      if(Config::configInstance().CV_DRAW_FRAME){
+	imshow("curFrame",curFrame);
+	waitKey(1);
+      }
 
       if(Config::configInstance().USE_GT){
 	float gtPose[6]={0};
