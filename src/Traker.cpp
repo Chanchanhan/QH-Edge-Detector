@@ -143,13 +143,15 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
 // 	  LOG(INFO)<<"b\n"<<b;
 	  Mat dX =- A_inverse*b*Config::configInstance().DX_SIZE;
 	  LOG(WARNING)<<"dX "<<dX;
+	  float lastE2=e2_new;
 	  updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);	  	  
-	  float lastE2=e2_new;	  	  
+		  	  
 	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
 	  itration_num++;
 	  
-	  if(fabs(lastE2-e2_new)<1e-5){
+	  if(fabs(lastE2==e2_new)<1e-10){
 	    LOG(WARNING)<<"Stop to LM-iteration ,beacuse lastE2>>E2";
+// 	    break;
 	  }
 	
       }
@@ -223,7 +225,6 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
   Mat extrinsic = Transformation::getTransformationMatrix(prePose);
   GLMmodel* model =m_data.m_model->GetObjModel();
   cv::Mat pos = m_data.m_model->getPos();
-  int size=0;
   cv::Mat drawFrame;
   if(Config::configInstance().CV_LINE_P2NP){    
     cv::cvtColor(distFrame/255.f, drawFrame, CV_GRAY2BGR);
@@ -247,7 +248,6 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
       Point point1= m_data.m_model->X_to_x(p1,extrinsic);
       Point point2= m_data.m_model->X_to_x(p2,extrinsic);
       dx /=Nx;
-      size+=Nx;
       Point3f X=p1;
       cv::Mat m_X(4,1,CV_32FC1),m_dX(4,1,CV_32FC1);
       m_X.at<float>(0,0)=X.x,m_X.at<float>(1,0)=X.y,m_X.at<float>(2,0)=X.z,m_X.at<float>(3,0)=1;
@@ -360,7 +360,7 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
 	waitKey(0);
       }
   }
-  Mat J=J_Energy_X*J_X_Pose*(1.0f/size)*(1.0f/size);
+  Mat J=J_Energy_X*J_X_Pose*Config::configInstance().J_SIZE;
   Mat J_T;  
   cv::transpose(J,J_T);
   A= J_T*J+lastA*lamda;//6*6
