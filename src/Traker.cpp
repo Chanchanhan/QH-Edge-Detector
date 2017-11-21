@@ -110,26 +110,26 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
       //get dX
       {
 	LOG(INFO)<<"A_I\n"<<A_I;
-      LOG(INFO)<<"lamda = "<<lamda;
-      LOG(INFO)<<"A\n"<<A;
-      b/=abs(b.at<float>(0,0));
-      LOG(INFO)<<"A_inverse\n"<<A_inverse;      
-      LOG(INFO)<<"b\n"<<b;
-      dX =- A_inverse*b*Config::configInstance().DX_SIZE;
-      LOG(WARNING)<<"dX "<<dX;
+	LOG(INFO)<<"lamda = "<<lamda;
+	LOG(INFO)<<"A\n"<<A;
+	b/=abs(b.at<float>(0,0));
+	LOG(INFO)<<"A_inverse\n"<<A_inverse;      
+	LOG(INFO)<<"b\n"<<b;
+	dX =- A_inverse*b*Config::configInstance().DX_SIZE;
+	LOG(WARNING)<<"dX "<<dX;
       }
   
 
       float e2_new;
       updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);
+	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
 
 #ifndef EDF_TRAKER
-      while(e2_new>e2){	 	
+      while(e2_new>=e2){	 	
 	  if(itration_num>Config::configInstance().MAX_ITERATIN_NUM){
 	    LOG(INFO)<<"to much itration_num!";
 	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
 	    finalE2= computeEnergy(distFrame, _newPose);
-
 	    return -1;    
 	  }
 	  
@@ -143,20 +143,13 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
 // 	  LOG(INFO)<<"b\n"<<b;
 	  Mat dX =- A_inverse*b*Config::configInstance().DX_SIZE;
 	  LOG(WARNING)<<"dX "<<dX;
-	  float lastE2;	  
-	  updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);
-	  lastE2=e2_new;
-
-	  
-	  
+	  updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);	  	  
+	  float lastE2=e2_new;	  	  
 	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
-
 	  itration_num++;
-
+	  
 	  if(fabs(lastE2-e2_new)<1e-5){
-	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
-
-	    continue ;  
+	    LOG(WARNING)<<"Stop to LM-iteration ,beacuse lastE2>>E2";
 	  }
 	
       }
