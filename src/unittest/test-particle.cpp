@@ -22,7 +22,7 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
   
   google::InitGoogleLogging(argv[0]);
   Config::configInstance().loadConfig(config);
-  FLAGS_log_dir=config.text("Input.Directory.LOG_DIR");     
+  FLAGS_log_dir=config.text("Output.Directory.LOG_DIR");     
   FLAGS_stderrthreshold = std::lround(config.value_f("LOG_Threshold"));  // INFO: 0, WARNING: 1, ERROR: 2, FATAL: 3
 
 
@@ -99,8 +99,8 @@ int main(int argc, char* argv[]) {
 	  particlesFilter->update(traker, curFrame, preFrame,frameId);
 
       }
-
-      traker.m_data.m_model->DisplayCV(prePose,curFrame);
+      
+      traker.m_data.m_model->DisplayCV( particlesFilter->m_particles->ort,curFrame);
 
       //to test model  , get its point set ,and try to compute energy
       

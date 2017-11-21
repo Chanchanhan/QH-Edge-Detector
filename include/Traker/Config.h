@@ -46,6 +46,8 @@ namespace OD
     float PARTICLE_NoiseRateHigh;
     float PARTICLE_NUM;
     float PARTICLE_ARParam;
+//     float PARTICLE_STD_ROT;
+//     float PARTICLE_STD_TRA;
     std::string videoPath;
     std::string objFile;  
     std::string gtFile;  
@@ -97,6 +99,8 @@ namespace OD
 	Config::configInstance().PARTICLE_USE_AR=std::lround(config.value_f("PARTICLE_USE_AR"))== 1;;  
 	Config::configInstance().PARTICLE_USE=std::lround(config.value_f("PARTICLE_USE"))== 1;
 	Config::configInstance().PARTICLE_ARParam=config.value_f("PARTICLE_ARParam");
+// 	Config::configInstance().PARTICLE_STD_ROT=config.value_f("PARTICLE_STD_ROT");
+// 	Config::configInstance().PARTICLE_STD_TRA=config.value_f("PARTICLE_STD_TRA");
       }
     }
     static Config& configInstance(){

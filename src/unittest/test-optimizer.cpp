@@ -21,7 +21,7 @@ void init_MAIN(int argc, char* argv[],TL::OcvYamlConfig &config,std::vector<std:
   
   google::InitGoogleLogging(argv[0]);
   Config::configInstance().loadConfig(config);
-  FLAGS_log_dir=config.text("Input.Directory.LOG_DIR");     
+  FLAGS_log_dir=config.text("Output.Directory.LOG_DIR");     
   FLAGS_stderrthreshold = std::lround(config.value_f("LOG_Threshold"));  // INFO: 0, WARNING: 1, ERROR: 2, FATAL: 3
 
 

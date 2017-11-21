@@ -10,7 +10,7 @@ Calib_CY: 540
 DIST_MASK_SIZE: 5
 # Input/Output directories and Sets
 LOG_Threshold :1
-Input.Directory.LOG_DIR: "/home/qqh/output/ObjTrackLog/"
+Output.Directory.LOG_DIR: "/home/qqh/output/ObjTrackLog/"
 Input.Directory.Obj: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/openbox.obj"
 Input.Directory.Video: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/video1/"
 Input.Directory.GroudTruth: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/video1/poseGT.txt"
@@ -38,10 +38,13 @@ USE_PNP: 1
 
 #Particle
 PARTICLE_USE: 1
-PARTICLE_ROTATION_GAUSSIAN_STD: 0.05  #  rotation noise
-PARTICLE_TRANSLATION_GAUSSIAN_STD: 0.5   # translation noise
+PARTICLE_ROTATION_GAUSSIAN_STD: 0.0005  #  rotation noise
+PARTICLE_TRANSLATION_GAUSSIAN_STD: 0.005   # translation noise
 PARTICLE_USE_AR: 0
-PARTICLE_NoiseRateLow: 1.0
-PARTICLE_NoiseRateHigh: 1.2
-PARTICLE_NUM: 1
+PARTICLE_NoiseRateLow: 0.010
+PARTICLE_NoiseRateHigh: 0.012
+PARTICLE_NUM: 2
 PARTICLE_ARParam: 0.1
+#PARTICLE_STD_ROT: 0.01
+#PARTICLE_STD_TRA: 0.01
+
