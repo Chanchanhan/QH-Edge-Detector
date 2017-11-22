@@ -1,0 +1,72 @@
+/home/qqh/workspace/clion-2017.2.3/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/qqh/projects/RandomForest
+-- The C compiler identification is GNU 5.4.0
+-- The CXX compiler identification is GNU 5.4.0
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+doxygen not found
+-- Performing Test COMPILER_SUPPORTS_CXX11
+-- Performing Test COMPILER_SUPPORTS_CXX11 - Success
+-- Performing Test COMPILER_SUPPORTS_CXX0X
+-- Performing Test COMPILER_SUPPORTS_CXX0X - Success
+-- Try OpenMP C flag = [-fopenmp]
+-- Performing Test OpenMP_FLAG_DETECTED
+-- Performing Test OpenMP_FLAG_DETECTED - Success
+CMake Warning (dev) at /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-3.8/Modules/FindOpenMP.cmake:179 (if):
+  if given arguments:
+
+    "TRUE"
+
+  An argument named "TRUE" appears in a conditional statement.  Policy
+  CMP0012 is not set: if() recognizes numbers and boolean constants.  Run
+  "cmake --help-policy CMP0012" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+Call Stack (most recent call first):
+  /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-3.8/Modules/FindOpenMP.cmake:224 (_OPENMP_GET_SPEC_DATE)
+  CMakeLists.txt:77 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Try OpenMP CXX flag = [-fopenmp]
+-- Performing Test OpenMP_FLAG_DETECTED
+-- Performing Test OpenMP_FLAG_DETECTED - Success
+CMake Warning (dev) at /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-3.8/Modules/FindOpenMP.cmake:179 (if):
+  if given arguments:
+
+    "TRUE"
+
+  An argument named "TRUE" appears in a conditional statement.  Policy
+  CMP0012 is not set: if() recognizes numbers and boolean constants.  Run
+  "cmake --help-policy CMP0012" for policy details.  Use the cmake_policy
+  command to set the policy and suppress this warning.
+Call Stack (most recent call first):
+  /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-3.8/Modules/FindOpenMP.cmake:266 (_OPENMP_GET_SPEC_DATE)
+  CMakeLists.txt:77 (find_package)
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Found OpenMP: -fopenmp  
+-- OpenMP found
+-- Found OpenGL: /usr/lib/x86_64-linux-gnu/libGL.so  
+-- Found GLUT: /usr/lib/x86_64-linux-gnu/libglut.so  
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Looking for pthread_create
+-- Looking for pthread_create - not found
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Found CUDA: /usr (found suitable exact version "7.5") 
+-- Found OpenCV: /usr/local (found suitable version "3.3.0", minimum required is "3.3") 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/qqh/projects/RandomForest/cmake-build-debug
