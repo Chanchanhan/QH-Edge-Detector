@@ -1047,36 +1047,6 @@ src/DT.cpp.s:
 	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/DT.cpp.s
 .PHONY : src/DT.cpp.s
 
-src/EdgeDetector.o: src/EdgeDetector.cpp.o
-
-.PHONY : src/EdgeDetector.o
-
-# target to build an object file
-src/EdgeDetector.cpp.o:
-	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o
-	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/EdgeDetector.cpp.o
-.PHONY : src/EdgeDetector.cpp.o
-
-src/EdgeDetector.i: src/EdgeDetector.cpp.i
-
-.PHONY : src/EdgeDetector.i
-
-# target to preprocess a source file
-src/EdgeDetector.cpp.i:
-	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.i
-	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/EdgeDetector.cpp.i
-.PHONY : src/EdgeDetector.cpp.i
-
-src/EdgeDetector.s: src/EdgeDetector.cpp.s
-
-.PHONY : src/EdgeDetector.s
-
-# target to generate assembly for a file
-src/EdgeDetector.cpp.s:
-	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.s
-	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/EdgeDetector.cpp.s
-.PHONY : src/EdgeDetector.cpp.s
-
 src/EdgeDistanceFieldTraking.o: src/EdgeDistanceFieldTraking.cpp.o
 
 .PHONY : src/EdgeDistanceFieldTraking.o
@@ -1106,6 +1076,36 @@ src/EdgeDistanceFieldTraking.cpp.s:
 	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/EdgeDistanceFieldTraking.cpp.s
 	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.s
 .PHONY : src/EdgeDistanceFieldTraking.cpp.s
+
+src/ImgProcession.o: src/ImgProcession.cpp.o
+
+.PHONY : src/ImgProcession.o
+
+# target to build an object file
+src/ImgProcession.cpp.o:
+	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o
+.PHONY : src/ImgProcession.cpp.o
+
+src/ImgProcession.i: src/ImgProcession.cpp.i
+
+.PHONY : src/ImgProcession.i
+
+# target to preprocess a source file
+src/ImgProcession.cpp.i:
+	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/ImgProcession.cpp.i
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.i
+.PHONY : src/ImgProcession.cpp.i
+
+src/ImgProcession.s: src/ImgProcession.cpp.s
+
+.PHONY : src/ImgProcession.s
+
+# target to generate assembly for a file
+src/ImgProcession.cpp.s:
+	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/ImgProcession.cpp.s
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.s
+.PHONY : src/ImgProcession.cpp.s
 
 src/Model.o: src/Model.cpp.o
 
@@ -1472,12 +1472,12 @@ help:
 	@echo "... src/DT.o"
 	@echo "... src/DT.i"
 	@echo "... src/DT.s"
-	@echo "... src/EdgeDetector.o"
-	@echo "... src/EdgeDetector.i"
-	@echo "... src/EdgeDetector.s"
 	@echo "... src/EdgeDistanceFieldTraking.o"
 	@echo "... src/EdgeDistanceFieldTraking.i"
 	@echo "... src/EdgeDistanceFieldTraking.s"
+	@echo "... src/ImgProcession.o"
+	@echo "... src/ImgProcession.i"
+	@echo "... src/ImgProcession.s"
 	@echo "... src/Model.o"
 	@echo "... src/Model.i"
 	@echo "... src/Model.s"

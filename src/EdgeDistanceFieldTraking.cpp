@@ -12,7 +12,7 @@
 #include "POSEST/include/posest_edft.h"
 #include "POSEST/include/posest.h"
 #include "Traker/EdgeDistanceFieldTraking.h"
-#include "edge/EdgeDetector.hpp"
+#include "Image/ImgProcession.h"
 
 using namespace OD;
 
@@ -41,7 +41,7 @@ void EdgeDistanceFieldTraking::getDist(Mat frame)
 
 Mat EdgeDistanceFieldTraking::toComputePose(const Mat& prePose, const Mat& preFrame, const Mat& curFrame, const Mat& locations, const int frameId,const GLRenderer &render)
 {
-  ED::EdgeDetector edgeDetector_;
+  ED::ImgProcession edgeDetector_;
   cv::Mat distMap;
    edgeDetector_.DealWithFrameAsMRWang(curFrame,distMap);
   double prevPose[6],newPose[6], coarsePose[6]={0};

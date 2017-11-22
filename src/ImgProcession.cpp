@@ -1,6 +1,6 @@
-#include "edge/EdgeDetector.hpp"
+#include "Image/ImgProcession.h"
 using namespace ED;
-EdgeDetector::EdgeDetector()
+ImgProcession::ImgProcession()
 {
   edgeThresh = 1;
   max_lowThreshold = 100;
@@ -9,7 +9,7 @@ EdgeDetector::EdgeDetector()
   lowThreshold = 20;
 }
 
-void EdgeDetector::getDistanceTransform(const Mat &src, const float &mask, Mat& dst, Mat& locations)
+void ImgProcession::getDistanceTransform(const Mat &src, const float &mask, Mat& dst, Mat& locations)
 {
   using namespace std;
   cv::Mat edge =edgeCanny(src);
@@ -31,7 +31,7 @@ void EdgeDetector::getDistanceTransform(const Mat &src, const float &mask, Mat& 
 }
 
 
-void EdgeDetector::DealWithFrameAsMRWang(const Mat& src, Mat& distMap)
+void ImgProcession::DealWithFrameAsMRWang(const Mat& src, Mat& distMap)
 {
   Mat frameGray;
   cvtColor(src, frameGray, CV_BGR2GRAY);
@@ -48,7 +48,7 @@ void EdgeDetector::DealWithFrameAsMRWang(const Mat& src, Mat& distMap)
   waitKey(0);
 }
 
-cv::Mat EdgeDetector::toTistanceTransform(cv::Mat src)
+cv::Mat ImgProcession::toTistanceTransform(cv::Mat src)
 {
   Mat bw;
      
@@ -75,7 +75,7 @@ cv::Mat EdgeDetector::toTistanceTransform(cv::Mat src)
 
       
  
-Mat EdgeDetector::edgeCanny(Mat src)
+Mat ImgProcession::edgeCanny(Mat src)
 {
 
   Mat  src_gray, dst, detected_edges;
@@ -95,7 +95,7 @@ Mat EdgeDetector::edgeCanny(Mat src)
   return dst;
 }
 
-cv::Mat EdgeDetector::extractEdgeOfImg(Mat src){
+cv::Mat ImgProcession::extractEdgeOfImg(Mat src){
     Mat3f fsrc;
     src.convertTo(fsrc, CV_32F, 1.0 / 255.0);
     Mat1f edges;
@@ -105,13 +105,13 @@ cv::Mat EdgeDetector::extractEdgeOfImg(Mat src){
 //      waitKey(0);
     return edges;
 }
-EdgeDetector::EdgeDetector(std::string modelFilename)
+ImgProcession::ImgProcession(std::string modelFilename)
 {
   std::cout<<modelFilename<<std::endl;
    pDollar = ximgproc::createStructuredEdgeDetection(modelFilename);
 }
 
-EdgeDetector::~EdgeDetector()
+ImgProcession::~ImgProcession()
 {
   if(!pDollar.empty()){
    pDollar.release();

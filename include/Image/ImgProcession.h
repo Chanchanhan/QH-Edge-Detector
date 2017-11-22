@@ -1,5 +1,5 @@
-#ifndef EDGEDETECTOR
-#define EDGEDETECTOR
+#ifndef IMG_PROCESSION_H
+#define IMG_PROCESSION_H
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -9,19 +9,19 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/ximgproc.hpp>
 #include<glog/logging.h>
-#include"edge/DT.hpp"
+#include"Image/DT.hpp"
 
 using namespace cv;
 
 // using namespace cv::ximgproc;
 namespace ED{
 
-class EdgeDetector{
+class ImgProcession{
 
 public: 
-  EdgeDetector();
-  ~EdgeDetector();
-  EdgeDetector(std::string modelFilename);
+  ImgProcession();
+  ~ImgProcession();
+  ImgProcession(std::string modelFilename);
   Mat edgeCanny(Mat src);
   Mat extractEdgeOfImg(Mat src);
   void getDistanceTransform(const Mat &,const float &mask, Mat &dst, Mat& locations);

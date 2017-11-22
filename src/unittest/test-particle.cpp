@@ -5,9 +5,9 @@
 
 
 
-#include "edge/EdgeFeature.hpp"
-#include "edge/ReadImg.hpp"
-#include "edge/EdgeDetector.hpp"
+#include "Image/EdgeFeature.hpp"
+#include "Image/ReadImg.hpp"
+#include "Image/ImgProcession.h"
 #include "GLRenderer/include/glm.h"
 #include "Traker/Config.h"
 #include "Traker//Render.h"
@@ -67,7 +67,7 @@ int main(int argc, char* argv[]) {
   }
   
   TL::OcvYamlConfig config(argv[1]);
-  auto edgeDetector_ = std::make_unique<ED::EdgeDetector>();
+  auto edgeDetector_ = std::make_unique<ED::ImgProcession>();
   std::vector<std::string> Frames;
   float prePose[6];  
   int starframeId = Config::configInstance().START_INDEX;

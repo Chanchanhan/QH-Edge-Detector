@@ -12,7 +12,7 @@
 #include "POSEST/include/posest_edft.h"
 #include "POSEST/include/posest.h"
 #include "Traker/Traker.h"
-#include "edge/EdgeDetector.hpp"
+#include "Image/ImgProcession.h"
 
 const float INF =1e10;
 
@@ -809,7 +809,7 @@ void Traker::UpdateStateLM(const cv::Mat &dx, const float * pose_Old, float * po
 }
 void Traker::getDistMap(const Mat& frame)
 {
-    auto edgeDetector = std::make_unique<ED::EdgeDetector>();
+    auto edgeDetector = std::make_unique<ED::ImgProcession>();
     edgeDetector->getDistanceTransform(frame,Config::configInstance().DIST_MASK_SIZE,distFrame,locationsMat);
 }
 

@@ -29,7 +29,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/opencv_modules.hpp"
-#include "edge/DT.hpp"
+#include "Image/DT.hpp"
 #include <algorithm>
 #define PERMIT_TO_SELF
 using namespace std;

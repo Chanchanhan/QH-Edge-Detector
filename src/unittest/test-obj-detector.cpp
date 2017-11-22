@@ -5,9 +5,9 @@
 
 #include "andres/marray.hxx"
 #include "andres/ml/decision-trees.hxx"
-#include "edge/EdgeFeature.hpp"
-#include "edge/ReadImg.hpp"
-#include "edge/EdgeDetector.hpp"
+#include "Image/EdgeFeature.hpp"
+#include "Image/ReadImg.hpp"
+#include "Image/ImgProcession.h"
 #include "GLRenderer/include/glm.h"
 #include "ObjectDetector/Model_Config.h"
 #include "ObjectDetector//Render.h"
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
   ORD::Render g_render;
   cv::Mat pose(1,6,CV_32FC1);
   OD::Config config;
-//   ED::EdgeDetector edgeDetector_("/home/qqh/projects/RandomForest/model.yml");
+//   ED::ImgProcession edgeDetector_("/home/qqh/projects/RandomForest/model.yml");
 
   	
 

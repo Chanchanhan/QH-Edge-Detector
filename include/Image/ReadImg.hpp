@@ -23,10 +23,10 @@
 #include <opencv2/core.hpp>
 #include <opencv2/ximgproc.hpp>
 
-#include "edge/TypeName.h"
+#include "Image/TypeName.h"
 #include"andres/ml/decision-trees.hxx"
-#include "edge/EdgeFeature.hpp"
-#include "EdgeDetector.hpp"
+#include "Image/EdgeFeature.hpp"
+#include "ImgProcession.h"
 namespace ED{
   
 
@@ -224,7 +224,7 @@ bool FileSys::readImg(const PathType path)
     default:
       return false;
   }
-  ED::EdgeDetector edgeDetector_("/home/qqh/projects/RandomForest/model.yml");
+  ED::ImgProcession edgeDetector_("/home/qqh/projects/RandomForest/model.yml");
   filesNames = getFiles(dir);
   
   

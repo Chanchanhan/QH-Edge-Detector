@@ -9,7 +9,7 @@
 #include<opencv2/core.hpp>  
 #include<opencv2/imgproc.hpp>  
 
-#include "edge/TypeName.h"
+#include "Image/TypeName.h"
 #include "tools/rgbConvertMex.hpp"
 #include "tools/gradient.hpp"
 #include "tools/model.h"

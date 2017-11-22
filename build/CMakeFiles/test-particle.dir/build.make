@@ -249,9 +249,33 @@ CMakeFiles/test-particle.dir/src/Transformation.cpp.o.provides: CMakeFiles/test-
 CMakeFiles/test-particle.dir/src/Transformation.cpp.o.provides.build: CMakeFiles/test-particle.dir/src/Transformation.cpp.o
 
 
+CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o: CMakeFiles/test-particle.dir/flags.make
+CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o: ../src/ImgProcession.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o"
+	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o -c /home/qqh/projects/RandomForest/src/ImgProcession.cpp
+
+CMakeFiles/test-particle.dir/src/ImgProcession.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test-particle.dir/src/ImgProcession.cpp.i"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/qqh/projects/RandomForest/src/ImgProcession.cpp > CMakeFiles/test-particle.dir/src/ImgProcession.cpp.i
+
+CMakeFiles/test-particle.dir/src/ImgProcession.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test-particle.dir/src/ImgProcession.cpp.s"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/qqh/projects/RandomForest/src/ImgProcession.cpp -o CMakeFiles/test-particle.dir/src/ImgProcession.cpp.s
+
+CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o.requires:
+
+.PHONY : CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o.requires
+
+CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o.provides: CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o.requires
+	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o.provides.build
+.PHONY : CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o.provides
+
+CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o.provides.build: CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o
+
+
 CMakeFiles/test-particle.dir/src/Model.cpp.o: CMakeFiles/test-particle.dir/flags.make
 CMakeFiles/test-particle.dir/src/Model.cpp.o: ../src/Model.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/test-particle.dir/src/Model.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/test-particle.dir/src/Model.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-particle.dir/src/Model.cpp.o -c /home/qqh/projects/RandomForest/src/Model.cpp
 
 CMakeFiles/test-particle.dir/src/Model.cpp.i: cmake_force
@@ -275,7 +299,7 @@ CMakeFiles/test-particle.dir/src/Model.cpp.o.provides.build: CMakeFiles/test-par
 
 CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o: CMakeFiles/test-particle.dir/flags.make
 CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o: ../src/OcvYamlConfig.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o -c /home/qqh/projects/RandomForest/src/OcvYamlConfig.cpp
 
 CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.i: cmake_force
@@ -299,7 +323,7 @@ CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o.provides.build: CMakeFiles/
 
 CMakeFiles/test-particle.dir/src/Particle.cpp.o: CMakeFiles/test-particle.dir/flags.make
 CMakeFiles/test-particle.dir/src/Particle.cpp.o: ../src/Particle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/test-particle.dir/src/Particle.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/test-particle.dir/src/Particle.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-particle.dir/src/Particle.cpp.o -c /home/qqh/projects/RandomForest/src/Particle.cpp
 
 CMakeFiles/test-particle.dir/src/Particle.cpp.i: cmake_force
@@ -319,30 +343,6 @@ CMakeFiles/test-particle.dir/src/Particle.cpp.o.provides: CMakeFiles/test-partic
 .PHONY : CMakeFiles/test-particle.dir/src/Particle.cpp.o.provides
 
 CMakeFiles/test-particle.dir/src/Particle.cpp.o.provides.build: CMakeFiles/test-particle.dir/src/Particle.cpp.o
-
-
-CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o: CMakeFiles/test-particle.dir/flags.make
-CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o: ../src/EdgeDetector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o"
-	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o -c /home/qqh/projects/RandomForest/src/EdgeDetector.cpp
-
-CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.i"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/qqh/projects/RandomForest/src/EdgeDetector.cpp > CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.i
-
-CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.s"
-	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/qqh/projects/RandomForest/src/EdgeDetector.cpp -o CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.s
-
-CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o.requires:
-
-.PHONY : CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o.requires
-
-CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o.provides: CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o.requires
-	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o.provides.build
-.PHONY : CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o.provides
-
-CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o.provides.build: CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o
 
 
 CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/marker.cpp.o: CMakeFiles/test-particle.dir/flags.make
@@ -1027,10 +1027,10 @@ test__particle_OBJECTS = \
 "CMakeFiles/test-particle.dir/src/DT.cpp.o" \
 "CMakeFiles/test-particle.dir/src/Render.cpp.o" \
 "CMakeFiles/test-particle.dir/src/Transformation.cpp.o" \
+"CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o" \
 "CMakeFiles/test-particle.dir/src/Model.cpp.o" \
 "CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o" \
 "CMakeFiles/test-particle.dir/src/Particle.cpp.o" \
-"CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o" \
 "CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/marker.cpp.o" \
 "CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/glInfo.cpp.o" \
 "CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o" \
@@ -1071,10 +1071,10 @@ test-particle: CMakeFiles/test-particle.dir/src/Quaternion.cpp.o
 test-particle: CMakeFiles/test-particle.dir/src/DT.cpp.o
 test-particle: CMakeFiles/test-particle.dir/src/Render.cpp.o
 test-particle: CMakeFiles/test-particle.dir/src/Transformation.cpp.o
+test-particle: CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o
 test-particle: CMakeFiles/test-particle.dir/src/Model.cpp.o
 test-particle: CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o
 test-particle: CMakeFiles/test-particle.dir/src/Particle.cpp.o
-test-particle: CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o
 test-particle: CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/marker.cpp.o
 test-particle: CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/glInfo.cpp.o
 test-particle: CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o
@@ -1186,10 +1186,10 @@ CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/Quaterni
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/DT.cpp.o.requires
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/Render.cpp.o.requires
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/Transformation.cpp.o.requires
+CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o.requires
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/Model.cpp.o.requires
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o.requires
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/Particle.cpp.o.requires
-CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/src/EdgeDetector.cpp.o.requires
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/marker.cpp.o.requires
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/glInfo.cpp.o.requires
 CMakeFiles/test-particle.dir/requires: CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o.requires
