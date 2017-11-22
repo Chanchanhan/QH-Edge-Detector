@@ -99,9 +99,9 @@ int main(int argc, char* argv[]) {
 	  particlesFilter->update(traker, curFrame, preFrame,frameId);
 
       }
-      
-      traker.m_data.m_model->DisplayCV( particlesFilter->m_particles->ort,curFrame);
+      particlesFilter->resample();
 
+      traker.m_data.m_model->DisplayCV( particlesFilter->m_particles[0].rt,curFrame);
       //to test model  , get its point set ,and try to compute energy
       
       imshow("curFrame",curFrame);

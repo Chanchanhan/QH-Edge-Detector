@@ -325,11 +325,7 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
 	  Mat _J=_j_Energy_X*_j_X_Pose;
 	  Mat _J_T;
 	  cv::transpose(_J,_J_T);
-//	  for(int i=0;i<6;i++){
-//	    mat_b.at<float>(i,lineIndex)=_J_T.at<float>(i,lineIndex)*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
-//	  }
-
-         b+=_J_T*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
+	  b+=_J_T*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
 	}
 	
 
@@ -342,15 +338,7 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
     
 
 
-// 	b+=_J_T*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
-// 	j_X_Pose+=_j_X_Pose;
-// 	j_Energy_X+=_j_Energy_X;  
-
   } 
-  /*
-  LOG(WARNING)<<"_j_X_Pose\n"<<j_X_Pose;
-  LOG(WARNING)<<"_j_Energy_X\n"<<j_Energy_X;*/
-  
   if(Config::configInstance().CV_LINE_P2NP){
     LOG(WARNING)<<"to draw drawFrame";
       m_data.m_model->DisplayCV(prePose,drawFrame);

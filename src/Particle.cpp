@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 
+#include <glog/logging.h>
 #include "Traker/Particle.h"
 #include "Traker/Traker.h"
 #include "GLRenderer/include/glRenderer.h"
@@ -217,6 +218,7 @@ static void update_(Particle *p, Traker &tracker, cv::Mat frame, cv::Mat prevFra
 	register float *trt = p->trt;
 	register float *ort = p->ort;
 	register float *arVel = p->arVel;
+	LOG(WARNING)<<"rt :"<<" "<<rt[0]<<" "<<rt[1]<<" "<<rt[2]<<" "<<rt[3]<<" "<<rt[4]<<" "<<rt[5];
 
 	// refine the transited rt by 3d tracking method
 	float e2 = 1E12;
@@ -228,7 +230,7 @@ static void update_(Particle *p, Traker &tracker, cv::Mat frame, cv::Mat prevFra
 	float ort_[6] = { ort[3], ort[4], ort[5], ort[0], ort[1], ort[2] }; // translation vector ,then rotation vector
 	liegroups::SE3<float> arVel_SE3, rt_SE3, ort_SE3;
 #endif
-	if (ret==0)
+	if (/*ret==0*/1)
 	{
 		if (useAR)
 		{
@@ -250,6 +252,7 @@ static void update_(Particle *p, Traker &tracker, cv::Mat frame, cv::Mat prevFra
 			}
 #endif
 		}
+	LOG(WARNING)<<"rt :"<<" "<<ort[0]<<" "<<ort[1]<<" "<<ort[2]<<" "<<ort[3]<<" "<<ort[4]<<" "<<ort[5];
 
 		// update the rt from ort
 		memcpy(rt, ort, 6*sizeof(float));
