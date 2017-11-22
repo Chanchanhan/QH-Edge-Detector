@@ -21,11 +21,11 @@ namespace OD
     bool USE_GT;
     int START_INDEX;
     bool CV_LINE_P2NP;
-    float DIST_MASK_SIZE;
-    unsigned int MAX_ITERATIN_NUM;
+    float IMG_DIST_MASK_SIZE;
+    unsigned int OPTIMIZER_MAX_ITERATIN_NUM;
     float OPTIMIZER_NEASTP_THREHOLD;
     float OPTIMIZER_POINT_THREHOLD;
-    float THREHOLD_ENERGY;
+    float OPTIMIZER_THREHOLD_ENERGY;
     float CV_CIRCLE_RADIUS;
     float CV_DRAW_FRAME;
     float DX_SIZE ;
@@ -65,7 +65,7 @@ namespace OD
 	Config::configInstance().camCalibration = OD::CameraCalibration(config.value_f("Calib_FX"),config.value_f("Calib_FY"),config.value_f("Calib_CX"),config.value_f("Calib_CY"));
 	Config::configInstance().model = glmReadOBJ(const_cast<char*>(Config::configInstance().objFile.c_str()));
 	Config::configInstance().START_INDEX=std::lround(config.value_f("Init_Frame_Index"));
-	Config::configInstance().DIST_MASK_SIZE=config.value_f("DIST_MASK_SIZE");
+	Config::configInstance().IMG_DIST_MASK_SIZE=config.value_f("IMG_DIST_MASK_SIZE");
 	Config::configInstance().USE_GT=std::lround(config.value_f("USE_GT_DATA"));
       }
 
@@ -73,8 +73,8 @@ namespace OD
       {
 	Config::configInstance().OPTIMIZER_NEASTP_THREHOLD=config.value_f("OPTIMIZER_NEASTP_THREHOLD");
 	Config::configInstance().OPTIMIZER_POINT_THREHOLD=config.value_f("OPTIMIZER_POINT_THREHOLD");
-	Config::configInstance().MAX_ITERATIN_NUM=std::lround(config.value_f("MAX_ITERATIN_NUM"));
-	Config::configInstance().THREHOLD_ENERGY=config.value_f("THREHOLD_ENERGY");
+	Config::configInstance().OPTIMIZER_MAX_ITERATIN_NUM=std::lround(config.value_f("OPTIMIZER_MAX_ITERATIN_NUM"));
+	Config::configInstance().OPTIMIZER_THREHOLD_ENERGY=config.value_f("OPTIMIZER_THREHOLD_ENERGY");
 	Config::configInstance().DX_SIZE=config.value_f("DX_SIZE");
 	Config::configInstance().NX_LENGTH=config.value_f("NX_LENGTH");
 	Config::configInstance().ENERGY_SIZE=config.value_f("ENERGY_SIZE");

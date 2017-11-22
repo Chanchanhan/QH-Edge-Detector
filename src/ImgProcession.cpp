@@ -29,7 +29,10 @@ void ImgProcession::getDistanceTransform(const Mat &src, const float &mask, Mat&
   distanceTransform(input,dst,locations,weights);
 //   imshow("dst",dst);
 }
+void ImgProcession::getGussainPYR(const Mat& src,const  int& nPYR, std::vector< Mat >& dsts)
+{
 
+}
 
 void ImgProcession::DealWithFrameAsMRWang(const Mat& src, Mat& distMap)
 {
@@ -48,7 +51,7 @@ void ImgProcession::DealWithFrameAsMRWang(const Mat& src, Mat& distMap)
   waitKey(0);
 }
 
-cv::Mat ImgProcession::toTistanceTransform(cv::Mat src)
+cv::Mat ImgProcession::toTistanceTransform(const  cv::Mat &src)
 {
   Mat bw;
      
@@ -75,7 +78,7 @@ cv::Mat ImgProcession::toTistanceTransform(cv::Mat src)
 
       
  
-Mat ImgProcession::edgeCanny(Mat src)
+Mat ImgProcession::edgeCanny(const Mat &src)
 {
 
   Mat  src_gray, dst, detected_edges;
@@ -95,7 +98,7 @@ Mat ImgProcession::edgeCanny(Mat src)
   return dst;
 }
 
-cv::Mat ImgProcession::extractEdgeOfImg(Mat src){
+cv::Mat ImgProcession::extractEdgeOfImg(Mat &src){
     Mat3f fsrc;
     src.convertTo(fsrc, CV_32F, 1.0 / 255.0);
     Mat1f edges;

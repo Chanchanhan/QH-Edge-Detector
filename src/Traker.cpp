@@ -80,15 +80,15 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
     Transformation newTransformation;
     m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());    
     float e2 = computeEnergy(distFrame, m_Transformation.Pose());
-    if(e2<Config::configInstance().THREHOLD_ENERGY){
+    if(e2<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
 	finalE2 =e2;
 	return 1;
       }else{      
 	
-	LOG(WARNING)<<"to optimize with energy = "<<e2<<"m_Transformation : "<<m_Transformation.M_Pose()<<" Config::configInstance().THREHOLD_ENERGY = "<<Config::configInstance().THREHOLD_ENERGY;	
+	LOG(WARNING)<<"to optimize with energy = "<<e2<<"m_Transformation : "<<m_Transformation.M_Pose()<<" Config::configInstance().OPTIMIZER_THREHOLD_ENERGY = "<<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY;	
     }
-    while(++itration_num<Config::configInstance().MAX_ITERATIN_NUM){    
+    while(++itration_num<Config::configInstance().OPTIMIZER_MAX_ITERATIN_NUM){    
       Sophus::SE3 T_SE3;	      
       LOG(INFO)<<"a itration_num = " <<itration_num;
       cv::Mat _A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1),A= cv::Mat::zeros(6,6,CV_32FC1);      
@@ -126,7 +126,7 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
 
 #ifndef EDF_TRAKER
       while(e2_new>=e2){	 	
-	  if(itration_num>Config::configInstance().MAX_ITERATIN_NUM){
+	  if(itration_num>Config::configInstance().OPTIMIZER_MAX_ITERATIN_NUM){
 	    LOG(INFO)<<"to much itration_num!";
 	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
 	    finalE2= computeEnergy(distFrame, _newPose);
@@ -185,7 +185,7 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
 	e2= e2_new;
 	lamda=Config::configInstance().INIT_LAMDA;
       }
-      if(e2_new<Config::configInstance().THREHOLD_ENERGY){
+      if(e2_new<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
 	LOG(WARNING)<<"succees optimize!";
 	memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
 	finalE2 =computeEnergy(distFrame, _newPose);
@@ -810,7 +810,7 @@ void Traker::UpdateStateLM(const cv::Mat &dx, const float * pose_Old, float * po
 void Traker::getDistMap(const Mat& frame)
 {
     auto edgeDetector = std::make_unique<ED::ImgProcession>();
-    edgeDetector->getDistanceTransform(frame,Config::configInstance().DIST_MASK_SIZE,distFrame,locationsMat);
+    edgeDetector->getDistanceTransform(frame,Config::configInstance().IMG_DIST_MASK_SIZE,distFrame,locationsMat);
 }
 
 

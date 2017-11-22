@@ -22,11 +22,12 @@ public:
   ImgProcession();
   ~ImgProcession();
   ImgProcession(std::string modelFilename);
-  Mat edgeCanny(Mat src);
-  Mat extractEdgeOfImg(Mat src);
-  void getDistanceTransform(const Mat &,const float &mask, Mat &dst, Mat& locations);
-  Mat toTistanceTransform(Mat src);
-  void DealWithFrameAsMRWang(const Mat &src,Mat &dist);
+  cv::Mat edgeCanny(const cv::Mat &src);
+  cv::Mat extractEdgeOfImg(cv::Mat &src);
+  void getDistanceTransform(const cv::Mat &,const float &mask, cv::Mat &dst, cv::Mat& locations);
+  cv::Mat toTistanceTransform(const cv::Mat &src);
+  void DealWithFrameAsMRWang(const cv::Mat &src,cv::Mat &dist);
+  void getGussainPYR(const cv::Mat &src,const int &nPYR,std::vector<cv::Mat> &dsts); 
 private :
   int edgeThresh ;
   int lowThreshold;

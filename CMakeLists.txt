@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.6)
 project(ml)
 include_directories(include)
 include_directories(3rdparty)
-file(GLOB headers include/andres/* include/andres/ml/* 3rdparty/GLRenderer/include/* 3rdparty/POSEST/include/*  3rdparty/POSEST/include/levmar/* 3rdparty/POSEST/include/mlsl/* include/Image/* include/tools/* include/Traker/* include/Detecting/*)
+file(GLOB headers include/andres/* include/andres/ml/* 3rdparty/GLRenderer/include/* 3rdparty/POSEST/include/*  3rdparty/POSEST/include/levmar/* 3rdparty/POSEST/include/mlsl/* include/Image/* include/tools/* include/Traker/* include/Detector/*)
 enable_testing()
 
 aux_source_directory(./src/  SRC_LIST)
