@@ -731,3 +731,20 @@ Linking C executable cmTC_d2d3f
 make[1]: Leaving directory '/home/qqh/projects/RandomForest/cmake-build-debug/CMakeFiles/CMakeTmp'
 
 
+Performing C++ SOURCE FILE Test COMPILER_SUPPORTS_CXX14 succeeded with the following output:
+Change Dir: /home/qqh/projects/RandomForest/cmake-build-debug/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_52151/fast"
+make[1]: Entering directory '/home/qqh/projects/RandomForest/cmake-build-debug/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_52151.dir/build.make CMakeFiles/cmTC_52151.dir/build
+make[2]: Entering directory '/home/qqh/projects/RandomForest/cmake-build-debug/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_52151.dir/src.cxx.o
+/usr/bin/c++    -DCOMPILER_SUPPORTS_CXX14   -std=c++14 -o CMakeFiles/cmTC_52151.dir/src.cxx.o -c /home/qqh/projects/RandomForest/cmake-build-debug/CMakeFiles/CMakeTmp/src.cxx
+Linking CXX executable cmTC_52151
+/home/qqh/workspace/clion-2017.2.3/bin/cmake/bin/cmake -E cmake_link_script CMakeFiles/cmTC_52151.dir/link.txt --verbose=1
+/usr/bin/c++   -DCOMPILER_SUPPORTS_CXX14    -rdynamic CMakeFiles/cmTC_52151.dir/src.cxx.o  -o cmTC_52151 
+make[2]: Leaving directory '/home/qqh/projects/RandomForest/cmake-build-debug/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/qqh/projects/RandomForest/cmake-build-debug/CMakeFiles/CMakeTmp'
+
+Source file was:
+int main() { return 0; }

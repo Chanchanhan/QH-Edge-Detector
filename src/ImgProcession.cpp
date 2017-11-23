@@ -9,15 +9,15 @@ ImgProcession::ImgProcession()
   lowThreshold = 20;
 }
 
-void ImgProcession::getDistanceTransform(const Mat &src, const float &mask, Mat& dst, Mat& locations)
+void ImgProcession::getDistanceTransform(const cv::Mat &src, const float &mask, cv::Mat& dst, cv::Mat& locations)
 {
   using namespace std;
   cv::Mat edge =edgeCanny(src);
   cv::cvtColor(edge, edge, CV_BGR2GRAY);  
   edge=~edge;
-//   imshow("edge",edge);
+//   cv::imshow("edge",edge);
 
-  cv::Mat input=Mat::zeros(edge.size(),CV_32FC1);
+  cv::Mat input=cv::Mat::zeros(edge.size(),CV_32FC1);
   edge.convertTo(input,CV_32FC1, 1/*/255.0f*/);	
   vector<float> weights;	
   weights.push_back(mask);	
@@ -27,33 +27,40 @@ void ImgProcession::getDistanceTransform(const Mat &src, const float &mask, Mat&
   int imageWidth=dst.size().width;
 
   distanceTransform(input,dst,locations,weights);
-//   imshow("dst",dst);
+//   cv::imshow("dst",dst);
 }
-void ImgProcession::getGussainPYR(const Mat& src,const  int& nPYR, std::vector< Mat >& dsts)
+void ImgProcession::getGussainPYR(const cv::Mat& src,const  int& nPYR, std::vector< cv::Mat >& dsts)
 {
+  cv::Mat tmp=src.clone();
+  dsts.push_back(tmp.clone());
+  for(int i=1;i<nPYR;++i){
+    cv::pyrDown(tmp,tmp,cv::Size(tmp.cols*0.5f, tmp.rows*0.5f));
 
+    dsts.push_back(tmp.clone());
+    
+  }
 }
 
-void ImgProcession::DealWithFrameAsMRWang(const Mat& src, Mat& distMap)
+void ImgProcession::DealWithFrameAsMRWang(const cv::Mat& src, cv::Mat& distMap)
 {
-  Mat frameGray;
+  cv::Mat frameGray;
   cvtColor(src, frameGray, CV_BGR2GRAY);
-  Mat frameEdge,frameCanny;
+  cv::Mat frameEdge,frameCanny;
   double lowThres = 20, highThres = 60; //20, 60  //50, 100
   cv::blur(frameGray, frameGray, cv::Size(3, 3));
   cv::Canny(frameGray, frameCanny, lowThres, highThres);
   std::cout<<"canny finished\n";
 //   distMap=toTistanceTransform(frameCanny);
-  imshow("frameCanny",frameCanny);
+  cv::imshow("frameCanny",frameCanny);
 
   cv::distanceTransform(~frameCanny, distMap, CV_DIST_L2, 3);// the distance to zero pixels
-  imshow("distMap",distMap);
-  waitKey(0);
+  cv::imshow("distMap",distMap);
+  cv::waitKey(0);
 }
 
 cv::Mat ImgProcession::toTistanceTransform(const  cv::Mat &src)
 {
-  Mat bw;
+  cv::Mat bw;
      
   cvtColor(src, bw, CV_BGR2GRAY);
   cv::adaptiveThreshold(bw,   // Input image
@@ -67,51 +74,51 @@ cv::Mat ImgProcession::toTistanceTransform(const  cv::Mat &src)
 
   bw=~bw;
   
-  Mat dist;
+  cv::Mat dist;
   cv::distanceTransform(bw, dist, CV_DIST_L2, 5);
   // Normalize the distance image for range = {0.0, 1.0}
   // so we can visualize and threshold it
-  normalize(dist, dist, 0, 1., NORM_MINMAX);
+  normalize(dist, dist, 0, 1., cv::NORM_MINMAX);
   return dist;
   
 }
 
       
  
-Mat ImgProcession::edgeCanny(const Mat &src)
+cv::Mat ImgProcession::edgeCanny(const cv::Mat &src)
 {
 
-  Mat  src_gray, dst, detected_edges;
+  cv::Mat  src_gray, dst, detected_edges;
   cv::cvtColor( src, src_gray, cv::COLOR_BGR2GRAY );
 
   dst.create( src.size(), src.type() );
-  cv::blur( src_gray, detected_edges, Size(3,3) );
+  cv::blur( src_gray, detected_edges, cv::Size(3,3) );
   cv::Canny( detected_edges, detected_edges, lowThreshold, lowThreshold*ratio, kernel_size );
 
-  dst = Scalar::all(0);
+  dst = cv::Scalar::all(0);
   src.copyTo( dst, detected_edges);
 //   cv::cvtColor(dst, dst, CV_BGR2GRAY);
 //   cv::cvtColor(dst, dst, CV_GRAY2BGR);
 
-//   imshow( "canny dst", dst );
-//   waitKey(0);
+//   cv::imshow( "canny dst", dst );
+//   cv::waitKey(0);
   return dst;
 }
 
-cv::Mat ImgProcession::extractEdgeOfImg(Mat &src){
-    Mat3f fsrc;
+cv::Mat ImgProcession::extractEdgeOfImg(cv::Mat &src){
+    cv::Mat3f fsrc;
     src.convertTo(fsrc, CV_32F, 1.0 / 255.0);
-    Mat1f edges;
+    cv::Mat1f edges;
     pDollar->detectEdges(fsrc, edges);
 
-//      imshow("Edges", edges);
-//      waitKey(0);
+//      cv::imshow("Edges", edges);
+//      cv::waitKey(0);
     return edges;
 }
 ImgProcession::ImgProcession(std::string modelFilename)
 {
   std::cout<<modelFilename<<std::endl;
-   pDollar = ximgproc::createStructuredEdgeDetection(modelFilename);
+   pDollar = cv::ximgproc::createStructuredEdgeDetection(modelFilename);
 }
 
 ImgProcession::~ImgProcession()

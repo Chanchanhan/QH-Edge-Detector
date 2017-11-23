@@ -66,6 +66,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
-  "CMakeFiles/test-particle.dir/DependInfo.cmake"
+  "CMakeFiles/test-obj-detector.dir/DependInfo.cmake"
   "CMakeFiles/test-optimizer.dir/DependInfo.cmake"
+  "CMakeFiles/test-particle.dir/DependInfo.cmake"
   )

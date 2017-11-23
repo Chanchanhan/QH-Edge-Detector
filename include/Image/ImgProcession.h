@@ -11,7 +11,6 @@
 #include<glog/logging.h>
 #include"Image/DT.hpp"
 
-using namespace cv;
 
 // using namespace cv::ximgproc;
 namespace ED{
@@ -34,7 +33,7 @@ private :
   int  max_lowThreshold ;
   int ratio;
   int kernel_size  ;
-  Ptr<ximgproc::StructuredEdgeDetection> pDollar;
+  cv::Ptr<cv::ximgproc::StructuredEdgeDetection> pDollar;
 };
 
 

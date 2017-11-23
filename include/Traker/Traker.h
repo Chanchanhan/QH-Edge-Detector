@@ -12,17 +12,15 @@ namespace OD
 {
 	struct Data
 	{
-		PointSet m_pointset;
+// 		PointSet m_pointset;
 		Model* m_model;
 // 		Correspondence* m_correspondence;
-		int m_n;
-
-		cv::Mat m_frame;
-
+// 		int m_n;
+// 		cv::Mat m_frame;
 		//for robust m-estimation
-		float m_weight[1000];
-		float m_residual[1000];
-		float m_jac[1000][6];
+// 		float m_weight[1000];
+// 		float m_residual[1000];
+// 		float m_jac[1000][6];
 	};
 
 	

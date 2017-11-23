@@ -15,13 +15,15 @@ namespace OD
     Camera camera;
     GLMmodel* model;
     CameraCalibration camCalibration ;
+    float IMG_DIST_MASK_SIZE;
+    int IMG_PYR_NUMBER;
     int VIDEO_WIDTH;
     int VIDEO_HEIGHT;
     double fps;
     bool USE_GT;
     int START_INDEX;
     bool CV_LINE_P2NP;
-    float IMG_DIST_MASK_SIZE;
+
     unsigned int OPTIMIZER_MAX_ITERATIN_NUM;
     float OPTIMIZER_NEASTP_THREHOLD;
     float OPTIMIZER_POINT_THREHOLD;
@@ -59,16 +61,21 @@ namespace OD
     void loadConfig(TL::OcvYamlConfig &config){
       //parameters for init
       {
+
 	Config::configInstance().objFile = config.text("Input.Directory.Obj");;
 	Config::configInstance().videoPath =config.text("Input.Directory.Video");
 	Config::configInstance().gtFile= config.text("Input.Directory.GroudTruth");
 	Config::configInstance().camCalibration = OD::CameraCalibration(config.value_f("Calib_FX"),config.value_f("Calib_FY"),config.value_f("Calib_CX"),config.value_f("Calib_CY"));
 	Config::configInstance().model = glmReadOBJ(const_cast<char*>(Config::configInstance().objFile.c_str()));
 	Config::configInstance().START_INDEX=std::lround(config.value_f("Init_Frame_Index"));
-	Config::configInstance().IMG_DIST_MASK_SIZE=config.value_f("IMG_DIST_MASK_SIZE");
 	Config::configInstance().USE_GT=std::lround(config.value_f("USE_GT_DATA"));
       }
+      //parameters for Detect
+      {
+	Config::configInstance().IMG_DIST_MASK_SIZE=config.value_f("IMG_DIST_MASK_SIZE");
+	Config::configInstance().IMG_PYR_NUMBER=std::lround(config.value_f("IMG_PYR_NUMBER"));
 
+      }
       //parameters for optimize
       {
 	Config::configInstance().OPTIMIZER_NEASTP_THREHOLD=config.value_f("OPTIMIZER_NEASTP_THREHOLD");

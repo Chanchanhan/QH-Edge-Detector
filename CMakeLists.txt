@@ -115,10 +115,11 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 # targets
 ##############################################################################
 # 
-# add_executable(test-obj-detector src/unittest/test-obj-detector.cpp ${headers} ${SRC_LIST})
-# add_test(test-obj-detector test-obj-detector)
-# target_link_libraries( test-obj-detector  ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}   ${Sophus_LIBRARIES} glog::glog   -O2 blas lapack
-# ) # exe 链接 OpenCV
+
+add_executable(test-obj-detector src/unittest/test-obj-detector.cpp ${headers} ${SRC_LIST})
+add_test(test-obj-detector test-obj-detector)
+target_link_libraries( test-obj-detector  ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}   ${Sophus_LIBRARIES} glog::glog   -O2 blas lapack
+) # exe 链接 OpenCV
 
 
 # add_executable(test-DT src/unittest/test-DT.cpp ${headers} ${SRC_LIST})

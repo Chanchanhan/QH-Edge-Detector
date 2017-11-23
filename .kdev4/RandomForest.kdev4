@@ -243,8 +243,15 @@ Name=test-obj-detector
 Type=Native Application
 
 [Launch][Launch Configuration 5][Data]
+Arguments=./../TrackConfig.yaml
 Configured from ProjectItem=RandomForest,test-obj-detector
+Dependencies=@Variant(\x00\x00\x00\t\x00\x00\x00\x00\x00)
+Dependency Action=Nothing
+EnvironmentGroup=
+Executable=file:///home/qqh/projects/RandomForest/
+External Terminal=konsole --noclose --workdir %workdir -e %exe
 Project Target=RandomForest,test-obj-detector
+Use External Terminal=false
 Working Directory=file:///home/qqh/projects/RandomForest/build/
 isExecutable=false
 

@@ -552,7 +552,7 @@ int Traker::edfTracker(const float* prePose, const Mat& distMap,const  int NLref
 */
 void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *coarsePose)
 {
-  m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
+//   m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
   float energy =0;
   int size =0;
   Mat intrinsic = m_data.m_model->getIntrinsic();
@@ -629,7 +629,7 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
 
 float Traker::computeEnergy(const cv::Mat& distFrame,const float * pose)
 {
-  m_data.m_model->GetImagePoints(pose, m_data.m_pointset);
+//   m_data.m_model->GetImagePoints(pose, m_data.m_pointset);
   float energy =0;
   int size =0;
   Mat intrinsic = m_data.m_model->getIntrinsic();
