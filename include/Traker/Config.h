@@ -28,6 +28,7 @@ namespace OD
     float OPTIMIZER_NEASTP_THREHOLD;
     float OPTIMIZER_POINT_THREHOLD;
     float OPTIMIZER_THREHOLD_ENERGY;
+    float OPTIMIZER_COARSE_POSE_SIZE;
     float CV_CIRCLE_RADIUS;
     float CV_DRAW_FRAME;
     float DX_SIZE ;
@@ -78,6 +79,7 @@ namespace OD
       }
       //parameters for optimize
       {
+	Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE=config.value_f("OPTIMIZER_COARSE_POSE_SIZE");
 	Config::configInstance().OPTIMIZER_NEASTP_THREHOLD=config.value_f("OPTIMIZER_NEASTP_THREHOLD");
 	Config::configInstance().OPTIMIZER_POINT_THREHOLD=config.value_f("OPTIMIZER_POINT_THREHOLD");
 	Config::configInstance().OPTIMIZER_MAX_ITERATIN_NUM=std::lround(config.value_f("OPTIMIZER_MAX_ITERATIN_NUM"));

@@ -97,10 +97,14 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
       float coarsePose[6]={0};
 	getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
 	LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
-//      if(computeEnergy(distFrame,coarsePose)<computeEnergy(distFrame,m_Transformation.Pose())){
+     if(computeEnergy(distFrame,coarsePose)<=(Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE*computeEnergy(distFrame,m_Transformation.Pose()))){
 	  m_Transformation.setPose(coarsePose,true);	  
 // 	 LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
+     }
+     else{
+       LOG(WARNING)<<"not update to coarse pose"<<m_Transformation.M_Pose();
 
+    }
       }
 
       constructEnergyFunction2(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
@@ -268,8 +272,8 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
 		
 	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
 
-	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE||
-	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD){
+	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE/*||
+	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD*/){
 	  continue;
 	}
 	if(Config::configInstance().CV_LINE_P2NP){      

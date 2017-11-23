@@ -13,60 +13,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ef1ec94-b561-4d11-84da-36eb71097a79" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/EdgeDetector.cpp.o" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o" afterPath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/Model.cpp.o" afterPath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/Model.cpp.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/Particle.cpp.o" afterPath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/Particle.cpp.o" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/Traker.cpp.o" afterPath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/Traker.cpp.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o" afterPath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/test-optimizer" afterPath="$PROJECT_DIR$/build/test-optimizer" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/Model.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/Model.cpp.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/Particle.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/Particle.cpp.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/Traker.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/Traker.cpp.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/test-optimizer" afterPath="$PROJECT_DIR$/cmake-build-debug/test-optimizer" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.kdev4/RandomForest.kdev4" afterPath="$PROJECT_DIR$/.kdev4/RandomForest.kdev4" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CMakeLists.txt" afterPath="$PROJECT_DIR$/CMakeLists.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/Makefile.cmake" afterPath="$PROJECT_DIR$/build/CMakeFiles/Makefile.cmake" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/Makefile2" afterPath="$PROJECT_DIR$/build/CMakeFiles/Makefile2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/TargetDirectories.txt" afterPath="$PROJECT_DIR$/build/CMakeFiles/TargetDirectories.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/progress.marks" afterPath="$PROJECT_DIR$/build/CMakeFiles/progress.marks" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/progress.make" afterPath="$PROJECT_DIR$/build/CMakeFiles/test-optimizer.dir/progress.make" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CMakeFiles/test-particle.dir/progress.make" afterPath="$PROJECT_DIR$/build/CMakeFiles/test-particle.dir/progress.make" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/CTestTestfile.cmake" afterPath="$PROJECT_DIR$/build/CTestTestfile.cmake" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/Makefile" afterPath="$PROJECT_DIR$/build/Makefile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/CXX.includecache" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/CXX.includecache" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/DependInfo.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/DependInfo.cmake" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/build.make" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/build.make" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/cmake_clean.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/cmake_clean.cmake" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/depend.internal" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/depend.internal" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/depend.make" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/depend.make" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/link.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/link.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/progress.make" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-optimizer.dir/progress.make" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/DependInfo.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/DependInfo.cmake" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/build.make" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/build.make" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/cmake_clean.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/cmake_clean.cmake" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/link.txt" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/link.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/progress.make" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/test-particle.dir/progress.make" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/CTestTestfile.cmake" afterPath="$PROJECT_DIR$/cmake-build-debug/CTestTestfile.cmake" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cmake-build-debug/ml.cbp" afterPath="$PROJECT_DIR$/cmake-build-debug/ml.cbp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/Image/ImgProcession.h" afterPath="$PROJECT_DIR$/include/Image/ImgProcession.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/Traker/Config.h" afterPath="$PROJECT_DIR$/include/Traker/Config.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/include/Traker/Traker.h" afterPath="$PROJECT_DIR$/include/Traker/Traker.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ImgProcession.cpp" afterPath="$PROJECT_DIR$/src/ImgProcession.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Model.cpp" afterPath="$PROJECT_DIR$/src/Model.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/test-particle" afterPath="$PROJECT_DIR$/build/test-particle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/TrackConfig.yaml" afterPath="$PROJECT_DIR$/TrackConfig.yaml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Traker.cpp" afterPath="$PROJECT_DIR$/src/Traker.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/unittest/test-obj-detector.cpp" afterPath="$PROJECT_DIR$/src/unittest/test-obj-detector.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/unittest/test-optimizer.cpp" afterPath="$PROJECT_DIR$/src/unittest/test-optimizer.cpp" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -84,7 +35,7 @@
             <state relative-caret-position="341">
               <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
               <folding>
-                <marker date="1511359547378" expanded="true" signature="3037:3548" ph="{...}" />
+                <marker date="1511360629234" expanded="true" signature="3037:3548" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -95,7 +46,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="176">
               <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-              <folding />
+              <folding>
+                <marker date="1511407511191" expanded="true" signature="1423:5698" ph="{...}" />
+                <marker date="1511407511191" expanded="true" signature="24521:24954" ph="{...}" />
+                <marker date="1511407511191" expanded="true" signature="25102:25673" ph="{...}" />
+                <marker date="1511407511191" expanded="true" signature="25832:27050" ph="{...}" />
+                <marker date="1511407511191" expanded="true" signature="26845:27048" ph="/.../" />
+                <marker date="1511407511191" expanded="true" signature="27158:27381" ph="{...}" />
+                <marker date="1511407511191" expanded="true" signature="27493:28706" ph="{...}" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -123,8 +82,8 @@
       <file leaf-file-name="Model.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Model.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="428">
-              <caret line="425" column="59" lean-forward="false" selection-start-line="425" selection-start-column="59" selection-end-line="425" selection-end-column="59" />
+            <state relative-caret-position="122">
+              <caret line="408" column="59" lean-forward="false" selection-start-line="408" selection-start-column="59" selection-end-line="408" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -256,12 +215,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1511249268770</updated>
-      <workItem from="1511249269985" duration="1575000" />
+      <workItem from="1511249269985" duration="2174000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1575000" />
+    <option name="totallyTimeSpent" value="2174000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
@@ -277,7 +236,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18594356" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="LuaJ" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39935413" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39935413" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -339,7 +298,7 @@
         <state relative-caret-position="341">
           <caret line="55" column="0" lean-forward="false" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
           <folding>
-            <marker date="1511359547378" expanded="true" signature="3037:3548" ph="{...}" />
+            <marker date="1511360629234" expanded="true" signature="3037:3548" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -356,14 +315,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
           <caret line="80" column="0" lean-forward="false" selection-start-line="80" selection-start-column="0" selection-end-line="80" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1511407511191" expanded="true" signature="1423:5698" ph="{...}" />
+            <marker date="1511407511191" expanded="true" signature="24521:24954" ph="{...}" />
+            <marker date="1511407511191" expanded="true" signature="25102:25673" ph="{...}" />
+            <marker date="1511407511191" expanded="true" signature="25832:27050" ph="{...}" />
+            <marker date="1511407511191" expanded="true" signature="26845:27048" ph="/.../" />
+            <marker date="1511407511191" expanded="true" signature="27158:27381" ph="{...}" />
+            <marker date="1511407511191" expanded="true" signature="27493:28706" ph="{...}" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Model.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="425" column="59" lean-forward="false" selection-start-line="425" selection-start-column="59" selection-end-line="425" selection-end-column="59" />
+        <state relative-caret-position="122">
+          <caret line="408" column="59" lean-forward="false" selection-start-line="408" selection-start-column="59" selection-end-line="408" selection-end-column="59" />
           <folding />
         </state>
       </provider>
