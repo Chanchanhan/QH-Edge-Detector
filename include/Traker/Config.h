@@ -42,7 +42,7 @@ namespace OD
     bool  USE_SOPHUS ;
     bool  USE_PNP;
     bool  USE_MY_TRANSFORMATION ;
-    float MAX_VALIAD_DISTANCE ;
+    float OPTIMIZER_MAX_EDGE_DISTANCE ;
     bool PARTICLE_USE ;
     float PARTICLE_ROTATION_GAUSSIAN_STD;
     float PARTICLE_TRANSLATION_GAUSSIAN_STD;
@@ -91,7 +91,7 @@ namespace OD
 	Config::configInstance().THREHOLD_DX=config.value_f("THREHOLD_DX");
 	Config::configInstance().USE_PNP=std::lround(config.value_f("USE_PNP"))== 1;;
 	Config::configInstance().USE_MY_TRANSFORMATION=std::lround(config.value_f("USE_MY_TRANSFORMATION"))== 1;
-	Config::configInstance().MAX_VALIAD_DISTANCE=config.value_f("MAX_VALIAD_DISTANCE");
+	Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE=config.value_f("OPTIMIZER_MAX_EDGE_DISTANCE");
 	Config::configInstance().J_SIZE=config.value_f("J_SIZE");
 	Config::configInstance().USE_SOPHUS=std::lround(config.value_f("USE_SOPHUS"))== 1;;
 	Config::configInstance().USE_MY_TRANSFORMATION=std::lround(config.value_f("USE_MY_TRANSFORMATION"))== 1;;

@@ -183,13 +183,12 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
 //         m_Transformation.setPose(newTransformation.M_Pose());
 
 	e2= e2_new;
-	lamda=Config::configInstance().INIT_LAMDA;
+	lamda/=Config::configInstance().LM_STEP;
       }
       if(e2_new<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
 	LOG(WARNING)<<"succees optimize!";
 	memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
 	finalE2 =computeEnergy(distFrame, _newPose);
-
 	return 1;
 	
       }
@@ -269,7 +268,7 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
 		
 	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
 
-	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE||
+	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE||
 	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD){
 	  continue;
 	}
@@ -400,7 +399,7 @@ void Traker::constructEnergyFunction(const cv::Mat distFrame,const float* prePos
 		
 	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
 
-	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE||
+	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE||
 	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD){
 	  continue;
 	}
@@ -589,7 +588,7 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
 	Point point= m_data.m_model->X_to_x(X,extrinsic);
 	Point nearst=getNearstPointLocation(point);
 	float dist2Edge=getDistanceToEdege(point1,point2,nearst);
-	if(distMap.at<float>(nearst)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD/*||dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE*/){
+	if(distMap.at<float>(nearst)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD/*||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE*/){
 	  continue;
 	}
 	 objectPoints.push_back(Point3d(X.x,X.y,X.z));
@@ -675,11 +674,17 @@ float Traker::computeEnergy(const cv::Mat& distFrame,const float * pose)
 	 if(de2==255.f){
 	    de2*=10;
 	 }
-// 	 if(dist2Edge>Config::configInstance().MAX_VALIAD_DISTANCE){
+	 if(distFrame.at<float>(nearst)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE||
+	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD){
 // 	   size--;
-// 	   continue;
-// 	 }
-// 	 de2*=(1-pow( dist2Edge/Config::configInstance().MAX_VALIAD_DISTANCE,2));
+	   de2*=(1+1
+// 	   +distFrame.at<float>(nearst)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD?1:0
+// 	   +dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE?1:0
+// 	   +distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD?1:0
+// 	   continue
+	      );
+	 }
+// 	 de2*=(1-pow( dist2Edge/Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE,2));
 	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << distFrame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y<<" dist2Edge ="<< dist2Edge;	 
 //	 if(DX<Config::configInstance().THREHOLD_DX||DX<meanE_LINE*meanE_LINE){
 	  energy+=de2;

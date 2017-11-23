@@ -82,20 +82,6 @@ stdint.h
 
 ../3rdparty/POSEST/include/sam.h
 
-../include/Detector/marker.h
-vector
--
-iostream
--
-opencv2/opencv.hpp
--
-
-../include/Detector/markerDetector.h
-vector
--
-opencv2/opencv.hpp
--
-
 ../include/Image/DT.hpp
 opencv2/opencv.hpp
 -
@@ -468,6 +454,20 @@ GLUT/glut.h
 GL/freeglut.h
 -
 
+/home/qqh/projects/RandomForest/3rdparty/GLRenderer/include/marker.h
+vector
+-
+iostream
+-
+opencv2/opencv.hpp
+-
+
+/home/qqh/projects/RandomForest/3rdparty/GLRenderer/include/markerDetector.h
+vector
+-
+opencv2/opencv.hpp
+-
+
 /home/qqh/projects/RandomForest/3rdparty/GLRenderer/include/timer.h
 windows.h
 -
@@ -521,18 +521,18 @@ assert.h
 /home/qqh/projects/RandomForest/3rdparty/GLRenderer/include/glm.h
 
 /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/marker.cpp
-Detector/marker.h
-/home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/Detector/marker.h
+../include/marker.h
+/home/qqh/projects/RandomForest/3rdparty/GLRenderer/include/marker.h
 
 /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/markerDetector.cpp
 iostream
 -
 sstream
 -
-Detector/markerDetector.h
-/home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/Detector/markerDetector.h
-Detector/marker.h
-/home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/Detector/marker.h
+../include/markerDetector.h
+/home/qqh/projects/RandomForest/3rdparty/GLRenderer/include/markerDetector.h
+../include/marker.h
+/home/qqh/projects/RandomForest/3rdparty/GLRenderer/include/marker.h
 ../include/cvCamera.h
 /home/qqh/projects/RandomForest/3rdparty/GLRenderer/include/cvCamera.h
 
@@ -705,22 +705,6 @@ math.h
 -
 Traker/Transformation.h
 /home/qqh/projects/RandomForest/src/Traker/Transformation.h
-
-/home/qqh/projects/RandomForest/src/marker.cpp
-Detector/marker.h
-/home/qqh/projects/RandomForest/src/Detector/marker.h
-
-/home/qqh/projects/RandomForest/src/markerDetector.cpp
-iostream
--
-sstream
--
-Detector/markerDetector.h
-/home/qqh/projects/RandomForest/src/Detector/markerDetector.h
-Detector/marker.h
-/home/qqh/projects/RandomForest/src/Detector/marker.h
-GLRenderer/include/cvCamera.h
-/home/qqh/projects/RandomForest/src/GLRenderer/include/cvCamera.h
 
 /home/qqh/projects/RandomForest/src/unittest/test-particle.cpp
 stdexcept

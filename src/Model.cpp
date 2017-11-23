@@ -369,89 +369,49 @@ void Model::getVisualableVertices(const float * pose, cv::Mat& vis_vertices) {
 
 void Model::setVisibleLinesAtPose(const float * pose)
 {
-//   cv::Mat extrinsic = Transformation::getTransformationMatrix(pose);
-//   cv::Mat pos(4,m_model->numvertices,CV_32FC1);
-//   PointSet pointset;
-//   GetImagePoints(pose,pointset);
-//   for(int i=0;i<m_model->numLines;i++){
-//     if(m_model->lines[i].visible){
-//       cv::Point v1=pointset.m_img_points[m_model->lines[i].vindices[0]-1];
-//       cv::Point v2=pointset.m_img_points[m_model->lines[i].vindices[1]-1];
-// 
-//       m_model->lines[i].tovisit=isLineVisible(v1,v2,pointset);
-//       
-// 
-//       
-//     }else{
-//       m_model->lines[i].tovisit=false;
-//     }
-//   }
-    using namespace cv;
-    for(int i=0;i<m_model->numLines;i++)
-      m_model->lines[i].tovisit=false;
-  
+   
+  using namespace cv;
+  for(int i=0;i<m_model->numLines;i++)
+    m_model->lines[i].tovisit=false; 
   cv::Mat pt_in_cam(3, m_model->numvertices+1, CV_32FC1);
 
-	cv::Mat extinsic(3, 4, CV_32FC1);
-	extinsic= Transformation::getTransformationMatrix(pose);
-	pt_in_cam = extinsic * modelPos;
+  cv::Mat extinsic(3, 4, CV_32FC1);
+  extinsic= Transformation::getTransformationMatrix(pose);
+  pt_in_cam = extinsic * modelPos;
+  
+  float u[3], v[3], n[3], center[3];
+  for (size_t i = 0; i < m_model->numtriangles; i++) {
+    //compute the norm of the triangles
+    u[0] = pt_in_cam.at<float>(0, m_model->triangles[i].vindices[1]-1) - pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]-1);
+    u[1] = pt_in_cam.at<float>(1, m_model->triangles[i].vindices[1]-1) - pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]-1);
+    u[2] = pt_in_cam.at<float>(2, m_model->triangles[i].vindices[1]-1) - pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]-1);
+    
+    v[0] = pt_in_cam.at<float>(0, m_model->triangles[i].vindices[2]-1) - pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]-1);
+    v[1] = pt_in_cam.at<float>(1, m_model->triangles[i].vindices[2]-1) - pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]-1);
+    v[2] = pt_in_cam.at<float>(2, m_model->triangles[i].vindices[2]-1) - pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]-1);
 
-	float u[3], v[3], n[3], center[3];
-	for (size_t i = 0; i < m_model->numtriangles; i++) {
-		//compute the norm of the triangles
-		u[0] = pt_in_cam.at<float>(0, m_model->triangles[i].vindices[1]-1) - pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]-1);
-		u[1] = pt_in_cam.at<float>(1, m_model->triangles[i].vindices[1]-1) - pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]-1);
-		u[2] = pt_in_cam.at<float>(2, m_model->triangles[i].vindices[1]-1) - pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]-1);
-
-		v[0] = pt_in_cam.at<float>(0, m_model->triangles[i].vindices[2]-1) - pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]-1);
-		v[1] = pt_in_cam.at<float>(1, m_model->triangles[i].vindices[2]-1) - pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]-1);
-		v[2] = pt_in_cam.at<float>(2, m_model->triangles[i].vindices[2]-1) - pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]-1);
-
-		glmCross(u, v, n);
-		glmNormalize(n);
+    glmCross(u, v, n);
+    glmNormalize(n);
       
-		//get center of triangle center[3]
-		{
-		  center[0] = 1.0/3*(pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]-1) + pt_in_cam.at<float>(0, m_model->triangles[i].vindices[1]-1) + pt_in_cam.at<float>(0, m_model->triangles[i].vindices[2]-1));
-		  center[1] = 1.0/3*(pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]-1) + pt_in_cam.at<float>(1, m_model->triangles[i].vindices[1]-1) + pt_in_cam.at<float>(1, m_model->triangles[i].vindices[2]-1));
-		  center[2] = 1.0/3*(pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]-1) + pt_in_cam.at<float>(2, m_model->triangles[i].vindices[1]-1) + pt_in_cam.at<float>(2, m_model->triangles[i].vindices[2]-1));
-		}
-		glmNormalize(center);
+    //get center of triangle center[3]
+    {
+      center[0] = 1.0/3*(pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]-1) + pt_in_cam.at<float>(0, m_model->triangles[i].vindices[1]-1) + pt_in_cam.at<float>(0, m_model->triangles[i].vindices[2]-1));
+      center[1] = 1.0/3*(pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]-1) + pt_in_cam.at<float>(1, m_model->triangles[i].vindices[1]-1) + pt_in_cam.at<float>(1, m_model->triangles[i].vindices[2]-1));
+      center[2] = 1.0/3*(pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]-1) + pt_in_cam.at<float>(2, m_model->triangles[i].vindices[1]-1) + pt_in_cam.at<float>(2, m_model->triangles[i].vindices[2]-1));
+    }
+    glmNormalize(center);
+    
+    //judge the whether the line is visible or not
+    float cross = n[0] * center[0] + n[1] * center[1] + n[2] * center[2];
+    if (cross < 0.0f) {		  
+      m_model->lines[m_model->triangles[i].lindices[0]].tovisit=(true&m_model->lines[m_model->triangles[i].lindices[0]].visible);
+      m_model->lines[m_model->triangles[i].lindices[1]].tovisit=(true&m_model->lines[m_model->triangles[i].lindices[1]].visible);
+      m_model->lines[m_model->triangles[i].lindices[2]].tovisit=(true&m_model->lines[m_model->triangles[i].lindices[2]].visible);
+      
+    }
+    
+  }
 
-		//judge the whether the line is visible or not
-		float cross = n[0] * center[0] + n[1] * center[1] + n[2] * center[2];
-		if (cross < 0.0f) {		  
-		   m_model->lines[m_model->triangles[i].lindices[0]].tovisit=(true&m_model->lines[m_model->triangles[i].lindices[0]].visible);
-		   m_model->lines[m_model->triangles[i].lindices[1]].tovisit=(true&m_model->lines[m_model->triangles[i].lindices[1]].visible);
-		   m_model->lines[m_model->triangles[i].lindices[2]].tovisit=(true&m_model->lines[m_model->triangles[i].lindices[2]].visible);
-		}
-	}
-
-
-
-// 	cv::Mat pos(4, visualable_line_count*2, CV_32FC1);
-// 	int vis_line_index = 0;
-// 	for (size_t i = 0; i<m_model->numLines; i++) {
-// 		if ((m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 0) || (m_model->lines[i].e1 == 0 && m_model->lines[i].e2 == 1) || (m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 1)) {
-// 			GLuint v0 = m_model->lines[i].vindices[0];
-// 			GLuint v1 = m_model->lines[i].vindices[1];
-// 
-// 			pos.at<float>(0, 2*vis_line_index) = m_model->vertices[3 * v0];
-// 			pos.at<float>(1, 2*vis_line_index) = m_model->vertices[3 * v0 + 1];
-// 			pos.at<float>(2, 2*vis_line_index) = m_model->vertices[3 * v0 + 2];
-// 			pos.at<float>(3, 2*vis_line_index) = 1;
-// 
-// 			pos.at<float>(0, 2*vis_line_index+1) = m_model->vertices[3 * v1];
-// 			pos.at<float>(1, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 1];
-// 			pos.at<float>(2, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 2];
-// 			pos.at<float>(3, 2*vis_line_index+1) = 1;
-// 			
-// 			vis_line_index++;
-// 		}
-// 		m_model->lines[i].e1 = 0; m_model->lines[i].e2 = 0;
-// 	}
-// 
-// 	vis_vertices = pos;
 }
 Point Model::X_to_x(Point3f X,Mat extrisic)
 {
