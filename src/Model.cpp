@@ -71,15 +71,12 @@ GLMmodel* Model::GetObjModel()
 	return m_model;
 }
 
-const vector< Line >& Model::getMyLines()
-{
-  return myLines;
-}
+
 void Model::GetImagePoints(const float* prepose, PointSet& pointset)
 {
 	pointset.m_img_points.clear();
 	pointset.m_img_points_f.clear();	
-	cv::Mat extrinsic = GetPoseMatrix(prepose);
+	cv::Mat extrinsic = Transformation::getTransformationMatrix(prepose);
 	
 	cv::Mat result(3,m_model->numvertices,CV_32FC1);
 
@@ -229,8 +226,8 @@ void Model::getVisibleLines()
   }
   for(int i=0; i<m_model->numLines; ++i)
   {
-    m_model->lines[i].visible=true;
-//      m_model->lines[i].visible=!isSameNormal(m_model->lines[i].n1, m_model->lines[i].n2);
+//     m_model->lines[i].visible=true;
+     m_model->lines[i].visible=!isSameNormal(m_model->lines[i].n1, m_model->lines[i].n2);
   }
   
 }
@@ -243,118 +240,17 @@ int Model::crossProductNorm(const Point &p, const Point &p1)
   return p.x*p1.y - p.y*p1.x;
 }
 
-bool Model::checkPointInTrinangle(const cv::Point p,const cv::Point a, const cv::Point b,const cv::Point c){
-  cv::Point pa=a-p,
-	    pb=b-p,
-	    pc=c-p;
- 
-  int t1 = crossProductNorm(pa,pb);
-  int t2 = crossProductNorm(pb,pc);
-  int t3 = crossProductNorm(pc,pa);
- 
- 
-  return t1*t2 >= 0 && t1*t3 >= 0;
-}
-bool Model::isLineVisible(const Point& v1, const Point& v2, const PointSet& point_set)
-{
-  return isPointVisible(v1,point_set)&&isPointVisible(v2,point_set);
-}
-
-bool Model::isPointVisible(const Point& vertice, const PointSet& point_set)
-{
-    float move=1;
-    int four[4]={0};
-    for (int j = 0; j < m_model->numtriangles; j++) {
-      cv::Point p1= point_set.m_img_points[m_model->triangles->vindices[0]-1];
-      cv::Point p2= point_set.m_img_points[m_model->triangles->vindices[1]-1];
-      cv::Point p3= point_set.m_img_points[m_model->triangles->vindices[2]-1]; 
-//       if(checkPointInTrinangle(cv::Point(vertice.x,vertice.y-move),p1,p2,p3)){
-// 	printf("in %d %d %d",m_model->triangles->vindices[0],m_model->triangles->vindices[1],m_model->triangles->vindices[2]);
-//       }
-      four[0]+=checkPointInTrinangle(cv::Point(vertice.x,vertice.y+move),p1,p2,p3);
-    }
-//     printf("in %d \n",four[0]);
-    if( (four[0]==0||four[1]==0||four[2]==0||four[3]==0)){
-      return true;
-    }
-//     return false;
-}
 const cv::Mat& Model::getIntrinsic() const
 {
   return intrinsic;
 }
-// void Model::Draw( float* pose, cv::Scalar color, cv::Mat& frame) {
-// 	cv::Mat visualable_model_points;
-// 	model.GetVisualableVertices(pose, visualable_model_points);
-// 
-// 	cv::Mat image_points;
-// 	Project(pose, visualable_model_points, image_points);
-// 
-// 	int size = image_points.cols/2;
-// 	for (int i = 0; i < size; ++i) {
-// 		cv::Point pt1(image_points.at<float>(0, 2*i), image_points.at<float>(1, 2*i));
-// 		cv::Point pt2(image_points.at<float>(0, 2*i+1), image_points.at<float>(1, 2*i+1));
-// 			
-// 		if (PointInFrame(pt1) && PointInFrame(pt2)) {
-// 			cv::line(frame, pt1, pt2, color);
-// 		}
-// 	}
-// }
 
 void Model::getVisualableVertices(const float * pose, cv::Mat& vis_vertices) {
   using namespace cv;
-  cv::Mat pt_in_cam(3, m_model->numvertices+1, CV_32FC1);
-
-	cv::Mat extinsic(3, 4, CV_32FC1);
-	extinsic= Transformation::getTransformationMatrix(pose);
-	pt_in_cam = extinsic * modelPos;
-
-	float u[3], v[3], n[3], c[3];
-	for (size_t i = 0; i < m_model->numtriangles; i++) {
-		//compute the norm of the triangles
-		u[0] = pt_in_cam.at<float>(0, m_model->triangles[i].vindices[1]) - pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]);
-		u[1] = pt_in_cam.at<float>(1, m_model->triangles[i].vindices[1]) - pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]);
-		u[2] = pt_in_cam.at<float>(2, m_model->triangles[i].vindices[1]) - pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]);
-
-		v[0] = pt_in_cam.at<float>(0, m_model->triangles[i].vindices[2]) - pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]);
-		v[1] = pt_in_cam.at<float>(1, m_model->triangles[i].vindices[2]) - pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]);
-		v[2] = pt_in_cam.at<float>(2, m_model->triangles[i].vindices[2]) - pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]);
-
-		glmCross(u, v, n);
-		glmNormalize(n);
-
-		//center of triangle
-		c[0] = 0.25f*pt_in_cam.at<float>(0, m_model->triangles[i].vindices[0]) + 0.25f*pt_in_cam.at<float>(0, m_model->triangles[i].vindices[1]) + 0.5f*pt_in_cam.at<float>(0, m_model->triangles[i].vindices[2]);
-		c[1] = 0.25f*pt_in_cam.at<float>(1, m_model->triangles[i].vindices[0]) + 0.25f*pt_in_cam.at<float>(1, m_model->triangles[i].vindices[1]) + 0.5f*pt_in_cam.at<float>(1, m_model->triangles[i].vindices[2]);
-		c[2] = 0.25f*pt_in_cam.at<float>(2, m_model->triangles[i].vindices[0]) + 0.25f*pt_in_cam.at<float>(2, m_model->triangles[i].vindices[1]) + 0.5f*pt_in_cam.at<float>(2, m_model->triangles[i].vindices[2]);
-
-		glmNormalize(c);
-
-		//judge the whether the line is visible or not
-		float cross = n[0] * c[0] + n[1] * c[1] + n[2] * c[2];
-		if (cross < 0.0f) {
-			if (m_model->lines[m_model->triangles[i].lindices[0]].e1 == 1)
-				m_model->lines[m_model->triangles[i].lindices[0]].e2 = 1;
-			else
-				m_model->lines[m_model->triangles[i].lindices[0]].e1 = 1;
-
-			if (m_model->lines[m_model->triangles[i].lindices[1]].e1 == 1)
-				m_model->lines[m_model->triangles[i].lindices[1]].e2 = 1;
-			else
-				m_model->lines[m_model->triangles[i].lindices[1]].e1 = 1;
-
-			if (m_model->lines[m_model->triangles[i].lindices[2]].e1 == 1)
-				m_model->lines[m_model->triangles[i].lindices[2]].e2 = 1;
-			else
-				m_model->lines[m_model->triangles[i].lindices[2]].e1 = 1;
-
-			
-		}
-	}
 
 	int visualable_line_count = 0;
 	for (size_t i = 0; i<m_model->numLines; i++) {
-		if ((m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 0) || (m_model->lines[i].e1 == 0 && m_model->lines[i].e2 == 1) || (m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 1)) {
+		if ((m_model->lines[i].tovisit )) {
 			visualable_line_count++;
 		}
 	}
@@ -362,7 +258,7 @@ void Model::getVisualableVertices(const float * pose, cv::Mat& vis_vertices) {
 	cv::Mat pos(4, visualable_line_count*2, CV_32FC1);
 	int vis_line_index = 0;
 	for (size_t i = 0; i<m_model->numLines; i++) {
-		if ((m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 0) || (m_model->lines[i].e1 == 0 && m_model->lines[i].e2 == 1) || (m_model->lines[i].e1 == 1 && m_model->lines[i].e2 == 1)) {
+		if (m_model->lines[i].tovisit) {
 			GLuint v0 = m_model->lines[i].vindices[0];
 			GLuint v1 = m_model->lines[i].vindices[1];
 
@@ -455,6 +351,18 @@ void Model::DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame,
   } 
   cv::line(frame,p1,p2,cv::Scalar(0,255,0),1,CV_AA);
 }
+void Model::Project(const float* pose, const Mat& visible_Xs,  Mat &visible_xs)
+{
+  	
+  cv::Mat extrinsic = Transformation::getTransformationMatrix(pose);
+  visible_xs=intrinsic*extrinsic*visible_Xs;
+  for (int i = 0; i < visible_xs.cols; ++i) {
+    float dz = 1.0f/visible_xs.at<float>(2, i);
+    visible_xs.at<float>(0, i) *= dz;
+    visible_xs.at<float>(1, i) *= dz;
+  }
+}
+
 void Model::DisplayCV(const float * pose,const cv::Scalar &color, cv::Mat& frame)
 {
   
@@ -516,76 +424,14 @@ void Model::DisplayCV(const float * pose,const cv::Scalar &color, cv::Mat& frame
 
 		if(u1 >=0 && u1<frame.cols && v1 >=0 && v1<=frame.rows && u2 >=0 && u2<frame.cols && v2>=0 && v2<=frame.rows)
 		{
-		  LOG(INFO)<< "v0:"<< u1<<" "<<v1<< " , v1:"<< u2<<" "<<v2<<std::endl;
+// 		  LOG(INFO)<< "v0:"<< u1<<" "<<v1<< " , v1:"<< u2<<" "<<v2<<std::endl;
 
 		  cv::line(frame,cv::Point(u1,v1),cv::Point(u2,v2),color,1,CV_AA);
 		}
 	}
 }
 
-void Model::DisplayGL(const cv::Mat& prepose)
-{
-	//compute extrinsic
-	g_render.m_shapePoseInfo.clear();
-	float x = prepose.at<float>(0,0); float y = prepose.at<float>(0,1); float z = prepose.at<float>(0,2);
-	float rx = prepose.at<float>(0,3); float ry = prepose.at<float>(0,4); float rz = prepose.at<float>(0,5);
 
-	//camera extrinsic
-	cv::Mat extrinsic(4,4,CV_32FC1);
-	const float pi = 3.1415926f;
-	extrinsic.at<float>(0,0)=cos(ry)*cos(rz); extrinsic.at<float>(0,1)=sin(rx)*sin(ry)-cos(rx)*cos(ry)*sin(rz); extrinsic.at<float>(0,2)=cos(rx)*sin(ry)+cos(ry)*sin(rx)*sin(rz); extrinsic.at<float>(0,3)=x;
-	extrinsic.at<float>(1,0)=sin(rz); extrinsic.at<float>(1,1)=cos(rx)*cos(rz); extrinsic.at<float>(1,2)=-cos(rz)*sin(rx); extrinsic.at<float>(1,3)=y;
-	extrinsic.at<float>(2,0)=-cos(rz)*sin(ry); extrinsic.at<float>(2,1)=cos(ry)*sin(rx)+cos(rx)*sin(ry)*sin(rz); extrinsic.at<float>(2,2)=cos(rx)*cos(ry)-sin(rx)*sin(ry)*sin(rz); extrinsic.at<float>(2,3)=z;
-	extrinsic.at<float>(3,0)=0; extrinsic.at<float>(3,1)=0; extrinsic.at<float>(3,2)=0; extrinsic.at<float>(3,3)=1;
-
-
-	ORD::ShapePoseInfo shapePoseInfo;
-	shapePoseInfo.m_shape = m_model;
-	g_render.matrixFromCV2GL(extrinsic,shapePoseInfo.mv_matrix);
-	g_render.m_shapePoseInfo.push_back(shapePoseInfo);
-	g_render.rendering();
-
-	//cv::Mat tmp = g_render.getRenderedImg();
-	////change to 3 channel
-	//cv::Mat render_img(tmp.rows,tmp.cols,CV_8UC3);
-	//for(int r=0; r<tmp.rows; r++)
-	//	for(int c=0; c<tmp.cols; c++)
-	//	{
-	//		render_img.at<cv::Vec3b>(r,c)[0] = tmp.at<uchar>(r,c);
-	//		render_img.at<cv::Vec3b>(r,c)[1] = tmp.at<uchar>(r,c);
-	//		render_img.at<cv::Vec3b>(r,c)[2] = tmp.at<uchar>(r,c);
-	//	}
-	//static cv::VideoWriter writer("result_s7_render.avi",CV_FOURCC('D','I','V','X'),30,render_img.size());
-	//writer<<render_img;
-}
-
-static void Extrinsic(cv::Mat* rotMatrix, float rx, float ry, float rz)
-{
-	//ry*rz*rx
-	const float pi = 3.1415926f;
-
-	(*rotMatrix).at<float>(0,0)=cos(ry)*cos(rz); (*rotMatrix).at<float>(0,1)=sin(rx)*sin(ry)-cos(rx)*cos(ry)*sin(rz); (*rotMatrix).at<float>(0,2)=cos(rx)*sin(ry)+cos(ry)*sin(rx)*sin(rz);
-	(*rotMatrix).at<float>(1,0)=sin(rz); (*rotMatrix).at<float>(1,1)=cos(rx)*cos(rz); (*rotMatrix).at<float>(1,2)=-cos(rz)*sin(rx);
-	(*rotMatrix).at<float>(2,0)=-cos(rz)*sin(ry); (*rotMatrix).at<float>(2,1)=cos(ry)*sin(rx)+cos(rx)*sin(ry)*sin(rz); (*rotMatrix).at<float>(2,2)=cos(rx)*cos(ry)-sin(rx)*sin(ry)*sin(rz);
-
-	//ry*rx*rz
-	/*(*rotMatrix).at<float>(0,0)=cos(ry)*cos(rz)+sin(rx)*sin(ry)*sin(rz); (*rotMatrix).at<float>(0,1)=cos(rz)*sin(rx)*sin(ry)-cos(ry)*sin(rz); (*rotMatrix).at<float>(0,2)=cos(rx)*sin(ry);
-	(*rotMatrix).at<float>(1,0)=cos(rx)*sin(rz); (*rotMatrix).at<float>(1,1)=cos(rx)*cos(rz); (*rotMatrix).at<float>(1,2)=-sin(rx);
-	(*rotMatrix).at<float>(2,0)=cos(ry)*sin(rx)*sin(rz)-cos(rz)*sin(ry); (*rotMatrix).at<float>(2,1)=sin(ry)*sin(rz)+cos(ry)*cos(rz)*sin(rx); (*rotMatrix).at<float>(2,2)=cos(rx)*cos(ry);*/
-}
-
-
-
-void Model::computeExtrinsicByEuler(cv::Mat* mvMatrix, float& _x, float& _y, float& _z, float& _rx, float &_ry, float &_rz)
-{
-	const float pi = 3.1415926f;
-	//float rx = _rx*pi/180; float ry = _ry*pi/180; float rz = _rz*pi/180;
-	float rx = _rx; float ry = _ry; float rz = _rz;
-	//openglÓëopencv×ø±ê²îÈÆx180¶È
-	(*mvMatrix).at<float>(0,0)=cos(ry)*cos(rz); (*mvMatrix).at<float>(0,1)=sin(rx)*sin(ry)-cos(rx)*cos(ry)*sin(rz); (*mvMatrix).at<float>(0,2)=cos(rx)*sin(ry)+cos(ry)*sin(rx)*sin(rz); (*mvMatrix).at<float>(0,3)=_x;
-	(*mvMatrix).at<float>(1,0)=sin(rz); (*mvMatrix).at<float>(1,1)=cos(rx)*cos(rz); (*mvMatrix).at<float>(1,2)=-cos(rz)*sin(rx); (*mvMatrix).at<float>(1,3)=_y;
-	(*mvMatrix).at<float>(2,0)=-cos(rz)*sin(ry); (*mvMatrix).at<float>(2,1)=cos(ry)*sin(rx)+cos(rx)*sin(ry)*sin(rz); (*mvMatrix).at<float>(2,2)=cos(rx)*cos(ry)-sin(rx)*sin(ry)*sin(rz); (*mvMatrix).at<float>(2,3)=_z;
-}
 cv::Point3f Model::getPos_E(int e)
 {
   float x0 = m_model->vertices[3*e];
@@ -605,27 +451,77 @@ const Mat& Model::getPos() const
 {
   return modelPos;
 }
+void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3f> &contour_Xs,std::vector<cv::Point> &contour_xs){
+   LOG(WARNING)<<"getContourPointsAndIts3DPoints";
+  Mat visible_Xs,visible_xs;
+  getVisualableVertices(pose,visible_Xs);
+  Project(pose, visible_Xs, visible_xs);
 
-
-Mat Model::GetPoseMatrix(const float* pose)
-{
-  cv::Mat roV(3,1,CV_32FC1);
-  roV.at<float>(0,0) = pose[0]; 
-  roV.at<float>(1,0) = pose[1]; 
-  roV.at<float>(2,0) = pose[2];
-  cv::Mat rotMat(3,3,CV_32FC1);
-  cv::Mat T = cv::Mat::eye(4,4,CV_32FC1);
-  cv::Rodrigues(roV,rotMat);
-  for(int c=0; c<3; c++)
-  {
-    for(int r=0; r<3; r++)
-    {
-      T.at<float>(r,c) = rotMat.at<float>(r,c);
-    }    
+  cv::Mat img1=cv::Mat::zeros(m_height, m_width, CV_32SC1);
+  for (int i = 0; i < visible_xs.cols; ++i) {
+    cv::Point pt(visible_xs.at<float>(0, i), visible_xs.at<float>(1, i));
+    LOG(INFO)<<i + 1<<" pt : "<<pt;
+    if (pointInFrame(pt)){
+      img1.at<int>(pt) = i + 1;
+    }
   }
-  T.at<float>(0,3)=pose[3]; T.at<float>(1,3)=pose[4]; T.at<float>(2,3) = pose[5];
-  return T;
+      
+//   LOG(INFO)<<"img1 \n"<<img1;
+  /***get countour***/ 
+  std::vector<std::vector<cv::Point> > contours; 
+
+  cv::Mat line_img = cv::Mat::zeros(Config::configInstance().VIDEO_HEIGHT, Config::configInstance().VIDEO_WIDTH , CV_8UC1);
+  DisplayCV(pose, cv::Scalar(255, 255, 255),line_img);  
+  cv::findContours(line_img, contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
+
+//   cv::Mat mask_img = cv::Mat::zeros(Config::configInstance().VIDEO_HEIGHT,Config::configInstance().VIDEO_WIDTH, CV_8UC1);  
+//   cv::drawContours(mask_img, contours, -1, CV_RGB(255, 255, 255), CV_FILLED);
+//   imshow("line_img",line_img);
+//   imshow("mask_img",mask_img);
+//   waitKey(0);
+  /***to map X-x***/
+  std::vector<cv::Point> &contour=contours[0];
+  int near[9][2]={{0,0},{0,-1},{0,1},{1,1},{1,-1},{-1,1},{-1,-1},{-1,0},{1,0}};
+  LOG(WARNING)<<"contour.size() : "<<contour.size();
+  Mat extrinsic =Transformation::getTransformationMatrix(pose);
+  for (int i = 0; i < contour.size(); ++i){
+      for(int j=0;j<9;j++){
+// 	cv::Point cpt = contour[i];      
+	int value = img1.at<int>(contour[i].y+near[j][0],contour[i].x+near[j][1]);
+// 	LOG(INFO)<<"cpt: "<<cpt<<" value: "<<value;
+	if (value > 0) {
+	  cv::Point3f pt3d( visible_Xs.at<float>(0, value - 1), visible_Xs.at<float>(1, value - 1),visible_Xs.at<float>(2, value - 1));
+	  contour_Xs.push_back(pt3d);
+	  contour_xs.push_back(X_to_x(pt3d,extrinsic));
+	  break;
+	}  
+      }
+  }
 }
+void Model::getContourPointsAndIts3DPoints(const  float *pose,float(*ctrPts3DMem)[3],float(*ctrPts2DMem)[2],int &nctrPts)
+{
+  std::vector<cv::Point3f> contour_Xs;
+  std::vector<cv::Point> contour_xs;
+  getContourPointsAndIts3DPoints(pose,contour_Xs,contour_xs);
+  nctrPts=contour_Xs.size();
+  ctrPts3DMem = (float(*)[3])malloc(nctrPts*sizeof(float[3]));
+  ctrPts2DMem = (float(*)[2])malloc(nctrPts*sizeof(float[2]));
+  for(int i=0;i<contour_Xs.size();i++){
+    ctrPts3DMem[i][0]=contour_Xs[i].x;
+    ctrPts3DMem[i][1]=contour_Xs[i].y;
+    ctrPts3DMem[i][2]=contour_Xs[i].z;
+    ctrPts2DMem[i][0]=contour_xs[i].x;
+    ctrPts2DMem[i][1]=contour_xs[i].y;
+  }
+  
+}
+
+
+bool Model::pointInFrame(const Point& pt)
+{
+  return(pt.x>=0&&pt.y>=0&&pt.x<m_width&&pt.y<m_height);
+}
+
 
 
 void Model::getIntrinsic(cv::Mat& intrinsic) const

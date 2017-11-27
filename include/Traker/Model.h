@@ -7,20 +7,13 @@
 #include "Traker/Config.h"
 #include "Traker/PointSet.hpp"
 #include "GLRenderer/include/glm.h"
-
+#include "GLRenderer/include/glRenderer.h"
 namespace OD
 {
-	struct Line{
-	 cv::Mat v1,v2;
-	};
+
 	class Model
 	{
 
-// 	struct Triangle{
-// 	 int v1,v2;
-// 	 std::vector<Vec3f> points;
-// 	 bool visible;
-// 	};
 	public:
 		Model(const Config& config);
 		~Model();
@@ -30,6 +23,7 @@ namespace OD
 		void GetImagePoints(const float * prepose, PointSet& pointset);
 
 		void setPointSet();
+		void Project(const float * pose,const cv::Mat &visible_Xs, cv::Mat &visible_xs);
 		void DisplayCV(const float * pose,const cv::Scalar &color, cv::Mat& frame);
 		void DisplayGL(const cv::Mat& pose);
 		void DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame,const float &radius);
@@ -40,9 +34,9 @@ namespace OD
 		void setVisibleLinesAtPose(const float * pose);
 		void getVisualableVertices(const float * pose, cv::Mat& vis_vertices);
 		const cv::Mat& getIntrinsic()  const;
-		const std::vector<Line> & getMyLines();
 		
-		
+		void getContourPointsAndIts3DPoints(const  float *pose, float(*ctrPts3DMem)[3],float(*ctrPts2DMem)[2],int &nctrPts);
+		void getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3f> &contour_Xs,std::vector<cv::Point> &contour_xs);
 		const cv::Mat& getPos() const;
 		Point X_to_x(Point3f X,Mat extrisic);
 
@@ -54,7 +48,6 @@ namespace OD
 		GLMmodel* GetObjModel();
 	private:
 		cv::Mat modelPos;
-		std::vector<Line> myLines;
 		GLMmodel* m_model;
 		OD::CameraCalibration m_calibration;
 		int m_width;
@@ -65,6 +58,7 @@ namespace OD
 		cv::Mat intrinsic;
 		
 	private:
+		bool pointInFrame(const cv::Point &pt);
 		cv::Point3f getPos_E(int e);
 		bool checkPointInTrinangle(const cv::Point p,const cv::Point p1, const cv::Point p2,const cv::Point p3);
 		void getVisibleLines();

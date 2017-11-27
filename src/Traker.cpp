@@ -55,7 +55,7 @@ Traker::~Traker()
 }
 
 
-int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & frameId,float * _newPose,float &finalE2 )
+int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & frameId,const GLRenderer &glrender,float * _newPose,float &finalE2 )
 {
   
    int64 time0 = cv::getTickCount();
@@ -65,7 +65,7 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
       getDistMap(curFrame);
       _locations=(int *)locationsMat.data;
     }
-    
+
     mFrame=curFrame;
     LOG(WARNING)<<" ";
     LOG(WARNING)<<"frameId = "<<frameId;
@@ -78,7 +78,13 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
     m_Transformation.setPose(prePose);
     int itration_num=0;
     Transformation newTransformation;
-    m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());    
+    m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());  
+    float(*ctrPts3DMem)[3];
+    float(*ctrPts2DMem)[2];
+    int nctrPts;
+    m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),ctrPts3DMem,ctrPts2DMem,nctrPts);
+    
+    
     float e2 = computeEnergy(distFrame, m_Transformation.Pose());
     if(e2<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
@@ -231,9 +237,7 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
   cv::Mat drawFrame;
   if(Config::configInstance().CV_LINE_P2NP){    
     cv::cvtColor(distFrame/255.f, drawFrame, CV_GRAY2BGR);
-  }
-  
-        
+  } 
         
   cv::Mat j_X_Pose= cv::Mat::zeros(2,6,CV_32FC1);
   cv::Mat j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);  
@@ -480,92 +484,22 @@ float Traker::getDistanceToEdege(const Point& e0, const Point& e1, const Point& 
   return pow((e0.y-e1.y)*v.x +(e1.x-e0.x)*v.y+(e0.x*e1.y-e1.x*e0.y),2)/
 	  (pow((e1.x-e0.x),2)+pow((e1.y-e0.y),2));
 }
-/*
-int Traker::edfTracker(const float* prePose, const Mat& distMap,const  int NLrefine, float* newPose)
-{
-  Mat _distMap=distMap.clone();
-  if (_distMap.isContinuous())
-  {
-    memcpy(dist, _distMap.data, imgHeight * imgWidth * sizeof(float));    
-  }
-  else
-  {
-    for (int i = 0; i < imgHeight; ++i)
-    {
-      float *rptr =_distMap.ptr<float>(i);
-      for (int j = 0; j < imgWidth; ++j)
-      {
-	dist[i*imgWidth + j] = rptr[j];	
-      }      
-    }    
-  }
-  
-  
-  
-  m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
-  float energy =0;
-  int size =0;
-  Mat intrinsic = m_data.m_model->getIntrinsic();
-  Mat extrinsic = m_data.m_model->GetPoseMatrix(prePose);
-  GLMmodel* model =m_data.m_model->GetObjModel();
-  cv::Mat pos = m_data.m_model->getPos();
-  int lineNum=0;       
-  float meanDX=0;
-  std::vector<cv::Point3d> contourPoints ;
-  for(int i=0;i<model->numLines;++i){
-    if(model->lines[i].tovisit){
-      
-      lineNum++;
-      int v0=model->lines[i].vindices[0],v1=model->lines[i].vindices[1];
-      Point3f p1= Point3f(pos.at<float>(0,v0-1),pos.at<float>(1,v0-1),pos.at<float>(2,v0-1));
-      Point3f p2= Point3f(pos.at<float>(0,v1-1),pos.at<float>(1,v1-1),pos.at<float>(2,v1-1));
-      Point3f dX=(p2-p1);      
-      int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/Config::configInstance().NX_LENGTH;
-      dX /=Nx;
-      Point3f X=p1;
-      Point point1= m_data.m_model->X_to_x(p1,extrinsic);
-      Point point2= m_data.m_model->X_to_x(p2,extrinsic);
-      if(point1.x<0||point1.y<0||point2.x<0||point2.y<0||point1.x>=imgWidth||point2.x>=imgWidth||point1.y>=imgHeight||point2.y>=imgHeight){
-	continue;
-      }
-      float meanE_LINE=0;
-      for(int i=0;i<=Nx;++i,X+=dX){
-	 contourPoints.push_back(Point3d(X.x,X.y,X.z));
-      }  
-    }
-  }
-  double(*ctrPts3D)[3];
-  int nCtrPts=contourPoints.size();
-  ctrPts3D = (double(*)[3])malloc(nCtrPts*sizeof(double[3]));
-  for (int i = 0; i < nCtrPts; ++i)
-  {
-    ctrPts3D[i][0] = contourPoints[i].x;
-    ctrPts3D[i][1] = contourPoints[i].y;
-    ctrPts3D[i][2] = contourPoints[i].z;    
-  }
-  double K[9] = { m_calibration.fx(), 0, m_calibration.cx(), 0, m_calibration.fy(), m_calibration.cy(), 0, 0, 1 };
-  double _newPose[6];
-  int ret = posest_edft(dist, ctrPts3D, nCtrPts,
-		imgWidth, imgHeight, K, _newPose, 6, NLrefine, 1, &final_e);
-  for(int i=0;i<6;i++){
-    newPose[i]=_newPose[i];
-  }
-  return ret;
-}
-*/
+
 void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *coarsePose)
 {
 //   m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
+  
   float energy =0;
   int size =0;
   Mat intrinsic = m_data.m_model->getIntrinsic();
-  Mat extrinsic = m_data.m_model->GetPoseMatrix(prePose);
+  Mat extrinsic = Transformation::getTransformationMatrix(prePose);
   GLMmodel* model =m_data.m_model->GetObjModel();
   cv::Mat pos = m_data.m_model->getPos();
   int lineNum=0;       
   float meanDX=0;
   std::vector<cv::Point2d> imagePoints ;
   std::vector<cv::Point3d> objectPoints ;
+  
   for(int i=0;i<model->numLines;++i){
     if(model->lines[i].tovisit){
       

@@ -16,8 +16,8 @@ int main(int argc, char* argv[]) {
         return -1;      
   }
   TL::OcvYamlConfig config(argv[1]);
-  auto dataProcessor = std::make_unique<DataProcessor>(config); 
-  dataProcessor->doTraking(argc,argv);
+  auto dataProcessor = std::make_unique<DataProcessor>(argc,argv,config); 
+  dataProcessor->doTraking();
   
   return 0;
 }

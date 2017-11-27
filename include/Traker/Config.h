@@ -19,6 +19,8 @@ namespace OD
     int IMG_PYR_NUMBER;
     int VIDEO_WIDTH;
     int VIDEO_HEIGHT;
+    float CV_NEAR_PLANE;
+    float CV_FAR_PLANE;
     double fps;
     bool USE_VIDEO;
     bool USE_GT;
@@ -104,6 +106,8 @@ namespace OD
       }
       //parameters for View
       {
+	Config::configInstance().CV_NEAR_PLANE=config.value_f("CV_NEAR_PLANE");
+	Config::configInstance().CV_FAR_PLANE=config.value_f("CV_FAR_PLANE");
 	Config::configInstance().CV_CIRCLE_RADIUS=config.value_f("CV_CIRCLE_RADIUS");
 	Config::configInstance().CV_LINE_P2NP=std::lround(config.value_f("CV_LINE_P2NP"))== 1;;
 	Config::configInstance().CV_DRAW_FRAME=std::lround(config.value_f("CV_DRAW_FRAME"))== 1;;

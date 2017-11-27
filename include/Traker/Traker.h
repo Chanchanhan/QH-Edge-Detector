@@ -5,7 +5,7 @@
 #include "Traker/Model.h"
 #include "Traker/Quaternion.h"
 #include "Traker/Transformation.h"
-
+#include "GLRenderer/include/glRenderer.h"
 #include <fstream>
 
 namespace OD
@@ -31,7 +31,7 @@ namespace OD
 		Traker( const float *initPose,const bool is_writer);
 		~Traker();
 	public:
-		int toTrack(const float * prePose,const cv::Mat& curFrame, const int & frameId,float * _newPose ,float &finalE2);
+		int toTrack(const float * prePose,const cv::Mat& curFrame, const int & frameId,const GLRenderer &glrender, float * _newPose ,float &finalE2);
 	      
 	private:
 		int edfTracker(const float * prePose,const cv::Mat& distFrame,const  int NLrefine, float* newPose);
