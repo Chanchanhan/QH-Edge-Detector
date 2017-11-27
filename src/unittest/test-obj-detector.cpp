@@ -48,11 +48,11 @@ int main(int argc, char* argv[]) {
   
   TL::OcvYamlConfig config(argv[1]);
   auto imgProcessor = std::make_unique<ED::ImgProcession>();
-  std::vector<std::string> Frames;
   float prePose[6];  
   int starframeId ;
   ifstream gtData;  
-  
+    std::vector<std::string> Frames;
+
   init_MAIN(argc,argv,config,Frames,prePose,starframeId,gtData);
 
   auto traker = std::make_unique<OD::Traker>(prePose,true); 

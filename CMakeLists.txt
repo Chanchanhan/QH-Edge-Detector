@@ -8,7 +8,6 @@ file(GLOB headers include/andres/* include/andres/ml/* 3rdparty/GLRenderer/inclu
 enable_testing()
 
 aux_source_directory(./src/  SRC_LIST)
-
 aux_source_directory(./3rdparty/GLRenderer/src/ SRC_LIST)
 # aux_source_directory(./3rdparty/View/ SRC_LIST)
 aux_source_directory(./3rdparty/POSEST/src/ SRC_LIST)

@@ -82,6 +82,18 @@ stdint.h
 
 ../3rdparty/POSEST/include/sam.h
 
+../include/DataProcessor.h
+iostream
+-
+tools/OcvYamlConfig.h
+../include/tools/OcvYamlConfig.h
+
+../include/Detector/Detector.h
+opencv2/core.hpp
+-
+Traker/Model.h
+../include/Detector/Traker/Model.h
+
 ../include/Image/DT.hpp
 opencv2/opencv.hpp
 -
@@ -557,6 +569,22 @@ Image/DT.hpp
 /home/qqh/projects/RandomForest/src/Image/DT.hpp
 algorithm
 -
+
+/home/qqh/projects/RandomForest/src/DataProcessor.cpp
+DataProcessor.h
+/home/qqh/projects/RandomForest/src/DataProcessor.h
+Traker/Config.h
+/home/qqh/projects/RandomForest/src/Traker/Config.h
+Image/ReadImg.hpp
+/home/qqh/projects/RandomForest/src/Image/ReadImg.hpp
+GLRenderer/include/glRenderer.h
+/home/qqh/projects/RandomForest/src/GLRenderer/include/glRenderer.h
+Traker/Traker.h
+/home/qqh/projects/RandomForest/src/Traker/Traker.h
+
+/home/qqh/projects/RandomForest/src/Detector.cpp
+Detector/Detector.h
+/home/qqh/projects/RandomForest/src/Detector/Detector.h
 
 /home/qqh/projects/RandomForest/src/EdgeDistanceFieldTraking.cpp
 fstream

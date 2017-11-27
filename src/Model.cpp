@@ -229,7 +229,8 @@ void Model::getVisibleLines()
   }
   for(int i=0; i<m_model->numLines; ++i)
   {
-     m_model->lines[i].visible=!isSameNormal(m_model->lines[i].n1, m_model->lines[i].n2);
+    m_model->lines[i].visible=true;
+//      m_model->lines[i].visible=!isSameNormal(m_model->lines[i].n1, m_model->lines[i].n2);
   }
   
 }
@@ -282,7 +283,23 @@ const cv::Mat& Model::getIntrinsic() const
 {
   return intrinsic;
 }
-
+// void Model::Draw( float* pose, cv::Scalar color, cv::Mat& frame) {
+// 	cv::Mat visualable_model_points;
+// 	model.GetVisualableVertices(pose, visualable_model_points);
+// 
+// 	cv::Mat image_points;
+// 	Project(pose, visualable_model_points, image_points);
+// 
+// 	int size = image_points.cols/2;
+// 	for (int i = 0; i < size; ++i) {
+// 		cv::Point pt1(image_points.at<float>(0, 2*i), image_points.at<float>(1, 2*i));
+// 		cv::Point pt2(image_points.at<float>(0, 2*i+1), image_points.at<float>(1, 2*i+1));
+// 			
+// 		if (PointInFrame(pt1) && PointInFrame(pt2)) {
+// 			cv::line(frame, pt1, pt2, color);
+// 		}
+// 	}
+// }
 
 void Model::getVisualableVertices(const float * pose, cv::Mat& vis_vertices) {
   using namespace cv;
@@ -438,7 +455,7 @@ void Model::DisplayLine(const cv::Point& p1,const cv::Point& p2, cv::Mat& frame,
   } 
   cv::line(frame,p1,p2,cv::Scalar(0,255,0),1,CV_AA);
 }
-void Model::DisplayCV(const float * pose, cv::Mat& frame)
+void Model::DisplayCV(const float * pose,const cv::Scalar &color, cv::Mat& frame)
 {
   
 	//camera extrinsic
@@ -485,7 +502,7 @@ void Model::DisplayCV(const float * pose, cv::Mat& frame)
 		pos.at<float>(3,2*i+1) = 1;
 	}
 	result = intrinsic*extrinsic*pos;
-	LOG(INFO)<<"----2D coordinate of tovisit line";
+	LOG(INFO)<<"---to draw visit line";
 	//display the visible lines
 	for(int i=0; i<vertexIndexs.size(); i++)
 	{
@@ -495,13 +512,13 @@ void Model::DisplayCV(const float * pose, cv::Mat& frame)
 		int u2 = result.at<float>(0,2*i+1)/result.at<float>(2,2*i+1);
 		int v2 = result.at<float>(1,2*i+1)/result.at<float>(2,2*i+1);
 				 
-		LOG(INFO)<<"frame.cols = "<<frame.cols<<" , frame.rows= "<<frame.rows; 
+// 		LOG(INFO)<<"frame.cols = "<<frame.cols<<" , frame.rows= "<<frame.rows; 
 
 		if(u1 >=0 && u1<frame.cols && v1 >=0 && v1<=frame.rows && u2 >=0 && u2<frame.cols && v2>=0 && v2<=frame.rows)
 		{
 		  LOG(INFO)<< "v0:"<< u1<<" "<<v1<< " , v1:"<< u2<<" "<<v2<<std::endl;
 
-		  cv::line(frame,cv::Point(u1,v1),cv::Point(u2,v2),cv::Scalar(0,0,255),1,CV_AA);
+		  cv::line(frame,cv::Point(u1,v1),cv::Point(u2,v2),color,1,CV_AA);
 		}
 	}
 }

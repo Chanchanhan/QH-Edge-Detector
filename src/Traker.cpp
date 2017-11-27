@@ -48,9 +48,9 @@ Traker::~Traker()
   }
   free(_locations);
   free(dist);
-  free(mFrame.data);
-  free(locationsMat.data);
-  free(distFrame.data);
+  mFrame.release();
+  locationsMat.release();
+  distFrame.release();
   
 }
 
@@ -344,7 +344,7 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
   } 
   if(Config::configInstance().CV_LINE_P2NP){
     LOG(WARNING)<<"to draw drawFrame";
-      m_data.m_model->DisplayCV(prePose,drawFrame);
+      m_data.m_model->DisplayCV(prePose, cv::Scalar(0, 0, 255),drawFrame);
       if(m_frameId%10==0){
 	imshow("DRAW_LINE_P2NP",drawFrame);
       //   imshow("distMap",frame/255.f);
@@ -455,7 +455,7 @@ void Traker::constructEnergyFunction(const cv::Mat distFrame,const float* prePos
   
 if(Config::configInstance().CV_LINE_P2NP){
   LOG(WARNING)<<"to draw drawFrame";
-    m_data.m_model->DisplayCV(prePose,drawFrame);
+    m_data.m_model->DisplayCV(prePose, cv::Scalar(0, 0, 255),drawFrame);
     if(m_frameId%10==0){
       imshow("DRAW_LINE_P2NP",drawFrame);
     //   imshow("distMap",frame/255.f);
@@ -601,10 +601,10 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
     }
   }
   cv::Mat distCoeffs(4,1,cv::DataType<double>::type);
-  distCoeffs.at<double>(0) = 0;
-  distCoeffs.at<double>(1) = 0;
-  distCoeffs.at<double>(2) = 0;
-  distCoeffs.at<double>(3) = 0;
+  distCoeffs.at<double>(0) = Config::configInstance().distortions[0];
+  distCoeffs.at<double>(1) = Config::configInstance().distortions[1];
+  distCoeffs.at<double>(2) = Config::configInstance().distortions[2];
+  distCoeffs.at<double>(3) = Config::configInstance().distortions[3];
   cv::Mat rvec(3,1,cv::DataType<double>::type);
   cv::Mat tvec(3,1,cv::DataType<double>::type);
       

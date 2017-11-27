@@ -41,6 +41,8 @@ void ImgProcession::getGussainPYR(const cv::Mat& src,const  int& nPYR, std::vect
   }
 }
 
+
+
 void ImgProcession::DealWithFrameAsMRWang(const cv::Mat& src, cv::Mat& distMap)
 {
   cv::Mat frameGray;

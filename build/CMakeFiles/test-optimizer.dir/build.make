@@ -81,9 +81,33 @@ CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o.provides: CMakeF
 CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o.provides.build: CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o
 
 
+CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
+CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o: ../src/DataProcessor.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o"
+	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o -c /home/qqh/projects/RandomForest/src/DataProcessor.cpp
+
+CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.i"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/qqh/projects/RandomForest/src/DataProcessor.cpp > CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.i
+
+CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.s"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/qqh/projects/RandomForest/src/DataProcessor.cpp -o CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.s
+
+CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o.requires:
+
+.PHONY : CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o.requires
+
+CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o.provides: CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o.requires
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o.provides.build
+.PHONY : CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o.provides
+
+CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o.provides.build: CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o
+
+
 CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o: ../src/CameraCalibration.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o -c /home/qqh/projects/RandomForest/src/CameraCalibration.cpp
 
 CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.i: cmake_force
@@ -107,7 +131,7 @@ CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o.provides.build: CMakeF
 
 CMakeFiles/test-optimizer.dir/src/Traker.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/Traker.cpp.o: ../src/Traker.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/test-optimizer.dir/src/Traker.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test-optimizer.dir/src/Traker.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/Traker.cpp.o -c /home/qqh/projects/RandomForest/src/Traker.cpp
 
 CMakeFiles/test-optimizer.dir/src/Traker.cpp.i: cmake_force
@@ -131,7 +155,7 @@ CMakeFiles/test-optimizer.dir/src/Traker.cpp.o.provides.build: CMakeFiles/test-o
 
 CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o: ../src/EdgeDistanceFieldTraking.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o -c /home/qqh/projects/RandomForest/src/EdgeDistanceFieldTraking.cpp
 
 CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.i: cmake_force
@@ -155,7 +179,7 @@ CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o.provides.build:
 
 CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o: ../src/Quaternion.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o -c /home/qqh/projects/RandomForest/src/Quaternion.cpp
 
 CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.i: cmake_force
@@ -179,7 +203,7 @@ CMakeFiles/test-optimizer.dir/src/Quaternion.cpp.o.provides.build: CMakeFiles/te
 
 CMakeFiles/test-optimizer.dir/src/DT.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/DT.cpp.o: ../src/DT.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/test-optimizer.dir/src/DT.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test-optimizer.dir/src/DT.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/DT.cpp.o -c /home/qqh/projects/RandomForest/src/DT.cpp
 
 CMakeFiles/test-optimizer.dir/src/DT.cpp.i: cmake_force
@@ -203,7 +227,7 @@ CMakeFiles/test-optimizer.dir/src/DT.cpp.o.provides.build: CMakeFiles/test-optim
 
 CMakeFiles/test-optimizer.dir/src/Render.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/Render.cpp.o: ../src/Render.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/test-optimizer.dir/src/Render.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test-optimizer.dir/src/Render.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/Render.cpp.o -c /home/qqh/projects/RandomForest/src/Render.cpp
 
 CMakeFiles/test-optimizer.dir/src/Render.cpp.i: cmake_force
@@ -227,7 +251,7 @@ CMakeFiles/test-optimizer.dir/src/Render.cpp.o.provides.build: CMakeFiles/test-o
 
 CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o: ../src/Transformation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o -c /home/qqh/projects/RandomForest/src/Transformation.cpp
 
 CMakeFiles/test-optimizer.dir/src/Transformation.cpp.i: cmake_force
@@ -251,7 +275,7 @@ CMakeFiles/test-optimizer.dir/src/Transformation.cpp.o.provides.build: CMakeFile
 
 CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o: ../src/ImgProcession.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o -c /home/qqh/projects/RandomForest/src/ImgProcession.cpp
 
 CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.i: cmake_force
@@ -275,7 +299,7 @@ CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o.provides.build: CMakeFiles
 
 CMakeFiles/test-optimizer.dir/src/Model.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/Model.cpp.o: ../src/Model.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/test-optimizer.dir/src/Model.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/test-optimizer.dir/src/Model.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/Model.cpp.o -c /home/qqh/projects/RandomForest/src/Model.cpp
 
 CMakeFiles/test-optimizer.dir/src/Model.cpp.i: cmake_force
@@ -299,7 +323,7 @@ CMakeFiles/test-optimizer.dir/src/Model.cpp.o.provides.build: CMakeFiles/test-op
 
 CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o: ../src/OcvYamlConfig.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o -c /home/qqh/projects/RandomForest/src/OcvYamlConfig.cpp
 
 CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.i: cmake_force
@@ -323,7 +347,7 @@ CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o.provides.build: CMakeFiles
 
 CMakeFiles/test-optimizer.dir/src/Particle.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/src/Particle.cpp.o: ../src/Particle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/test-optimizer.dir/src/Particle.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/test-optimizer.dir/src/Particle.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/Particle.cpp.o -c /home/qqh/projects/RandomForest/src/Particle.cpp
 
 CMakeFiles/test-optimizer.dir/src/Particle.cpp.i: cmake_force
@@ -345,9 +369,33 @@ CMakeFiles/test-optimizer.dir/src/Particle.cpp.o.provides: CMakeFiles/test-optim
 CMakeFiles/test-optimizer.dir/src/Particle.cpp.o.provides.build: CMakeFiles/test-optimizer.dir/src/Particle.cpp.o
 
 
+CMakeFiles/test-optimizer.dir/src/Detector.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
+CMakeFiles/test-optimizer.dir/src/Detector.cpp.o: ../src/Detector.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/test-optimizer.dir/src/Detector.cpp.o"
+	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/src/Detector.cpp.o -c /home/qqh/projects/RandomForest/src/Detector.cpp
+
+CMakeFiles/test-optimizer.dir/src/Detector.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test-optimizer.dir/src/Detector.cpp.i"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/qqh/projects/RandomForest/src/Detector.cpp > CMakeFiles/test-optimizer.dir/src/Detector.cpp.i
+
+CMakeFiles/test-optimizer.dir/src/Detector.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test-optimizer.dir/src/Detector.cpp.s"
+	g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/qqh/projects/RandomForest/src/Detector.cpp -o CMakeFiles/test-optimizer.dir/src/Detector.cpp.s
+
+CMakeFiles/test-optimizer.dir/src/Detector.cpp.o.requires:
+
+.PHONY : CMakeFiles/test-optimizer.dir/src/Detector.cpp.o.requires
+
+CMakeFiles/test-optimizer.dir/src/Detector.cpp.o.provides: CMakeFiles/test-optimizer.dir/src/Detector.cpp.o.requires
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/Detector.cpp.o.provides.build
+.PHONY : CMakeFiles/test-optimizer.dir/src/Detector.cpp.o.provides
+
+CMakeFiles/test-optimizer.dir/src/Detector.cpp.o.provides.build: CMakeFiles/test-optimizer.dir/src/Detector.cpp.o
+
+
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o: ../3rdparty/GLRenderer/src/marker.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o -c /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/marker.cpp
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.i: cmake_force
@@ -371,7 +419,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o.provides.buil
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o: ../3rdparty/GLRenderer/src/glInfo.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o -c /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/glInfo.cpp
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.i: cmake_force
@@ -395,7 +443,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o.provides.buil
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o: ../3rdparty/GLRenderer/src/glRenderer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o -c /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/glRenderer.cpp
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.i: cmake_force
@@ -419,7 +467,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o.provides.
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/cvCamera.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/cvCamera.cpp.o: ../3rdparty/GLRenderer/src/cvCamera.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/cvCamera.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/cvCamera.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/cvCamera.cpp.o -c /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/cvCamera.cpp
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/cvCamera.cpp.i: cmake_force
@@ -443,7 +491,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/cvCamera.cpp.o.provides.bu
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/markerDetector.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/markerDetector.cpp.o: ../3rdparty/GLRenderer/src/markerDetector.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/markerDetector.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/markerDetector.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/markerDetector.cpp.o -c /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/markerDetector.cpp
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/markerDetector.cpp.i: cmake_force
@@ -467,7 +515,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/markerDetector.cpp.o.provi
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/timer.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/timer.cpp.o: ../3rdparty/GLRenderer/src/timer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/timer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/timer.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/timer.cpp.o -c /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/timer.cpp
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/timer.cpp.i: cmake_force
@@ -491,7 +539,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/timer.cpp.o.provides.build
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glm.cpp.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glm.cpp.o: ../3rdparty/GLRenderer/src/glm.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glm.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glm.cpp.o"
 	g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glm.cpp.o -c /home/qqh/projects/RandomForest/3rdparty/GLRenderer/src/glm.cpp
 
 CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glm.cpp.i: cmake_force
@@ -515,7 +563,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glm.cpp.o.provides.build: 
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lqs.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lqs.c.o: ../3rdparty/POSEST/src/lqs.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lqs.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lqs.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lqs.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/lqs.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lqs.c.i: cmake_force
@@ -539,7 +587,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lqs.c.o.provides.build: CMakeF
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/svd3.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/svd3.c.o: ../3rdparty/POSEST/src/svd3.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/svd3.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/svd3.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/svd3.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/svd3.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/svd3.c.i: cmake_force
@@ -563,7 +611,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/svd3.c.o.provides.build: CMake
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/poseproj.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/poseproj.c.o: ../3rdparty/POSEST/src/poseproj.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/poseproj.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/poseproj.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/poseproj.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/poseproj.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/poseproj.c.i: cmake_force
@@ -587,7 +635,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/poseproj.c.o.provides.build: C
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p4pf.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p4pf.c.o: ../3rdparty/POSEST/src/p4pf.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_23) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p4pf.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p4pf.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p4pf.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/p4pf.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p4pf.c.i: cmake_force
@@ -611,7 +659,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p4pf.c.o.provides.build: CMake
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/ransac.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/ransac.c.o: ../3rdparty/POSEST/src/ransac.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_24) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/ransac.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/ransac.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/ransac.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/ransac.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/ransac.c.i: cmake_force
@@ -635,7 +683,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/ransac.c.o.provides.build: CMa
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/rngs.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/rngs.c.o: ../3rdparty/POSEST/src/rngs.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_25) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/rngs.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/rngs.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/rngs.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/rngs.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/rngs.c.i: cmake_force
@@ -659,7 +707,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/rngs.c.o.provides.build: CMake
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/prosac.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/prosac.c.o: ../3rdparty/POSEST/src/prosac.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_26) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/prosac.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/prosac.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/prosac.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/prosac.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/prosac.c.i: cmake_force
@@ -683,7 +731,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/prosac.c.o.provides.build: CMa
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/buckets.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/buckets.c.o: ../3rdparty/POSEST/src/buckets.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_27) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/buckets.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/buckets.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/buckets.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/buckets.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/buckets.c.i: cmake_force
@@ -707,7 +755,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/buckets.c.o.provides.build: CM
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest.c.o: ../3rdparty/POSEST/src/posest.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_28) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/posest.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest.c.i: cmake_force
@@ -731,7 +779,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest.c.o.provides.build: CMa
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/deal.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/deal.c.o: ../3rdparty/POSEST/src/deal.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_29) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/deal.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/deal.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/deal.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/deal.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/deal.c.i: cmake_force
@@ -755,7 +803,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/deal.c.o.provides.build: CMake
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/align.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/align.c.o: ../3rdparty/POSEST/src/align.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_30) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/align.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/align.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/align.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/align.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/align.c.i: cmake_force
@@ -779,7 +827,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/align.c.o.provides.build: CMak
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/planep4p.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/planep4p.c.o: ../3rdparty/POSEST/src/planep4p.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_31) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/planep4p.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/planep4p.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/planep4p.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/planep4p.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/planep4p.c.i: cmake_force
@@ -803,7 +851,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/planep4p.c.o.provides.build: C
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p3p.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p3p.c.o: ../3rdparty/POSEST/src/p3p.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_32) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p3p.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p3p.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p3p.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/p3p.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p3p.c.i: cmake_force
@@ -827,7 +875,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/p3p.c.o.provides.build: CMakeF
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/polysolve.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/polysolve.c.o: ../3rdparty/POSEST/src/polysolve.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_33) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/polysolve.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/polysolve.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/polysolve.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/polysolve.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/polysolve.c.i: cmake_force
@@ -851,7 +899,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/polysolve.c.o.provides.build: 
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/sam.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/sam.c.o: ../3rdparty/POSEST/src/sam.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_34) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/sam.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/sam.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/sam.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/sam.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/sam.c.i: cmake_force
@@ -875,7 +923,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/sam.c.o.provides.build: CMakeF
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lhm.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lhm.c.o: ../3rdparty/POSEST/src/lhm.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_35) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lhm.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lhm.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lhm.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/lhm.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lhm.c.i: cmake_force
@@ -899,7 +947,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/lhm.c.o.provides.build: CMakeF
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest_edft.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest_edft.c.o: ../3rdparty/POSEST/src/posest_edft.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_36) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest_edft.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest_edft.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest_edft.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/posest_edft.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest_edft.c.i: cmake_force
@@ -923,7 +971,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/posest_edft.c.o.provides.build
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/redblack.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/redblack.c.o: ../3rdparty/POSEST/src/mlsl/redblack.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_37) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/redblack.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/redblack.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/redblack.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/mlsl/redblack.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/redblack.c.i: cmake_force
@@ -947,7 +995,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/redblack.c.o.provides.bui
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mlsl.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mlsl.c.o: ../3rdparty/POSEST/src/mlsl/mlsl.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_38) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mlsl.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mlsl.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mlsl.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/mlsl/mlsl.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mlsl.c.i: cmake_force
@@ -971,7 +1019,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mlsl.c.o.provides.build: 
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/sobolseq.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/sobolseq.c.o: ../3rdparty/POSEST/src/mlsl/sobolseq.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_39) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/sobolseq.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/sobolseq.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/sobolseq.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/mlsl/sobolseq.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/sobolseq.c.i: cmake_force
@@ -995,7 +1043,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/sobolseq.c.o.provides.bui
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mt19937ar.c.o: CMakeFiles/test-optimizer.dir/flags.make
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mt19937ar.c.o: ../3rdparty/POSEST/src/mlsl/mt19937ar.c
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_40) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mt19937ar.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_42) "Building C object CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mt19937ar.c.o"
 	/usr/bin/cc  $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mt19937ar.c.o   -c /home/qqh/projects/RandomForest/3rdparty/POSEST/src/mlsl/mt19937ar.c
 
 CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mt19937ar.c.i: cmake_force
@@ -1020,6 +1068,7 @@ CMakeFiles/test-optimizer.dir/3rdparty/POSEST/src/mlsl/mt19937ar.c.o.provides.bu
 # Object files for target test-optimizer
 test__optimizer_OBJECTS = \
 "CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o" \
+"CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o" \
 "CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o" \
 "CMakeFiles/test-optimizer.dir/src/Traker.cpp.o" \
 "CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o" \
@@ -1031,6 +1080,7 @@ test__optimizer_OBJECTS = \
 "CMakeFiles/test-optimizer.dir/src/Model.cpp.o" \
 "CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o" \
 "CMakeFiles/test-optimizer.dir/src/Particle.cpp.o" \
+"CMakeFiles/test-optimizer.dir/src/Detector.cpp.o" \
 "CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o" \
 "CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o" \
 "CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o" \
@@ -1064,6 +1114,7 @@ test__optimizer_OBJECTS = \
 test__optimizer_EXTERNAL_OBJECTS =
 
 test-optimizer: CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o
+test-optimizer: CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/src/Traker.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o
@@ -1075,6 +1126,7 @@ test-optimizer: CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/src/Model.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/src/Particle.cpp.o
+test-optimizer: CMakeFiles/test-optimizer.dir/src/Detector.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o
 test-optimizer: CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o
@@ -1170,7 +1222,7 @@ test-optimizer: /usr/local/lib/libopencv_imgproc.so.3.3.0
 test-optimizer: /usr/local/lib/libopencv_core.so.3.3.0
 test-optimizer: /usr/local/lib/libopencv_cudev.so.3.3.0
 test-optimizer: CMakeFiles/test-optimizer.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_41) "Linking CXX executable test-optimizer"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/qqh/projects/RandomForest/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_43) "Linking CXX executable test-optimizer"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/test-optimizer.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -1179,6 +1231,7 @@ CMakeFiles/test-optimizer.dir/build: test-optimizer
 .PHONY : CMakeFiles/test-optimizer.dir/build
 
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o.requires
+CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o.requires
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o.requires
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/Traker.cpp.o.requires
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o.requires
@@ -1190,6 +1243,7 @@ CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/ImgPro
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/Model.cpp.o.requires
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o.requires
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/Particle.cpp.o.requires
+CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/src/Detector.cpp.o.requires
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o.requires
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o.requires
 CMakeFiles/test-optimizer.dir/requires: CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o.requires

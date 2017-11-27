@@ -1,19 +1,34 @@
 %YAML:1.0
 
 # MAIN
-Init_Frame_Index: 100
-USE_GT_DATA: 0
-Calib_FX: 2666.67
-Calib_FY: 2666.67
-Calib_CX: 960
-Calib_CY: 540
-# Input/Output directories and Sets
-LOG_Threshold :1
-Output.Directory.LOG_DIR: "/home/qqh/output/ObjTrackLog/"
-Input.Directory.Obj: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/openbox.obj"
-Input.Directory.Video: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/video1/"
-Input.Directory.GroudTruth: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/video1/poseGT.txt"
 
+LOG_Threshold :1
+Init_Frame_Index: 0
+USE_GT_DATA: 1
+USE_VIDEO: 1
+
+
+
+
+
+# Input/Output directories and Sets
+Output.Directory.LOG_DIR: "/home/qqh/output/ObjTrackLog/"
+#Input.Directory.Obj: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/openbox.obj"
+#Input.Directory.Video: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/video1/"
+#Input.Directory.GroudTruth: "/home/qqh/DataSets/3D Rigid Tracking from RGB Images Dataset/box/video1/poseGT.txt"
+#Calib_FX: 2666.67
+#Calib_FY: 2666.67
+#Calib_CX: 960
+#Calib_CY: 540
+
+Calib_FX: 832.560809
+Calib_FY: 832.560809
+Calib_CX: 319.5
+Calib_CY: 239.5
+Input.Directory.Obj: "/home/qqh/DataSets/cat/cat.obj"
+Input.Directory.Video: "/home/qqh/DataSets/cat/cat_video.avi"
+Input.Directory.GroudTruth: "/home/qqh/DataSets/cat/cat_gtpose.txt"
+Input.Directory.DISTORTIONS: "/home/qqh/DataSets/cat/distortions.txt"
 
 #View
 CV_CIRCLE_RADIUS: 5
@@ -23,7 +38,8 @@ CV_DRAW_FRAME: 1
 #IMG
 IMG_PYR_NUMBER: 5
 IMG_DIST_MASK_SIZE: 8
-
+VIDEO_WIDTH: 1920
+VIDEO_HEIGHT: 1080
 #Optimize
 DX_SIZE: 1.0
 NX_LENGTH: 0.02

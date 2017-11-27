@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o"
+  "CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/Traker.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o"
@@ -11,6 +12,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/test-optimizer.dir/src/Model.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/OcvYamlConfig.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/Particle.cpp.o"
+  "CMakeFiles/test-optimizer.dir/src/Detector.cpp.o"
   "CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/marker.cpp.o"
   "CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glInfo.cpp.o"
   "CMakeFiles/test-optimizer.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o"

@@ -20,10 +20,11 @@ namespace OD
     int VIDEO_WIDTH;
     int VIDEO_HEIGHT;
     double fps;
+    bool USE_VIDEO;
     bool USE_GT;
     int START_INDEX;
     bool CV_LINE_P2NP;
-
+    float distortions[5] ;
     unsigned int OPTIMIZER_MAX_ITERATIN_NUM;
     float OPTIMIZER_NEASTP_THREHOLD;
     float OPTIMIZER_POINT_THREHOLD;
@@ -57,19 +58,22 @@ namespace OD
     std::string videoPath;
     std::string objFile;  
     std::string gtFile;  
-    
+    std::string DISTORTIONS; 
   public:
-    void loadConfig(TL::OcvYamlConfig &config){
+    void loadConfig(const TL::OcvYamlConfig &config){
       //parameters for init
       {
-
+	
+	Config::configInstance().USE_VIDEO = std::lround(config.value_f("USE_VIDEO"))== 1;
 	Config::configInstance().objFile = config.text("Input.Directory.Obj");;
 	Config::configInstance().videoPath =config.text("Input.Directory.Video");
 	Config::configInstance().gtFile= config.text("Input.Directory.GroudTruth");
-	Config::configInstance().camCalibration = OD::CameraCalibration(config.value_f("Calib_FX"),config.value_f("Calib_FY"),config.value_f("Calib_CX"),config.value_f("Calib_CY"));
+	Config::configInstance().DISTORTIONS= config.text("Input.Directory.DISTORTIONS");
 	Config::configInstance().model = glmReadOBJ(const_cast<char*>(Config::configInstance().objFile.c_str()));
 	Config::configInstance().START_INDEX=std::lround(config.value_f("Init_Frame_Index"));
-	Config::configInstance().USE_GT=std::lround(config.value_f("USE_GT_DATA"));
+	Config::configInstance().USE_GT=std::lround(config.value_f("USE_GT_DATA"))==1;
+	Config::configInstance().VIDEO_HEIGHT=std::lround(config.value_f("VIDEO_HEIGHT"));
+	Config::configInstance().VIDEO_WIDTH=std::lround(config.value_f("VIDEO_WIDTH"));
       }
       //parameters for Detect
       {
@@ -117,10 +121,31 @@ namespace OD
 // 	Config::configInstance().PARTICLE_STD_ROT=config.value_f("PARTICLE_STD_ROT");
 // 	Config::configInstance().PARTICLE_STD_TRA=config.value_f("PARTICLE_STD_TRA");
       }
+      //Load Files
+      {
+	loadFiles();
+	Config::configInstance().camCalibration = OD::CameraCalibration(config.value_f("Calib_FX"),config.value_f("Calib_FY"),config.value_f("Calib_CX"),config.value_f("Calib_CY"),Config::configInstance().distortions);
+
+      }
     }
     static Config& configInstance(){
       static Config G_CONFIG;
       return G_CONFIG;
+    }
+    private:
+      void loadFiles(){
+	std::string str;
+	ifstream _DISTORTIONS=ifstream(Config::configInstance().DISTORTIONS);    
+	if(_DISTORTIONS.is_open()){
+	  getline(_DISTORTIONS,str) ;    
+	  istringstream gt_line(str);
+	  int i=0;
+	  for (float pos; gt_line >> pos; ++i) {   
+		distortions[i] = pos;   
+	  }
+	}else{
+	  memset(distortions,0,5*sizeof(float));
+	}
     }
   };
     

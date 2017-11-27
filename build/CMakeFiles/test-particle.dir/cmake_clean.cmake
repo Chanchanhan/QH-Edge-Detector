@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/test-particle.dir/src/unittest/test-particle.cpp.o"
+  "CMakeFiles/test-particle.dir/src/DataProcessor.cpp.o"
   "CMakeFiles/test-particle.dir/src/CameraCalibration.cpp.o"
   "CMakeFiles/test-particle.dir/src/Traker.cpp.o"
   "CMakeFiles/test-particle.dir/src/EdgeDistanceFieldTraking.cpp.o"
@@ -11,6 +12,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/test-particle.dir/src/Model.cpp.o"
   "CMakeFiles/test-particle.dir/src/OcvYamlConfig.cpp.o"
   "CMakeFiles/test-particle.dir/src/Particle.cpp.o"
+  "CMakeFiles/test-particle.dir/src/Detector.cpp.o"
   "CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/marker.cpp.o"
   "CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/glInfo.cpp.o"
   "CMakeFiles/test-particle.dir/3rdparty/GLRenderer/src/glRenderer.cpp.o"
