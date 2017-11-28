@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/test-particle.dir/src/unittest/test-particle.cpp.o"
   "CMakeFiles/test-particle.dir/src/CameraCalibration.cpp.o"
   "CMakeFiles/test-particle.dir/src/DT.cpp.o"
+  "CMakeFiles/test-particle.dir/src/DataProcessor.cpp.o"
   "CMakeFiles/test-particle.dir/src/Detector.cpp.o"
   "CMakeFiles/test-particle.dir/src/EdgeDistanceFieldTraking.cpp.o"
   "CMakeFiles/test-particle.dir/src/ImgProcession.cpp.o"

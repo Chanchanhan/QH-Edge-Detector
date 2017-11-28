@@ -1150,6 +1150,39 @@ src/DT.cpp.s:
 	$(MAKE) -f CMakeFiles/test-obj-detector.dir/build.make CMakeFiles/test-obj-detector.dir/src/DT.cpp.s
 .PHONY : src/DT.cpp.s
 
+src/DataProcessor.o: src/DataProcessor.cpp.o
+
+.PHONY : src/DataProcessor.o
+
+# target to build an object file
+src/DataProcessor.cpp.o:
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o
+	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/DataProcessor.cpp.o
+	$(MAKE) -f CMakeFiles/test-obj-detector.dir/build.make CMakeFiles/test-obj-detector.dir/src/DataProcessor.cpp.o
+.PHONY : src/DataProcessor.cpp.o
+
+src/DataProcessor.i: src/DataProcessor.cpp.i
+
+.PHONY : src/DataProcessor.i
+
+# target to preprocess a source file
+src/DataProcessor.cpp.i:
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.i
+	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/DataProcessor.cpp.i
+	$(MAKE) -f CMakeFiles/test-obj-detector.dir/build.make CMakeFiles/test-obj-detector.dir/src/DataProcessor.cpp.i
+.PHONY : src/DataProcessor.cpp.i
+
+src/DataProcessor.s: src/DataProcessor.cpp.s
+
+.PHONY : src/DataProcessor.s
+
+# target to generate assembly for a file
+src/DataProcessor.cpp.s:
+	$(MAKE) -f CMakeFiles/test-optimizer.dir/build.make CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.s
+	$(MAKE) -f CMakeFiles/test-particle.dir/build.make CMakeFiles/test-particle.dir/src/DataProcessor.cpp.s
+	$(MAKE) -f CMakeFiles/test-obj-detector.dir/build.make CMakeFiles/test-obj-detector.dir/src/DataProcessor.cpp.s
+.PHONY : src/DataProcessor.cpp.s
+
 src/Detector.o: src/Detector.cpp.o
 
 .PHONY : src/Detector.o
@@ -1663,6 +1696,9 @@ help:
 	@echo "... src/DT.o"
 	@echo "... src/DT.i"
 	@echo "... src/DT.s"
+	@echo "... src/DataProcessor.o"
+	@echo "... src/DataProcessor.i"
+	@echo "... src/DataProcessor.s"
 	@echo "... src/Detector.o"
 	@echo "... src/Detector.i"
 	@echo "... src/Detector.s"

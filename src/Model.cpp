@@ -249,33 +249,53 @@ void Model::getVisualableVertices(const float * pose, cv::Mat& vis_vertices) {
   using namespace cv;
 
 	int visualable_line_count = 0;
+	std::vector<cv::Point3f> Xs; 
 	for (size_t i = 0; i<m_model->numLines; i++) {
 		if ((m_model->lines[i].tovisit )) {
-			visualable_line_count++;
-		}
-	}
-
-	cv::Mat pos(4, visualable_line_count*2, CV_32FC1);
-	int vis_line_index = 0;
-	for (size_t i = 0; i<m_model->numLines; i++) {
-		if (m_model->lines[i].tovisit) {
 			GLuint v0 = m_model->lines[i].vindices[0];
 			GLuint v1 = m_model->lines[i].vindices[1];
-
-			pos.at<float>(0, 2*vis_line_index) = m_model->vertices[3 * v0];
-			pos.at<float>(1, 2*vis_line_index) = m_model->vertices[3 * v0 + 1];
-			pos.at<float>(2, 2*vis_line_index) = m_model->vertices[3 * v0 + 2];
-			pos.at<float>(3, 2*vis_line_index) = 1;
-
-			pos.at<float>(0, 2*vis_line_index+1) = m_model->vertices[3 * v1];
-			pos.at<float>(1, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 1];
-			pos.at<float>(2, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 2];
-			pos.at<float>(3, 2*vis_line_index+1) = 1;
 			
-			vis_line_index++;
+			Point3f p1= Point3f(m_model->vertices[3 * v0],m_model->vertices[3 * v0 + 1],m_model->vertices[3 * v0 + 2]);
+			Point3f p2= Point3f(m_model->vertices[3 * v1],m_model->vertices[3 * v1 + 1],m_model->vertices[3 * v1 + 2]);
+			Point3f dX=(p2-p1);      
+			int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/Config::configInstance().NX_LENGTH;
+			if(Nx<1){
+			  Nx=1;
+			}
+			dX/=Nx;
+			for(int j=0;j<=Nx;j++){
+			  Xs.push_back(p1+dX*j);
+			}			
 		}
-		m_model->lines[i].e1 = 0; m_model->lines[i].e2 = 0;
 	}
+	visualable_line_count=Xs.size();
+	LOG(INFO)<<"visualable_line_count = "<<visualable_line_count;
+	cv::Mat pos(4, visualable_line_count, CV_32FC1);
+	for(int i=0;i<visualable_line_count;i++){
+	  pos.at<float>(0, i) =	Xs[i].x;
+	  pos.at<float>(1, i) = Xs[i].y;
+	  pos.at<float>(2, i) = Xs[i].z;
+	  pos.at<float>(3, i) = 1;
+	}
+// 	for (size_t i = 0; i<m_model->numLines; i++) {
+// 		if (m_model->lines[i].tovisit) {
+// 		  for(int j=0;j<
+// 			GLuint v0 = m_model->lines[i].vindices[0];
+// 			GLuint v1 = m_model->lines[i].vindices[1];
+// 
+// 			pos.at<float>(0, 2*vis_line_index) = m_model->vertices[3 * v0];
+// 			pos.at<float>(1, 2*vis_line_index) = m_model->vertices[3 * v0 + 1];
+// 			pos.at<float>(2, 2*vis_line_index) = m_model->vertices[3 * v0 + 2];
+// 			pos.at<float>(3, 2*vis_line_index) = 1;
+// 
+// 			pos.at<float>(0, 2*vis_line_index+1) = m_model->vertices[3 * v1];
+// 			pos.at<float>(1, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 1];
+// 			pos.at<float>(2, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 2];
+// 			pos.at<float>(3, 2*vis_line_index+1) = 1;			
+// 			vis_line_index++;
+// 		}
+// 		m_model->lines[i].e1 = 0; m_model->lines[i].e2 = 0;
+// 	}
 
 	vis_vertices = pos;
 }
@@ -452,22 +472,20 @@ const Mat& Model::getPos() const
   return modelPos;
 }
 void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3f> &contour_Xs,std::vector<cv::Point> &contour_xs){
-   LOG(WARNING)<<"getContourPointsAndIts3DPoints";
+  LOG(WARNING)<<"getContourPointsAndIts3DPoints";
   Mat visible_Xs,visible_xs;
   getVisualableVertices(pose,visible_Xs);
   Project(pose, visible_Xs, visible_xs);
-
+  LOG(WARNING)<<"visible_Xs.size "<<visible_Xs.size();
   cv::Mat img1=cv::Mat::zeros(m_height, m_width, CV_32SC1);
   for (int i = 0; i < visible_xs.cols; ++i) {
     cv::Point pt(visible_xs.at<float>(0, i), visible_xs.at<float>(1, i));
-    LOG(INFO)<<i + 1<<" pt : "<<pt;
+//     LOG(INFO)<<i + 1<<" pt : "<<pt;
     if (pointInFrame(pt)){
       img1.at<int>(pt) = i + 1;
     }
   }
       
-//   LOG(INFO)<<"img1 \n"<<img1;
-  /***get countour***/ 
   std::vector<std::vector<cv::Point> > contours; 
 
   cv::Mat line_img = cv::Mat::zeros(Config::configInstance().VIDEO_HEIGHT, Config::configInstance().VIDEO_WIDTH , CV_8UC1);
@@ -481,22 +499,24 @@ void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Po
 //   waitKey(0);
   /***to map X-x***/
   std::vector<cv::Point> &contour=contours[0];
-  int near[9][2]={{0,0},{0,-1},{0,1},{1,1},{1,-1},{-1,1},{-1,-1},{-1,0},{1,0}};
+  int near[9][2]={{0,0},{0,-1},{0,1},{-1,0},{1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
   LOG(WARNING)<<"contour.size() : "<<contour.size();
   Mat extrinsic =Transformation::getTransformationMatrix(pose);
   for (int i = 0; i < contour.size(); ++i){
       for(int j=0;j<9;j++){
 // 	cv::Point cpt = contour[i];      
 	int value = img1.at<int>(contour[i].y+near[j][0],contour[i].x+near[j][1]);
-// 	LOG(INFO)<<"cpt: "<<cpt<<" value: "<<value;
 	if (value > 0) {
-	  cv::Point3f pt3d( visible_Xs.at<float>(0, value - 1), visible_Xs.at<float>(1, value - 1),visible_Xs.at<float>(2, value - 1));
+	  img1.at<int>(contour[i].y+near[j][0],contour[i].x+near[j][1])=0;
+// 	  LOG(INFO)<<" value: "<<value;
+	  cv::Point3f pt3d( visible_Xs.at<float>(0, value - 1), visible_Xs.at<float>(1, value - 1),visible_Xs.at<float>(2, value - 1));	  
 	  contour_Xs.push_back(pt3d);
 	  contour_xs.push_back(X_to_x(pt3d,extrinsic));
 	  break;
 	}  
       }
   }
+  LOG(INFO)<<"contour_Xs.size = "<<contour_Xs.size();
 }
 void Model::getContourPointsAndIts3DPoints(const  float *pose,float(*ctrPts3DMem)[3],float(*ctrPts2DMem)[2],int &nctrPts)
 {

@@ -40,6 +40,8 @@ namespace OD
 
 		void solveEnergyFunction();
 		float computeEnergy(const cv::Mat& distFrame,const float * pose);
+		float computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs);
+
 		float nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint ,const bool printP=false);
 		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, float * pose_New);
 		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New);

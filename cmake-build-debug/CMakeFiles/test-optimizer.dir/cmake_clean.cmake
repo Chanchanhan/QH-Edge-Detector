@@ -2,6 +2,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/test-optimizer.dir/src/unittest/test-optimizer.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/CameraCalibration.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/DT.cpp.o"
+  "CMakeFiles/test-optimizer.dir/src/DataProcessor.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/Detector.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/EdgeDistanceFieldTraking.cpp.o"
   "CMakeFiles/test-optimizer.dir/src/ImgProcession.cpp.o"

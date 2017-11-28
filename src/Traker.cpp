@@ -276,7 +276,7 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
 		
 	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
 
-	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE/*||
+	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD/*||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE*//*||
 	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD*/){
 	  continue;
 	}
@@ -453,9 +453,6 @@ void Traker::constructEnergyFunction(const cv::Mat distFrame,const float* prePos
     }
 
   } 
-  /*
-  LOG(WARNING)<<"_j_X_Pose\n"<<j_X_Pose;
-  LOG(WARNING)<<"_j_Energy_X\n"<<j_Energy_X;*/
   
 if(Config::configInstance().CV_LINE_P2NP){
   LOG(WARNING)<<"to draw drawFrame";
@@ -562,6 +559,25 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
   }
    LOG(INFO)<<"coarsePose out: "<<coarsePose[0]<<" "<<coarsePose[1]<<" "<<coarsePose[2]<<" "<<coarsePose[3]<<" "<<coarsePose[4]<<" "<<coarsePose[5]<<" ";
 
+}
+float Traker::computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs){
+    float energy=0;
+    for(int i=0;i<countour_xs.size();++i){
+	 Point point= countour_xs[i];	 	 
+	 Point nearst=getNearstPointLocation(point);
+	 float de2 = /*getDistance2ToEdege(point1,point2,nearst)+*/distFrame.at<float>(point);
+	 if(de2==255.f){
+	    de2*=10;
+	 }
+	 if(distFrame.at<float>(nearst)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD|| distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD){
+	   de2*=2;
+	 }
+	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << distFrame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y;	 
+	  energy+=de2;
+       }
+    energy*=1.0f/countour_xs.size();
+    LOG(INFO)<<"Total mean Energy = "<<energy;
+    return energy;
 }
 
 float Traker::computeEnergy(const cv::Mat& distFrame,const float * pose)

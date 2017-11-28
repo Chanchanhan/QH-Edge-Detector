@@ -2,7 +2,7 @@
 
 # MAIN
 
-LOG_Threshold :1
+LOG_Threshold: 1
 Init_Frame_Index: 0
 USE_GT_DATA: 0
 USE_VIDEO: 0

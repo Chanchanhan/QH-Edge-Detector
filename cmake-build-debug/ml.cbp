@@ -737,6 +737,11 @@
 			<Option target="test-particle"/>
 			<Option target="test-obj-detector"/>
 		</Unit>
+		<Unit filename="/home/qqh/projects/RandomForest/src/DataProcessor.cpp">
+			<Option target="test-optimizer"/>
+			<Option target="test-particle"/>
+			<Option target="test-obj-detector"/>
+		</Unit>
 		<Unit filename="/home/qqh/projects/RandomForest/src/Detector.cpp">
 			<Option target="test-optimizer"/>
 			<Option target="test-particle"/>
