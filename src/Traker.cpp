@@ -54,6 +54,158 @@ Traker::~Traker()
   
 }
 
+int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frameId, const GLRenderer& glrender, float* _newPose, float& finalE2)
+{
+  if(m_frameId!=frameId){
+      m_frameId=frameId;
+      getDistMap(curFrame);
+      _locations=(int *)locationsMat.data;
+    }
+
+    mFrame=curFrame;
+    LOG(WARNING)<<" ";
+    LOG(WARNING)<<"frameId = "<<frameId;
+    
+//     imgHeight=distFrame.cols;
+//     imgWidth=distFrame.rows;
+    cv::Mat A_I=cv::Mat::eye(6,6,CV_32FC1);
+    float lamda=Config::configInstance().INIT_LAMDA;
+    std::vector<cv::Point> nPoints;
+    m_Transformation.setPose(prePose);
+    int itration_num=0;
+    Transformation newTransformation;
+    m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());  
+    float(*ctrPts3DMem)[3];
+    float(*ctrPts2DMem)[2];
+    int nctrPts;
+    m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),ctrPts3DMem,ctrPts2DMem,nctrPts);
+    
+    
+    float e2 = computeEnergy(distFrame, m_Transformation.Pose());
+    if(e2<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
+	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
+	finalE2 =e2;
+	return 1;
+      }else{      
+	
+	LOG(WARNING)<<"to optimize with energy = "<<e2<<"m_Transformation : "<<m_Transformation.M_Pose()<<" Config::configInstance().OPTIMIZER_THREHOLD_ENERGY = "<<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY;	
+    }
+    while(++itration_num<Config::configInstance().OPTIMIZER_MAX_ITERATIN_NUM){    
+      Sophus::SE3 T_SE3;	      
+      LOG(INFO)<<"a itration_num = " <<itration_num;
+      cv::Mat _A= cv::Mat::zeros(6,6,CV_32FC1),b= cv::Mat::zeros(6,1,CV_32FC1),A= cv::Mat::zeros(6,6,CV_32FC1);      
+      Mat A_inverse,dX ;
+      if(Config::configInstance().USE_PNP){
+      float coarsePose[6]={0};
+	getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
+	LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
+     if(computeEnergy(distFrame,coarsePose)<=(Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE*computeEnergy(distFrame,m_Transformation.Pose()))){
+	  m_Transformation.setPose(coarsePose,true);	  
+// 	 LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
+     }
+     else{
+       LOG(WARNING)<<"not update to coarse pose"<<m_Transformation.M_Pose();
+	}
+      }
+
+      constructEnergyFunction2(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
+      _A/=abs(_A.at<float>(0,0));
+      A=_A+A_I*lamda;
+      cv::invert(A,A_inverse);
+      //get dX
+      {
+	LOG(INFO)<<"A_I\n"<<A_I;
+	LOG(INFO)<<"lamda = "<<lamda;
+	LOG(INFO)<<"A\n"<<A;
+	b/=abs(b.at<float>(0,0));
+	LOG(INFO)<<"A_inverse\n"<<A_inverse;      
+	LOG(INFO)<<"b\n"<<b;
+	dX =- A_inverse*b*Config::configInstance().DX_SIZE;
+	LOG(WARNING)<<"dX "<<dX;
+      }
+  
+
+      float e2_new;
+      updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);
+	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+
+#ifndef EDF_TRAKER
+      while(e2_new>=e2){	 	
+	  if(itration_num>Config::configInstance().OPTIMIZER_MAX_ITERATIN_NUM){
+	    LOG(INFO)<<"to much itration_num!";
+	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+	    finalE2= computeEnergy(distFrame, _newPose);
+	    return -1;    
+	  }
+	  
+	  LOG(WARNING)<<"sorry!!!Not to optimize! e2 :"<<e2<<" e2_new: "<<e2_new<<" \n";
+
+	  lamda*=Config::configInstance().LM_STEP;
+	  A=_A+A_I*lamda;
+	  cv::invert(A,A_inverse);	  
+	  b/=abs(b.at<float>(0,0));
+// 	  LOG(INFO)<<"A_inverse\n"<<A_inverse;      
+// 	  LOG(INFO)<<"b\n"<<b;
+	  Mat dX =- A_inverse*b*Config::configInstance().DX_SIZE;
+	  LOG(WARNING)<<"dX "<<dX;
+	  float lastE2=e2_new;
+	  updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);	  	  
+		  	  
+	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
+	  itration_num++;
+	  
+	  if(fabs(lastE2==e2_new)<1e-10){
+	    LOG(WARNING)<<"Stop to LM-iteration ,beacuse lastE2>>E2";
+// 	    break;
+	  }
+	
+      }
+#else
+  int cstfunc = POSEST_EDFT_ERR_NLN;
+  float newPose[6];
+  int ret=edfTracker(m_Transformation.Pose(), distFrame,cstfunc,newPose);
+  newTransformation.setPose(newPose);
+  e2_new = computeEnergy(distFrame, newTransformation.Pose());
+  LOG(WARNING)<<"ret = "<<ret<<" Pose : "<<newTransformation.M_Pose()<<" energy = "<<e2_new;
+#endif
+    	     
+      if(e2_new>=e2){
+#ifndef EDF_TRAKER
+
+
+	lamda*=Config::configInstance().LM_STEP;
+	continue;
+#else
+	
+#endif
+      }else{      
+	LOG(WARNING)<<"good !To optimize! e2 :"<<e2<<" e2_new: "<<e2_new;
+	LOG(INFO)<<"dX "<<dX;
+	LOG(INFO)<<"newPose "<<newTransformation.M_Pose();
+	A_I=A.clone();
+	A_I/=abs(A_I.at<float>(0,0));
+	m_Transformation.setPose(newTransformation.Pose());         
+//         m_Transformation.setPose(newTransformation.M_Pose());
+
+	e2= e2_new;
+	lamda/=Config::configInstance().LM_STEP;
+      }
+      if(e2_new<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
+	LOG(WARNING)<<"succees optimize!";
+	memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+	finalE2 =computeEnergy(distFrame, _newPose);
+	return 1;
+	
+      }
+     
+    }
+
+        memcpy(_newPose,prePose,sizeof(float)*6);
+    finalE2= computeEnergy(distFrame, _newPose);
+    LOG(INFO)<<"to much itration_num!";
+    return -1;
+  
+}
 
 int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & frameId,const GLRenderer &glrender,float * _newPose,float &finalE2 )
 {
@@ -109,8 +261,7 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
      }
      else{
        LOG(WARNING)<<"not update to coarse pose"<<m_Transformation.M_Pose();
-
-    }
+	}
       }
 
       constructEnergyFunction2(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
@@ -227,6 +378,7 @@ cv::Point Traker::getNearstPointLocation(const cv::Point &point){
 //    cout<<"End to: x "<<x<<" y: "<<y<<endl;
    return Point(y,x);
 }
+
 void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b)
 {
   
@@ -363,7 +515,114 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
 
 
 }
+void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs,const int &lamda, cv::Mat &A, cv::Mat &b){
 
+  cv::Mat drawFrame;
+  if(Config::configInstance().CV_LINE_P2NP){    
+    cv::cvtColor(distFrame/255.f, drawFrame, CV_GRAY2BGR);
+  } 
+  int N_P=countour_xs.size();
+  cv::Mat j_X_Pose= cv::Mat::zeros(2,6,CV_32FC1);
+  cv::Mat j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);  
+  cv::Mat mat_b(6, N_P, CV_32FC1);   
+  cv::Mat J_X_Pose = cv::Mat::zeros(2*N_P,6,CV_32FC1);
+  cv::Mat J_Energy_X=cv::Mat::zeros(1,2*N_P,CV_32FC1);
+  
+  for(int pointIndex=0;pointIndex<N_P;++pointIndex){
+	cv::Mat m_X(4,1,CV_32FC1),C_X(4,1,CV_32FC1);
+	cv::Mat _j_X_Pose = cv::Mat::zeros(2,6,CV_32FC1);
+	cv::Mat _j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
+	m_X.at<float>(0,0)=countour_Xs[pointIndex].x,m_X.at<float>(1,0)=countour_Xs[pointIndex].y,m_X.at<float>(2,0)=countour_Xs[pointIndex].z,m_X.at<float>(3,0)=1;
+		
+	/*get nearestEdgeDistance ponit*/
+	Point point(countour_xs[pointIndex]);
+	Point nearstPoint = getNearstPointLocation(point);
+		
+// 	float dist2Edge=getDistanceToEdege(point1,point2,nearstPoint);
+	float dist2Edge=5;
+	if(distFrame.at<float>(nearstPoint)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD/*||dist2Edge>Config::configInstance().OPTIMIZER_MAX_EDGE_DISTANCE*//*||
+	  distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD*/){
+	  continue;
+	}
+	if(Config::configInstance().CV_LINE_P2NP){      
+	  m_data.m_model->DisplayLine(point,nearstPoint,drawFrame,sqrt(dist2Edge));
+	}
+	//computeEnergy
+	{	  
+	  float _x=C_X.at<float>(0,0);
+	  float _y=C_X.at<float>(0,1);
+	  float _z=C_X.at<float>(0,2);
+	  
+	  //try compute another way 
+	  {	  
+	  J_X_Pose.at<float>(2*pointIndex,0)=m_calibration.fx()/_z; 
+	  J_X_Pose.at<float>(2*pointIndex,1)=0;
+	  J_X_Pose.at<float>(2*pointIndex,2)=-m_calibration.fx()*_x/(_z*_z);
+	  J_X_Pose.at<float>(2*pointIndex,3)=-m_calibration.fx()*_x*_y/(_z*_z);
+	  J_X_Pose.at<float>(2*pointIndex,4)=m_calibration.fx()*(1+_x*_x/(_z*_z));
+	  J_X_Pose.at<float>(2*pointIndex,5)=m_calibration.fx()*_y/_z;
+
+	  J_X_Pose.at<float>(2*pointIndex+1,0)=0;  
+	  J_X_Pose.at<float>(2*pointIndex+1,1)=m_calibration.fy()/_z;      
+	  J_X_Pose.at<float>(2*pointIndex+1,2)=-m_calibration.fy()*_y/(_z*_z);    
+	  J_X_Pose.at<float>(2*pointIndex+1,3)=-m_calibration.fy()*(1+_y*_y*(1/(_z*_z)));
+	  J_X_Pose.at<float>(2*pointIndex+1,4)=-m_calibration.fy()*_x*_y/(_z*_z);
+	  J_X_Pose.at<float>(2*pointIndex+1,5)=m_calibration.fy()*_x/_z; 
+	  
+	  J_Energy_X.at<float>(0,2*pointIndex+0)=2*(point.x - nearstPoint.x);
+	  J_Energy_X.at<float>(0,2*pointIndex+1)=2*(point.y - nearstPoint.y);
+
+	  }
+	  
+	  _j_X_Pose.at<float>(0,0)=m_calibration.fx()/_z; 
+	  _j_X_Pose.at<float>(0,1)=0;
+	  _j_X_Pose.at<float>(0,2)=-m_calibration.fx()*_x/(_z*_z);
+	  _j_X_Pose.at<float>(0,3)=-m_calibration.fx()*_x*_y/(_z*_z);
+	  _j_X_Pose.at<float>(0,4)=m_calibration.fx()*(1+_x*_x/(_z*_z));
+	  _j_X_Pose.at<float>(0,5)=m_calibration.fx()*_y/_z;
+
+	  _j_X_Pose.at<float>(1,0)=0;  
+	  _j_X_Pose.at<float>(1,1)=m_calibration.fy()/_z;      
+	  _j_X_Pose.at<float>(1,2)=-m_calibration.fy()*_y/(_z*_z);    
+	  _j_X_Pose.at<float>(1,3)=-m_calibration.fy()*(1+_y*_y*(1/(_z*_z)));
+	  _j_X_Pose.at<float>(1,4)=-m_calibration.fy()*_x*_y/(_z*_z);
+	  _j_X_Pose.at<float>(1,5)=m_calibration.fy()*_x/_z;    
+		  
+
+	  _j_Energy_X.at<float>(0,0)=2*(point.x - nearstPoint.x);
+	  _j_Energy_X.at<float>(0,1)=2*(point.y - nearstPoint.y);
+	  _j_X_Pose*=Config::configInstance().J_SIZE;
+	  _j_Energy_X*=Config::configInstance().J_SIZE;
+	  Mat _J=_j_Energy_X*_j_X_Pose;
+	  Mat _J_T;
+	  cv::transpose(_J,_J_T);
+	  b+=_J_T*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
+	}
+	
+
+
+	j_X_Pose+=_j_X_Pose;
+	j_Energy_X+=_j_Energy_X;  
+      }
+
+    
+    
+
+  if(Config::configInstance().CV_LINE_P2NP){
+    LOG(WARNING)<<"to draw drawFrame";
+      m_data.m_model->DisplayCV(prePose, cv::Scalar(0, 0, 255),drawFrame);
+      if(m_frameId%10==0){
+	imshow("DRAW_LINE_P2NP",drawFrame);
+      //   imshow("distMap",frame/255.f);
+	waitKey(0);
+      }
+  }
+  Mat J=J_Energy_X*J_X_Pose*Config::configInstance().J_SIZE;
+  Mat J_T;  
+  cv::transpose(J,J_T);
+  A= J_T*J+lastA*lamda;//6*6
+  A*=Config::configInstance().SIZE_A;
+}
 void Traker::constructEnergyFunction(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b){
  cv::Mat j_X_Pose= cv::Mat::zeros(2,6,CV_32FC1);
   cv::Mat j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
@@ -481,7 +740,35 @@ float Traker::getDistanceToEdege(const Point& e0, const Point& e1, const Point& 
   return pow((e0.y-e1.y)*v.x +(e1.x-e0.x)*v.y+(e0.x*e1.y-e1.x*e0.y),2)/
 	  (pow((e1.x-e0.x),2)+pow((e1.y-e0.y),2));
 }
+void Traker::getCoarsePoseByPNP(const float *prePose,float *coarsePose, std::vector<cv::Point2d> &imagePoints,std::vector<cv::Point3d> &objectPoints){
+  cv::Mat distCoeffs(4,1,cv::DataType<double>::type);
+  distCoeffs.at<double>(0) = Config::configInstance().distortions[0];
+  distCoeffs.at<double>(1) = Config::configInstance().distortions[1];
+  distCoeffs.at<double>(2) = Config::configInstance().distortions[2];
+  distCoeffs.at<double>(3) = Config::configInstance().distortions[3];
+  cv::Mat rvec(3,1,cv::DataType<double>::type);
+  cv::Mat tvec(3,1,cv::DataType<double>::type);
+      
+   LOG(INFO)<<"coarsePose in: "<<prePose[0]<<" "<<prePose[1]<<" "<<prePose[2]<<" "<<prePose[3]<<" "<<prePose[4]<<" "<<prePose[5]<<" ";
 
+   for(int i=0;i<3;i++){
+     rvec.at<double>(i,0)=(double)prePose[i];
+     tvec.at<double>(i,0)=(double)prePose[i+3];
+   }
+
+  cv::Mat cameraMatrix(3,3,cv::DataType<double>::type);
+  cameraMatrix.at<double>(0,0)=m_calibration.fx();
+  cameraMatrix.at<double>(1,1)=m_calibration.fy();
+  cameraMatrix.at<double>(0,2)=m_calibration.cx();
+  cameraMatrix.at<double>(1,2)=m_calibration.cy();
+  cv::solvePnP(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec,true,cv::SOLVEPNP_EPNP);
+  
+  for(int i=0;i<3;++i){
+      coarsePose[i]=(float)rvec.at<double>(i,0);
+      coarsePose[i+3]=(float)tvec.at<double>(i,0);
+    }
+    LOG(INFO)<<"coarsePose out: "<<coarsePose[0]<<" "<<coarsePose[1]<<" "<<coarsePose[2]<<" "<<coarsePose[3]<<" "<<coarsePose[4]<<" "<<coarsePose[5]<<" ";
+}
 void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *coarsePose)
 {
 //   m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
@@ -531,35 +818,38 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
       }  
     }
   }
-  cv::Mat distCoeffs(4,1,cv::DataType<double>::type);
-  distCoeffs.at<double>(0) = Config::configInstance().distortions[0];
-  distCoeffs.at<double>(1) = Config::configInstance().distortions[1];
-  distCoeffs.at<double>(2) = Config::configInstance().distortions[2];
-  distCoeffs.at<double>(3) = Config::configInstance().distortions[3];
-  cv::Mat rvec(3,1,cv::DataType<double>::type);
-  cv::Mat tvec(3,1,cv::DataType<double>::type);
-      
-   LOG(INFO)<<"coarsePose in: "<<prePose[0]<<" "<<prePose[1]<<" "<<prePose[2]<<" "<<prePose[3]<<" "<<prePose[4]<<" "<<prePose[5]<<" ";
-
-   for(int i=0;i<3;i++){
-     rvec.at<double>(i,0)=(double)prePose[i];
-     tvec.at<double>(i,0)=(double)prePose[i+3];
-   }
-
-  cv::Mat cameraMatrix(3,3,cv::DataType<double>::type);
-  cameraMatrix.at<double>(0,0)=m_calibration.fx();
-  cameraMatrix.at<double>(1,1)=m_calibration.fy();
-  cameraMatrix.at<double>(0,2)=m_calibration.cx();
-  cameraMatrix.at<double>(1,2)=m_calibration.cy();
-  cv::solvePnP(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec,true,cv::SOLVEPNP_EPNP);
-
- for(int i=0;i<3;++i){
-    coarsePose[i]=(float)rvec.at<double>(i,0);
-    coarsePose[i+3]=(float)tvec.at<double>(i,0);
-  }
-   LOG(INFO)<<"coarsePose out: "<<coarsePose[0]<<" "<<coarsePose[1]<<" "<<coarsePose[2]<<" "<<coarsePose[3]<<" "<<coarsePose[4]<<" "<<coarsePose[5]<<" ";
+  getCoarsePoseByPNP(prePose,coarsePose,imagePoints, objectPoints);
+//   cv::Mat distCoeffs(4,1,cv::DataType<double>::type);
+//   distCoeffs.at<double>(0) = Config::configInstance().distortions[0];
+//   distCoeffs.at<double>(1) = Config::configInstance().distortions[1];
+//   distCoeffs.at<double>(2) = Config::configInstance().distortions[2];
+//   distCoeffs.at<double>(3) = Config::configInstance().distortions[3];
+//   cv::Mat rvec(3,1,cv::DataType<double>::type);
+//   cv::Mat tvec(3,1,cv::DataType<double>::type);
+//       
+//    LOG(INFO)<<"coarsePose in: "<<prePose[0]<<" "<<prePose[1]<<" "<<prePose[2]<<" "<<prePose[3]<<" "<<prePose[4]<<" "<<prePose[5]<<" ";
+// 
+//    for(int i=0;i<3;i++){
+//      rvec.at<double>(i,0)=(double)prePose[i];
+//      tvec.at<double>(i,0)=(double)prePose[i+3];
+//    }
+// 
+//   cv::Mat cameraMatrix(3,3,cv::DataType<double>::type);
+//   cameraMatrix.at<double>(0,0)=m_calibration.fx();
+//   cameraMatrix.at<double>(1,1)=m_calibration.fy();
+//   cameraMatrix.at<double>(0,2)=m_calibration.cx();
+//   cameraMatrix.at<double>(1,2)=m_calibration.cy();
+//   cv::solvePnP(objectPoints, imagePoints, cameraMatrix, distCoeffs, rvec, tvec,true,cv::SOLVEPNP_EPNP);
+// 
+//  for(int i=0;i<3;++i){
+//     coarsePose[i]=(float)rvec.at<double>(i,0);
+//     coarsePose[i+3]=(float)tvec.at<double>(i,0);
+//   }
+//    LOG(INFO)<<"coarsePose out: "<<coarsePose[0]<<" "<<coarsePose[1]<<" "<<coarsePose[2]<<" "<<coarsePose[3]<<" "<<coarsePose[4]<<" "<<coarsePose[5]<<" ";
 
 }
+
+
 float Traker::computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs){
     float energy=0;
     for(int i=0;i<countour_xs.size();++i){

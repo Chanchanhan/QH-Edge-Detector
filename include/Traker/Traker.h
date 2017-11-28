@@ -12,15 +12,7 @@ namespace OD
 {
 	struct Data
 	{
-// 		PointSet m_pointset;
 		Model* m_model;
-// 		Correspondence* m_correspondence;
-// 		int m_n;
-// 		cv::Mat m_frame;
-		//for robust m-estimation
-// 		float m_weight[1000];
-// 		float m_residual[1000];
-// 		float m_jac[1000][6];
 	};
 
 	
@@ -32,12 +24,13 @@ namespace OD
 		~Traker();
 	public:
 		int toTrack(const float * prePose,const cv::Mat& curFrame, const int & frameId,const GLRenderer &glrender, float * _newPose ,float &finalE2);
-	      
+		int toTrack2(const float * prePose,const cv::Mat& curFrame, const int & frameId,const GLRenderer &glrender, float * _newPose ,float &finalE2);
+
 	private:
 		int edfTracker(const float * prePose,const cv::Mat& distFrame,const  int NLrefine, float* newPose);
 		void constructEnergyFunction(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
 		void constructEnergyFunction2(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
-
+		void constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs,const int &lamda, cv::Mat &A, cv::Mat &b);
 		void solveEnergyFunction();
 		float computeEnergy(const cv::Mat& distFrame,const float * pose);
 		float computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs);
@@ -46,6 +39,7 @@ namespace OD
 		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, float * pose_New);
 		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New);
 		void getCoarsePoseByPNP(const float *prePose,const cv::Mat &distMap,float *coarsePose);
+		void getCoarsePoseByPNP(const float *prePose, float *coarsePose, std::vector<cv::Point2d> &imagePoints,std::vector<cv::Point3d> &objectPoints);
 		void getMk();
 		void getDistMap(const cv::Mat &frame);
 		void updateState(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new);
