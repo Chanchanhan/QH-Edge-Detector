@@ -36,7 +36,7 @@ namespace OD
 		const cv::Mat& getIntrinsic()  const;
 		
 		void getContourPointsAndIts3DPoints(const  float *pose, float(*ctrPts3DMem)[3],float(*ctrPts2DMem)[2],int &nctrPts);
-		void getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3f> &contour_Xs,std::vector<cv::Point> &contour_xs);
+		void getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3d> &contour_Xs,std::vector<cv::Point2d> &contour_xs);
 		const cv::Mat& getPos() const;
 		Point X_to_x(Point3f X,Mat extrisic);
 

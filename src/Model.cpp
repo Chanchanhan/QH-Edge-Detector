@@ -471,7 +471,7 @@ const Mat& Model::getPos() const
 {
   return modelPos;
 }
-void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3f> &contour_Xs,std::vector<cv::Point> &contour_xs){
+void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3d> &contour_Xs,std::vector<cv::Point2d> &contour_xs){
   LOG(WARNING)<<"getContourPointsAndIts3DPoints";
   Mat visible_Xs,visible_xs;
   getVisualableVertices(pose,visible_Xs);
@@ -509,7 +509,7 @@ void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Po
 	if (value > 0) {
 	  img1.at<int>(contour[i].y+near[j][0],contour[i].x+near[j][1])=0;
 // 	  LOG(INFO)<<" value: "<<value;
-	  cv::Point3f pt3d( visible_Xs.at<float>(0, value - 1), visible_Xs.at<float>(1, value - 1),visible_Xs.at<float>(2, value - 1));	  
+	  cv::Point3d pt3d( visible_Xs.at<float>(0, value - 1), visible_Xs.at<float>(1, value - 1),visible_Xs.at<float>(2, value - 1));	  
 	  contour_Xs.push_back(pt3d);
 	  contour_xs.push_back(X_to_x(pt3d,extrinsic));
 	  break;
@@ -520,8 +520,8 @@ void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Po
 }
 void Model::getContourPointsAndIts3DPoints(const  float *pose,float(*ctrPts3DMem)[3],float(*ctrPts2DMem)[2],int &nctrPts)
 {
-  std::vector<cv::Point3f> contour_Xs;
-  std::vector<cv::Point> contour_xs;
+  std::vector<cv::Point3d> contour_Xs;
+  std::vector<cv::Point2d> contour_xs;
   getContourPointsAndIts3DPoints(pose,contour_Xs,contour_xs);
   nctrPts=contour_Xs.size();
   ctrPts3DMem = (float(*)[3])malloc(nctrPts*sizeof(float[3]));

@@ -30,19 +30,20 @@ namespace OD
 		int edfTracker(const float * prePose,const cv::Mat& distFrame,const  int NLrefine, float* newPose);
 		void constructEnergyFunction(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
 		void constructEnergyFunction2(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
-		void constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs,const int &lamda, cv::Mat &A, cv::Mat &b);
+		void constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs, cv::Mat &A, cv::Mat &b);
 		void solveEnergyFunction();
 		float computeEnergy(const cv::Mat& distFrame,const float * pose);
-		float computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs);
-
+		float computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs);
+		float computeEnergy(const cv::Mat& distFrame,const float * pose, std::vector<cv::Point3d>  &countour_Xs, std::vector<cv::Point2d>  &countour_xs);
 		float nearestEdgeDistance(const cv::Point & point,const std::vector<m_img_point_data>  &edge_points,cv::Point &nPoint ,const bool printP=false);
 		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, float * pose_New);
 		void UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New);
 		void getCoarsePoseByPNP(const float *prePose,const cv::Mat &distMap,float *coarsePose);
-		void getCoarsePoseByPNP(const float *prePose, float *coarsePose, std::vector<cv::Point2d> &imagePoints,std::vector<cv::Point3d> &objectPoints);
+		void getCoarsePoseByPNP(const float *prePose, float *coarsePose,std::vector<cv::Point3d> &objectPoints, std::vector<cv::Point2d> &imagePoints);
 		void getMk();
 		void getDistMap(const cv::Mat &frame);
 		void updateState(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new);
+		void updateState2(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new);
 		float getDistanceToEdege(const cv::Point& e1,const cv::Point& e2,const cv::Point& v);
 		cv::Point getNearstPointLocation(const cv::Point &point);
 		

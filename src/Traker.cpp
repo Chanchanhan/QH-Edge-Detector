@@ -75,20 +75,21 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
     int itration_num=0;
     Transformation newTransformation;
     m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());  
-    float(*ctrPts3DMem)[3];
-    float(*ctrPts2DMem)[2];
+    std::vector<cv::Point3d> objectPoints;
+    std::vector<cv::Point2d> imagePoints;
+
     int nctrPts;
-    m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),ctrPts3DMem,ctrPts2DMem,nctrPts);
+    m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),objectPoints,imagePoints);
     
     
-    float e2 = computeEnergy(distFrame, m_Transformation.Pose());
+    float e2 = computeEnergy(distFrame,objectPoints,imagePoints);
     if(e2<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
 	LOG(INFO)<<"good init ,no need to optimize! energy = "<<e2;
 	finalE2 =e2;
 	return 1;
-      }else{      
-	
-	LOG(WARNING)<<"to optimize with energy = "<<e2<<"m_Transformation : "<<m_Transformation.M_Pose()<<" Config::configInstance().OPTIMIZER_THREHOLD_ENERGY = "<<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY;	
+      }else{     
+	LOG(WARNING)<<"to optimize with energy = "<<e2<<"m_Transformation : "<<m_Transformation.M_Pose()<<" Config::configInstance().OPTIMIZER_THREHOLD_ENERGY = "
+	<<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY;	
     }
     while(++itration_num<Config::configInstance().OPTIMIZER_MAX_ITERATIN_NUM){    
       Sophus::SE3 T_SE3;	      
@@ -97,10 +98,16 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
       Mat A_inverse,dX ;
       if(Config::configInstance().USE_PNP){
       float coarsePose[6]={0};
-	getCoarsePoseByPNP(m_Transformation.Pose(),distFrame,coarsePose);
+	getCoarsePoseByPNP(m_Transformation.Pose(),coarsePose ,objectPoints,imagePoints);
 	LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
-     if(computeEnergy(distFrame,coarsePose)<=(Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE*computeEnergy(distFrame,m_Transformation.Pose()))){
-	  m_Transformation.setPose(coarsePose,true);	  
+	  
+
+    std::vector<cv::Point3d> _objectPoints;
+    std::vector<cv::Point2d> _imagePoints;
+     if(computeEnergy(distFrame,coarsePose,_objectPoints,_imagePoints)<=(Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE*computeEnergy(distFrame,objectPoints,imagePoints))){
+	  m_Transformation.setPose(coarsePose,true);	
+	  objectPoints=_objectPoints;
+	  imagePoints=_imagePoints;
 // 	 LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
      }
      else{
@@ -108,7 +115,7 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
 	}
       }
 
-      constructEnergyFunction2(distFrame,m_Transformation.Pose(),A_I,lamda, _A,b);
+      constructEnergyFunction2(distFrame,m_Transformation.Pose(),A_I,lamda,objectPoints,imagePoints, _A,b);
       _A/=abs(_A.at<float>(0,0));
       A=_A+A_I*lamda;
       cv::invert(A,A_inverse);
@@ -127,14 +134,13 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
 
       float e2_new;
       updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);
-	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
-
-#ifndef EDF_TRAKER
+      memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
+      
       while(e2_new>=e2){	 	
 	  if(itration_num>Config::configInstance().OPTIMIZER_MAX_ITERATIN_NUM){
 	    LOG(INFO)<<"to much itration_num!";
 	    memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
-	    finalE2= computeEnergy(distFrame, _newPose);
+	    finalE2= computeEnergy(distFrame, _newPose,objectPoints,imagePoints);
 	    return -1;    
 	  }
 	  
@@ -160,28 +166,17 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
 	  }
 	
       }
-#else
-  int cstfunc = POSEST_EDFT_ERR_NLN;
-  float newPose[6];
-  int ret=edfTracker(m_Transformation.Pose(), distFrame,cstfunc,newPose);
-  newTransformation.setPose(newPose);
-  e2_new = computeEnergy(distFrame, newTransformation.Pose());
-  LOG(WARNING)<<"ret = "<<ret<<" Pose : "<<newTransformation.M_Pose()<<" energy = "<<e2_new;
-#endif
+
     	     
       if(e2_new>=e2){
-#ifndef EDF_TRAKER
-
-
 	lamda*=Config::configInstance().LM_STEP;
 	continue;
-#else
 	
-#endif
       }else{      
 	LOG(WARNING)<<"good !To optimize! e2 :"<<e2<<" e2_new: "<<e2_new;
 	LOG(INFO)<<"dX "<<dX;
 	LOG(INFO)<<"newPose "<<newTransformation.M_Pose();
+	m_data.m_model->getContourPointsAndIts3DPoints(newTransformation.Pose(),objectPoints,imagePoints);
 	A_I=A.clone();
 	A_I/=abs(A_I.at<float>(0,0));
 	m_Transformation.setPose(newTransformation.Pose());         
@@ -193,7 +188,7 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
       if(e2_new<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
 	LOG(WARNING)<<"succees optimize!";
 	memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
-	finalE2 =computeEnergy(distFrame, _newPose);
+	finalE2 =computeEnergy(distFrame, _newPose,objectPoints,imagePoints);
 	return 1;
 	
       }
@@ -515,7 +510,7 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
 
 
 }
-void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs,const int &lamda, cv::Mat &A, cv::Mat &b){
+void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs, cv::Mat &A, cv::Mat &b){
 
   cv::Mat drawFrame;
   if(Config::configInstance().CV_LINE_P2NP){    
@@ -740,7 +735,7 @@ float Traker::getDistanceToEdege(const Point& e0, const Point& e1, const Point& 
   return pow((e0.y-e1.y)*v.x +(e1.x-e0.x)*v.y+(e0.x*e1.y-e1.x*e0.y),2)/
 	  (pow((e1.x-e0.x),2)+pow((e1.y-e0.y),2));
 }
-void Traker::getCoarsePoseByPNP(const float *prePose,float *coarsePose, std::vector<cv::Point2d> &imagePoints,std::vector<cv::Point3d> &objectPoints){
+void Traker::getCoarsePoseByPNP(const float *prePose,float *coarsePose,std::vector<cv::Point3d> &objectPoints, std::vector<cv::Point2d> &imagePoints){
   cv::Mat distCoeffs(4,1,cv::DataType<double>::type);
   distCoeffs.at<double>(0) = Config::configInstance().distortions[0];
   distCoeffs.at<double>(1) = Config::configInstance().distortions[1];
@@ -770,9 +765,7 @@ void Traker::getCoarsePoseByPNP(const float *prePose,float *coarsePose, std::vec
     LOG(INFO)<<"coarsePose out: "<<coarsePose[0]<<" "<<coarsePose[1]<<" "<<coarsePose[2]<<" "<<coarsePose[3]<<" "<<coarsePose[4]<<" "<<coarsePose[5]<<" ";
 }
 void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *coarsePose)
-{
-//   m_data.m_model->GetImagePoints(prePose, m_data.m_pointset);
-  
+{  
   float energy =0;
   int size =0;
   Mat intrinsic = m_data.m_model->getIntrinsic();
@@ -818,7 +811,7 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
       }  
     }
   }
-  getCoarsePoseByPNP(prePose,coarsePose,imagePoints, objectPoints);
+  getCoarsePoseByPNP(prePose,coarsePose, objectPoints,imagePoints);
 //   cv::Mat distCoeffs(4,1,cv::DataType<double>::type);
 //   distCoeffs.at<double>(0) = Config::configInstance().distortions[0];
 //   distCoeffs.at<double>(1) = Config::configInstance().distortions[1];
@@ -849,8 +842,12 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
 
 }
 
+float Traker::computeEnergy(const cv::Mat& distFrame,const float * pose, std::vector<cv::Point3d>  &countour_Xs, std::vector<cv::Point2d>  &countour_xs){
+    m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),countour_Xs,countour_xs);
 
-float Traker::computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3f>  &countour_Xs,const std::vector<cv::Point>  &countour_xs){
+   return computeEnergy(distFrame,countour_Xs,countour_xs);
+}
+float Traker::computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs){
     float energy=0;
     for(int i=0;i<countour_xs.size();++i){
 	 Point point= countour_xs[i];	 	 
@@ -965,8 +962,36 @@ float Traker::nearestEdgeDistance(const cv::Point & point,const std::vector<m_im
   }
   return Config::configInstance().ENERGY_SIZE*nearstD; 
 }
-void Traker::updateState(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new )
+void Traker::updateState2(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new)
+{  
+    std::vector<cv::Point3d> objectPoints;
+    std::vector<cv::Point2d> imagePoints;
+    if(Config::configInstance().USE_MY_TRANSFORMATION){
+	    new_transformation.setPose(old_Transformation.Pose());
+	    new_transformation.xTransformation(dX);
+	    e2_new = computeEnergy(distFrame, new_transformation.Pose(),objectPoints,imagePoints);
+	  }
+	  else if(Config::configInstance().USE_SOPHUS)
+	  {
+	    Sophus::SE3 T_SE3;
+	    Eigen::Vector3d v3d(m_Transformation.u1(),m_Transformation.u2(),m_Transformation.u3());     
+	    Eigen::Vector3d translationV3(m_Transformation.x(),m_Transformation.y(),m_Transformation.z());     
+	    T_SE3 =Sophus::SE3( Sophus::SO3::exp(v3d),translationV3); 
+	    Vector6d se3_Update;
+	    for(int i=0;i<3;i++){
+	      se3_Update(i,0)=(double)dX.at<float>(0,i+3);
+	      se3_Update(i+3,0)=(double)dX.at<float>(0,i);
+	    }
+	    Sophus::SE3 update_SE3=Sophus::SE3::exp(se3_Update); 
+	    Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
+	    new_transformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
+	    e2_new = computeEnergy(distFrame, new_transformation.Pose(),objectPoints,imagePoints);
+	  }
+}
+void Traker::updateState(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new)
 {
+	
+  
 	  if(Config::configInstance().USE_MY_TRANSFORMATION){
 	    new_transformation.setPose(old_Transformation.Pose());
 	    new_transformation.xTransformation(dX);
@@ -987,12 +1012,7 @@ void Traker::updateState(const cv::Mat&distFrame, const Mat& dX, const Transform
 	    Sophus::SE3 new_T_SE3=Sophus::SE3::exp(se3_Update)*T_SE3;	
 	    new_transformation.setPoseFromTransformationMatrix(new_T_SE3.matrix());
 	    e2_new = computeEnergy(distFrame, new_transformation.Pose());
-	  }/*else{
-	    float newPose[6];
-	    UpdateStateLM(dX,m_Transformation.Pose(),newPose);	
-	    new_transformation.setPose(newPose);
-	    e2_new = computeEnergy(distFrame, new_transformation.Pose());
-	  }*/
+	  }
 }
 
 void Traker::UpdateStateLM(const cv::Mat &dx, const float * pose_Old, Transformation &transformation_New)
