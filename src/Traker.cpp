@@ -98,21 +98,24 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
       Mat A_inverse,dX ;
       if(Config::configInstance().USE_PNP){
       float coarsePose[6]={0};
+      // a bug here ,bu this imagePoints!
 	getCoarsePoseByPNP(m_Transformation.Pose(),coarsePose ,objectPoints,imagePoints);
 	LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
 	  
 
     std::vector<cv::Point3d> _objectPoints;
     std::vector<cv::Point2d> _imagePoints;
-     if(computeEnergy(distFrame,coarsePose,_objectPoints,_imagePoints)<=(Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE*computeEnergy(distFrame,objectPoints,imagePoints))){
-	  m_Transformation.setPose(coarsePose,true);	
-	  objectPoints=_objectPoints;
-	  imagePoints=_imagePoints;
+//      if(computeEnergy(distFrame,coarsePose,_objectPoints,_imagePoints)<=(Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE*computeEnergy(distFrame,objectPoints,imagePoints))){
+	  m_Transformation.setPose(coarsePose,true);
+	      m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),objectPoints,imagePoints);
+
+// 	  objectPoints=_objectPoints;
+// 	  imagePoints=_imagePoints;
 // 	 LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
-     }
-     else{
-       LOG(WARNING)<<"not update to coarse pose"<<m_Transformation.M_Pose();
-	}
+//      }
+//      else{
+//        LOG(WARNING)<<"not update to coarse pose"<<m_Transformation.M_Pose();
+// 	}
       }
 
       constructEnergyFunction2(distFrame,m_Transformation.Pose(),A_I,lamda,objectPoints,imagePoints, _A,b);
@@ -844,12 +847,12 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
 
 float Traker::computeEnergy(const cv::Mat& distFrame,const float * pose, std::vector<cv::Point3d>  &countour_Xs, std::vector<cv::Point2d>  &countour_xs){
     m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),countour_Xs,countour_xs);
-
    return computeEnergy(distFrame,countour_Xs,countour_xs);
 }
 float Traker::computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs){
     float energy=0;
-    for(int i=0;i<countour_xs.size();++i){
+	int nPoint=countour_xs.size();
+    for(int i=0;i<nPoint;++i){
 	 Point point= countour_xs[i];	 	 
 	 Point nearst=getNearstPointLocation(point);
 	 float de2 = /*getDistance2ToEdege(point1,point2,nearst)+*/distFrame.at<float>(point);
@@ -859,11 +862,14 @@ float Traker::computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point
 	 if(distFrame.at<float>(nearst)>=Config::configInstance().OPTIMIZER_NEASTP_THREHOLD|| distFrame.at<float>(point)>=Config::configInstance().OPTIMIZER_POINT_THREHOLD){
 	   de2*=2;
 	 }
-	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << distFrame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y;	 
-	  energy+=de2;
+		energy+=de2;
+	 LOG(INFO)<< i<<"th point :"<<point.x<<" "<<point.y<< "  energy: " << distFrame.at<float>(point)<<" Distance energy: "<<de2<<"  np: "<<nearst.x<<" "<<nearst.y;
+
        }
-    energy*=1.0f/countour_xs.size();
-    LOG(INFO)<<"Total mean Energy = "<<energy;
+	LOG(INFO)<<"Total Energy = "<<energy;
+
+	energy*=1.0f/nPoint;
+    LOG(INFO)<<" mean Energy = "<<energy;
     return energy;
 }
 
