@@ -26,9 +26,6 @@ static void printMat(std::string name, cv::Mat M){
 Model::Model(const Config& config) : m_bb_points(4,8,CV_32FC1),m_model( config.model),m_radius ( glmMaxRadius(m_model)),m_calibration ( config.camCalibration),	m_width ( config.VIDEO_WIDTH),
 	m_height ( config.VIDEO_HEIGHT)
 {
-
-
-
 	getVisibleLines();
 	
 	intrinsic=cv::Mat(3,4,CV_32FC1);
@@ -254,11 +251,12 @@ void Model::getVisualableVertices(const float * pose, cv::Mat& vis_vertices) {
 		if ((m_model->lines[i].tovisit )) {
 			GLuint v0 = m_model->lines[i].vindices[0];
 			GLuint v1 = m_model->lines[i].vindices[1];
-			
 			Point3f p1= Point3f(m_model->vertices[3 * v0],m_model->vertices[3 * v0 + 1],m_model->vertices[3 * v0 + 2]);
 			Point3f p2= Point3f(m_model->vertices[3 * v1],m_model->vertices[3 * v1 + 1],m_model->vertices[3 * v1 + 2]);
 			Point3f dX=(p2-p1);      
 			int Nx = sqrt(dX.x*dX.x+dX.y*dX.y+dX.z*dX.z)/Config::configInstance().NX_LENGTH;
+			LOG(INFO)<<"visible lines "<<m_model->lines[i].vindices[0]<<" "<<m_model->lines[i].vindices[1]<<" Nx = "<<Nx;
+
 			if(Nx<1){
 			  Nx=1;
 			}
@@ -277,26 +275,6 @@ void Model::getVisualableVertices(const float * pose, cv::Mat& vis_vertices) {
 	  pos.at<float>(2, i) = Xs[i].z;
 	  pos.at<float>(3, i) = 1;
 	}
-// 	for (size_t i = 0; i<m_model->numLines; i++) {
-// 		if (m_model->lines[i].tovisit) {
-// 		  for(int j=0;j<
-// 			GLuint v0 = m_model->lines[i].vindices[0];
-// 			GLuint v1 = m_model->lines[i].vindices[1];
-// 
-// 			pos.at<float>(0, 2*vis_line_index) = m_model->vertices[3 * v0];
-// 			pos.at<float>(1, 2*vis_line_index) = m_model->vertices[3 * v0 + 1];
-// 			pos.at<float>(2, 2*vis_line_index) = m_model->vertices[3 * v0 + 2];
-// 			pos.at<float>(3, 2*vis_line_index) = 1;
-// 
-// 			pos.at<float>(0, 2*vis_line_index+1) = m_model->vertices[3 * v1];
-// 			pos.at<float>(1, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 1];
-// 			pos.at<float>(2, 2*vis_line_index+1) = m_model->vertices[3 * v1 + 2];
-// 			pos.at<float>(3, 2*vis_line_index+1) = 1;			
-// 			vis_line_index++;
-// 		}
-// 		m_model->lines[i].e1 = 0; m_model->lines[i].e2 = 0;
-// 	}
-
 	vis_vertices = pos;
 }
 
@@ -346,7 +324,7 @@ void Model::setVisibleLinesAtPose(const float * pose)
   }
 
 }
-Point Model::X_to_x(Point3f X,Mat extrisic)
+Point Model::X_to_x(const Point3f &X,const Mat &extrisic)
 {
   Mat P(4,1,CV_32FC1);
   Mat res(3,1,CV_32FC1);

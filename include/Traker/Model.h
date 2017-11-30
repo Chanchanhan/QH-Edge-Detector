@@ -38,7 +38,7 @@ namespace OD
 		void getContourPointsAndIts3DPoints(const  float *pose, float(*ctrPts3DMem)[3],float(*ctrPts2DMem)[2],int &nctrPts);
 		void getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3d> &contour_Xs,std::vector<cv::Point2d> &contour_xs);
 		const cv::Mat& getPos() const;
-		Point X_to_x(Point3f X,Mat extrisic);
+		Point X_to_x(const Point3f & X,const cv::Mat & extrisic);
 
 		cv::Mat GetPoseMatrix();
 		cv::Mat GetPoseMatrix(cv::Mat pose);

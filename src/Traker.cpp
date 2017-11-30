@@ -72,15 +72,16 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
     float lamda=Config::configInstance().INIT_LAMDA;
     std::vector<cv::Point> nPoints;
     m_Transformation.setPose(prePose);
+    
     int itration_num=0;
     Transformation newTransformation;
     m_data.m_model->setVisibleLinesAtPose(m_Transformation.Pose());  
     std::vector<cv::Point3d> objectPoints;
     std::vector<cv::Point2d> imagePoints;
-
+    std::vector<cv::Point2d> nearPoints;
     int nctrPts;
     m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),objectPoints,imagePoints);
-    
+    getNearImgPoint(imagePoints,nearPoints);
     
     float e2 = computeEnergy(distFrame,objectPoints,imagePoints);
     if(e2<Config::configInstance().OPTIMIZER_THREHOLD_ENERGY){
@@ -99,23 +100,23 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
       if(Config::configInstance().USE_PNP){
       float coarsePose[6]={0};
       // a bug here ,bu this imagePoints!
-	getCoarsePoseByPNP(m_Transformation.Pose(),coarsePose ,objectPoints,imagePoints);
+	getCoarsePoseByPNP(m_Transformation.Pose(),coarsePose ,objectPoints,nearPoints);
 	LOG(INFO)<<"pre pose"<<m_Transformation.M_Pose();
 	  
 
     std::vector<cv::Point3d> _objectPoints;
     std::vector<cv::Point2d> _imagePoints;
-//      if(computeEnergy(distFrame,coarsePose,_objectPoints,_imagePoints)<=(Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE*computeEnergy(distFrame,objectPoints,imagePoints))){
+     if(computeEnergy(distFrame,coarsePose,_objectPoints,_imagePoints)<=(Config::configInstance().OPTIMIZER_COARSE_POSE_SIZE*computeEnergy(distFrame,objectPoints,imagePoints))){
 	  m_Transformation.setPose(coarsePose,true);
 	      m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),objectPoints,imagePoints);
 
-// 	  objectPoints=_objectPoints;
-// 	  imagePoints=_imagePoints;
-// 	 LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
-//      }
-//      else{
-//        LOG(WARNING)<<"not update to coarse pose"<<m_Transformation.M_Pose();
-// 	}
+	  objectPoints=_objectPoints;
+	  imagePoints=_imagePoints;
+	 LOG(INFO)<<" update to coarse pose"<<m_Transformation.M_Pose();
+     }
+     else{
+       LOG(WARNING)<<"not update to coarse pose"<<m_Transformation.M_Pose();
+	}
       }
 
       constructEnergyFunction2(distFrame,m_Transformation.Pose(),A_I,lamda,objectPoints,imagePoints, _A,b);
@@ -136,7 +137,7 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
   
 
       float e2_new;
-      updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);
+      updateState2(distFrame,dX,m_Transformation,newTransformation,e2_new);
       memcpy(_newPose,m_Transformation.Pose(),sizeof(float)*6);
       
       while(e2_new>=e2){	 	
@@ -158,7 +159,7 @@ int Traker::toTrack2(const float* prePose, const Mat& curFrame, const int& frame
 	  Mat dX =- A_inverse*b*Config::configInstance().DX_SIZE;
 	  LOG(WARNING)<<"dX "<<dX;
 	  float lastE2=e2_new;
-	  updateState(distFrame,dX,m_Transformation,newTransformation,e2_new);	  	  
+	  updateState2(distFrame,dX,m_Transformation,newTransformation,e2_new);	  	  
 		  	  
 	  LOG(WARNING)<<"newPose"<<newTransformation.M_Pose()<<"  e2_new(newPose) = "<<e2_new;
 	  itration_num++;
@@ -363,6 +364,12 @@ int Traker::toTrack(const float * prePose,const cv::Mat& curFrame,const int & fr
   int64 teim0 = cv::getTickCount();
 }
 
+void Traker::getNearImgPoint(const vector< Point2d >& imagePoints, vector< Point2d >& nearPoints)
+{
+  for(int i=0;i<imagePoints.size();i++){
+    nearPoints.push_back(getNearstPointLocation(imagePoints[i]));
+  }
+}
 
 
 cv::Point Traker::getNearstPointLocation(const cv::Point &point){
@@ -525,13 +532,14 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
   cv::Mat mat_b(6, N_P, CV_32FC1);   
   cv::Mat J_X_Pose = cv::Mat::zeros(2*N_P,6,CV_32FC1);
   cv::Mat J_Energy_X=cv::Mat::zeros(1,2*N_P,CV_32FC1);
-  
+  cv::Mat extrinsic = Transformation::getTransformationMatrix(prePose);
   for(int pointIndex=0;pointIndex<N_P;++pointIndex){
 	cv::Mat m_X(4,1,CV_32FC1),C_X(4,1,CV_32FC1);
+
 	cv::Mat _j_X_Pose = cv::Mat::zeros(2,6,CV_32FC1);
 	cv::Mat _j_Energy_X=cv::Mat::zeros(1,2,CV_32FC1);
 	m_X.at<float>(0,0)=countour_Xs[pointIndex].x,m_X.at<float>(1,0)=countour_Xs[pointIndex].y,m_X.at<float>(2,0)=countour_Xs[pointIndex].z,m_X.at<float>(3,0)=1;
-		
+	C_X=extrinsic*m_X;	
 	/*get nearestEdgeDistance ponit*/
 	Point point(countour_xs[pointIndex]);
 	Point nearstPoint = getNearstPointLocation(point);
@@ -586,14 +594,17 @@ void Traker::constructEnergyFunction2(const cv::Mat distFrame,const float* prePo
 	  _j_X_Pose.at<float>(1,4)=-m_calibration.fy()*_x*_y/(_z*_z);
 	  _j_X_Pose.at<float>(1,5)=m_calibration.fy()*_x/_z;    
 		  
-
+	
 	  _j_Energy_X.at<float>(0,0)=2*(point.x - nearstPoint.x);
 	  _j_Energy_X.at<float>(0,1)=2*(point.y - nearstPoint.y);
 	  _j_X_Pose*=Config::configInstance().J_SIZE;
 	  _j_Energy_X*=Config::configInstance().J_SIZE;
+	    LOG(INFO)<<"_j_Energy_X : "<<_j_Energy_X;
+	  LOG(INFO)<<"_j_X_Pose : "<<_j_X_Pose;
 	  Mat _J=_j_Energy_X*_j_X_Pose;
 	  Mat _J_T;
 	  cv::transpose(_J,_J_T);
+	  LOG(INFO)<<"_J : "<<_J;
 	  b+=_J_T*( (point.x - nearstPoint.x)*(point.x - nearstPoint.x)+(point.y - nearstPoint.y)*(point.y - nearstPoint.y));
 	}
 	
@@ -846,7 +857,7 @@ void Traker::getCoarsePoseByPNP(const float *prePose, const Mat &distMap,float *
 }
 
 float Traker::computeEnergy(const cv::Mat& distFrame,const float * pose, std::vector<cv::Point3d>  &countour_Xs, std::vector<cv::Point2d>  &countour_xs){
-    m_data.m_model->getContourPointsAndIts3DPoints (m_Transformation.Pose(),countour_Xs,countour_xs);
+    m_data.m_model->getContourPointsAndIts3DPoints (pose,countour_Xs,countour_xs);
    return computeEnergy(distFrame,countour_Xs,countour_xs);
 }
 float Traker::computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs){

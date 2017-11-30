@@ -45,6 +45,7 @@ namespace OD
 		void updateState(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new);
 		void updateState2(const cv::Mat&distFrame, const Mat& dX, const Transformation& old_Transformation, Transformation& new_transformation,float &e2_new);
 		float getDistanceToEdege(const cv::Point& e1,const cv::Point& e2,const cv::Point& v);
+		void getNearImgPoint(const std::vector<cv::Point2d> &imagePoints,std::vector<cv::Point2d> &nearPoints);
 		cv::Point getNearstPointLocation(const cv::Point &point);
 		
 	public:
