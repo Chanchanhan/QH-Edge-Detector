@@ -1,5 +1,12 @@
 /home/qqh/workspace/clion-2017.2.3/bin/cmake/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/qqh/projects/RandomForest
 doxygen not found
+-- Looking for dgemm_
+-- Looking for dgemm_ - found
+-- A library with BLAS API found.
+-- A library with BLAS API found.
+-- Looking for cheev_
+-- Looking for cheev_ - found
+-- A library with LAPACK API found.
 CMake Warning (dev) at /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-3.8/Modules/FindOpenMP.cmake:179 (if):
   if given arguments:
 
@@ -11,7 +18,7 @@ CMake Warning (dev) at /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-
   command to set the policy and suppress this warning.
 Call Stack (most recent call first):
   /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-3.8/Modules/FindOpenMP.cmake:224 (_OPENMP_GET_SPEC_DATE)
-  CMakeLists.txt:78 (find_package)
+  CMakeLists.txt:94 (find_package)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
 CMake Warning (dev) at /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-3.8/Modules/FindOpenMP.cmake:179 (if):
@@ -25,7 +32,7 @@ CMake Warning (dev) at /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-
   command to set the policy and suppress this warning.
 Call Stack (most recent call first):
   /home/qqh/workspace/clion-2017.2.3/bin/cmake/share/cmake-3.8/Modules/FindOpenMP.cmake:266 (_OPENMP_GET_SPEC_DATE)
-  CMakeLists.txt:78 (find_package)
+  CMakeLists.txt:94 (find_package)
 This warning is for project developers.  Use -Wno-dev to suppress it.
 
 -- OpenMP found

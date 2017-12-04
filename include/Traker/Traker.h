@@ -33,6 +33,7 @@ namespace OD
 		void constructEnergyFunction(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs, cv::Mat &A, cv::Mat &b);
 		void constructEnergyFunction2(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
 		void constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs, cv::Mat &A, cv::Mat &b);
+		void computeJacobian(const Point3f& X, const Point& point, const Mat& intrinsic, const Mat& extrinsic, Mat& J_X_Pose, Mat& J_Energy_X, Mat& b,cv::Mat &drawFrame);
 		void solveEnergyFunction();
 		float computeEnergy(const cv::Mat& distFrame,const float * pose);
 		float computeEnergy(const cv::Mat& distFrame,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs);

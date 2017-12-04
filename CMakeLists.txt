@@ -151,7 +151,7 @@ target_link_libraries( test-particle ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_
 
 add_executable(test-optimizer src/unittest/test-optimizer.cpp ${headers} ${SRC_LIST})
 add_test(test-optimizer test-Edge-detector)
-target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}  ${Sophus_LIBRARIES} glog::glog     -O2 blas lapack lapack_LINUX.a blas_LINUX.a libf2c.a
+target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}  ${Sophus_LIBRARIES} glog::glog     -O2 blas lapack
 ) # exe 链接 OpenCV
 
 # set( 

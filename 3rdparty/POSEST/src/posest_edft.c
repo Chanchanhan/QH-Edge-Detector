@@ -406,7 +406,7 @@ static int refinePoseRT(double *p, struct EDFTdata *data, int doMLSL, int inpl, 
 #endif
 
 		/* refine PnP pose and use it to initiate MLSL */
-		ret = dlevmar_der(err, jacerr, p, x, m, n, 1000, opts, info, NULL, NULL, (void *)data); // with analytic Jacobian
+// qqh		ret = dlevmar_der(err, jacerr, p, x, m, n, 1000, opts, info, NULL, NULL, (void *)data); // with analytic Jacobian
 
 		mlsl_dlevmar_der(err, jacerr, p, x, m, n, lb, ub, scl, 500, opts, info, NULL, NULL, (void *)data, &minL2sq, 5, 1, verbose);
 		if (verbose) printf("MLSL pose: %g %g %g %g %g %g, error %g\n", p[0], p[1], p[2], p[3], p[4], p[5], minL2sq / n);
@@ -426,7 +426,7 @@ static int refinePoseRT(double *p, struct EDFTdata *data, int doMLSL, int inpl, 
 	rp[0] = ME_GEMANMCCLURE; rp[1] = 2.3849; // Geman-McClure 0.25
 	ret = dlevmar_rob_der(err, jacerr, p, x, m, n, rp, 100, opts, info, NULL, NULL, (void *)data);
 #else
-	ret = dlevmar_der(err, jacerr, p, x, m, n, 1000, opts, info, NULL, NULL, (void *)data);
+// qqh	ret = dlevmar_der(err, jacerr, p, x, m, n, 1000, opts, info, NULL, NULL, (void *)data);
 
 	//rp[0] = ME_TUKEY; rp[1] = 20.0;
 	//ret = dlevmar_rob_der(err, jacerr, p, x, m, n, rp, 1000, opts, info, NULL, NULL, (void *)data);
