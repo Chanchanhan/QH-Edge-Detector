@@ -450,11 +450,11 @@ const Mat& Model::getPos() const
   return modelPos;
 }
 void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Point3d> &contour_Xs,std::vector<cv::Point2d> &contour_xs){
-  LOG(WARNING)<<"getContourPointsAndIts3DPoints";
+  LOG(INFO)<<"getContourPointsAndIts3DPoints";
   Mat visible_Xs,visible_xs;
   getVisualableVertices(pose,visible_Xs);
   Project(pose, visible_Xs, visible_xs);
-  LOG(WARNING)<<"visible_Xs.size "<<visible_Xs.size();
+  LOG(INFO)<<"visible_Xs.size "<<visible_Xs.size();
   cv::Mat img1=cv::Mat::zeros(m_height, m_width, CV_32SC1);
   for (int i = 0; i < visible_xs.cols; ++i) {
     cv::Point pt(visible_xs.at<float>(0, i), visible_xs.at<float>(1, i));
@@ -476,9 +476,12 @@ void Model::getContourPointsAndIts3DPoints(const  float *pose,std::vector<cv::Po
 //   imshow("mask_img",mask_img);
 //   waitKey(0);
   /***to map X-x***/
+    if(contours.size()==0){
+        return;
+    }
   std::vector<cv::Point> &contour=contours[0];
   int near[9][2]={{0,0},{0,-1},{0,1},{-1,0},{1,0},{1,1},{1,-1},{-1,1},{-1,-1}};
-  LOG(WARNING)<<"contour.size() : "<<contour.size();
+  LOG(INFO)<<"contour.size() : "<<contour.size();
   Mat extrinsic =Transformation::getTransformationMatrix(pose);
   for (int i = 0; i < contour.size(); ++i){
       for(int j=0;j<9;j++){

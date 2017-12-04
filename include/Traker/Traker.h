@@ -12,6 +12,7 @@ namespace OD
 {
 	struct Data
 	{
+	  PointSet m_pointset;
 		Model* m_model;
 	};
 
@@ -27,8 +28,9 @@ namespace OD
 		int toTrack2(const float * prePose,const cv::Mat& curFrame, const int & frameId,const GLRenderer &glrender, float * _newPose ,float &finalE2);
 
 	private:
-		int edfTracker(const float * prePose,const cv::Mat& distFrame,const  int NLrefine, float* newPose);
+		int edfTracker(const float * prePose,const  int NLrefine, float* newPose);
 		void constructEnergyFunction(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
+		void constructEnergyFunction(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs, cv::Mat &A, cv::Mat &b);
 		void constructEnergyFunction2(const cv::Mat frame, const float* prePose ,const cv::Mat &lastA,const int &lamda, cv::Mat &A, cv::Mat &b);
 		void constructEnergyFunction2(const cv::Mat distFrame,const float* prePose,const cv::Mat &lastA,const int &lamda,const std::vector<cv::Point3d>  &countour_Xs,const std::vector<cv::Point2d>  &countour_xs, cv::Mat &A, cv::Mat &b);
 		void solveEnergyFunction();

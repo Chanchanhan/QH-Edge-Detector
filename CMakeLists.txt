@@ -9,18 +9,32 @@ enable_testing()
 
 aux_source_directory(./src/  SRC_LIST)
 aux_source_directory(./3rdparty/GLRenderer/src/ SRC_LIST)
-# aux_source_directory(./3rdparty/View/ SRC_LIST)
 aux_source_directory(./3rdparty/POSEST/src/ SRC_LIST)
 aux_source_directory(./3rdparty/POSEST/src/mlsl/ SRC_LIST)
-aux_source_directory(./3rdparty/POSEST/src/EdgeDistanceFieldTraking.cpp SRC_LIST)
+# aux_source_directory(./3rdparty/POSEST/src/levmar/ SRC_LIST)
 
 aux_source_directory(./3rdparty/POSEST/src/levmar/Axb.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/Axb_core.c SRC_LIST)
+
 aux_source_directory(./3rdparty/POSEST/src/levmar/expfit.c SRC_LIST)
+
+aux_source_directory(./3rdparty/POSEST/src/levmar/lm.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/lm_core.c SRC_LIST)
+
 aux_source_directory(./3rdparty/POSEST/src/levmar/lmbc.c SRC_LIST)
-aux_source_directory(./3rdparty/POSEST/src/levmar/lmblec.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/lmbc_core.c SRC_LIST)
+
 aux_source_directory(./3rdparty/POSEST/src/levmar/lmbleic.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/lmbleic_core.c SRC_LIST)
+
+aux_source_directory(./3rdparty/POSEST/src/levmar/lmblec.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/lmblec_core.c SRC_LIST)
+
+
 aux_source_directory(./3rdparty/POSEST/src/levmar/mestimators.c SRC_LIST)
+
 aux_source_directory(./3rdparty/POSEST/src/levmar/misc.c SRC_LIST)
+aux_source_directory(./3rdparty/POSEST/src/levmar/misc_core.c SRC_LIST)
 
 # aux_source_directory(./src/DT.cpp  SRC_LIST)
 
@@ -71,6 +85,9 @@ if(MSVC)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif()
 
+
+find_package(BLAS REQUIRED)
+find_package(LAPACK REQUIRED)
 ##############################################################################
 # OpenMP
 ##############################################################################
@@ -117,7 +134,7 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 add_executable(test-obj-detector src/unittest/test-obj-detector.cpp ${headers} ${SRC_LIST})
 add_test(test-obj-detector test-obj-detector)
-target_link_libraries( test-obj-detector  ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}   ${Sophus_LIBRARIES} glog::glog   -O2 blas lapack
+target_link_libraries( test-obj-detector  ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}   ${Sophus_LIBRARIES} glog::glog   -O2 blas lapack 
 ) # exe 链接 OpenCV
 
 
@@ -134,7 +151,7 @@ target_link_libraries( test-particle ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_
 
 add_executable(test-optimizer src/unittest/test-optimizer.cpp ${headers} ${SRC_LIST})
 add_test(test-optimizer test-Edge-detector)
-target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}  ${Sophus_LIBRARIES} glog::glog     -O2 blas lapack
+target_link_libraries( test-optimizer ${OpenCV_LIBS}  ${OPENGL_LIBRARIES} ${GLUT_LIBRARY} ${GLOG_LIBRARY}  ${Sophus_LIBRARIES} glog::glog     -O2 blas lapack lapack_LINUX.a blas_LINUX.a libf2c.a
 ) # exe 链接 OpenCV
 
 # set( 

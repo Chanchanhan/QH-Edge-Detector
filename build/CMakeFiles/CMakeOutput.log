@@ -675,3 +675,35 @@ make[1]: Leaving directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMa
 
 Source file was:
 int main() { return 0; }
+Determining if the function dgemm_ exists passed with the following output:
+Change Dir: /home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ceb7b/fast"
+make[1]: Entering directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_ceb7b.dir/build.make CMakeFiles/cmTC_ceb7b.dir/build
+make[2]: Entering directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ceb7b.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=dgemm_   -o CMakeFiles/cmTC_ceb7b.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_ceb7b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ceb7b.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=dgemm_    CMakeFiles/cmTC_ceb7b.dir/CheckFunctionExists.c.o  -o cmTC_ceb7b -rdynamic /usr/lib/libf77blas.so /usr/lib/libatlas.so 
+make[2]: Leaving directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp'
+
+
+Determining if the function cheev_ exists passed with the following output:
+Change Dir: /home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_640ac/fast"
+make[1]: Entering directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_640ac.dir/build.make CMakeFiles/cmTC_640ac.dir/build
+make[2]: Entering directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_640ac.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -DCHECK_FUNCTION_EXISTS=cheev_   -o CMakeFiles/cmTC_640ac.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_640ac
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_640ac.dir/link.txt --verbose=1
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=cheev_    CMakeFiles/cmTC_640ac.dir/CheckFunctionExists.c.o  -o cmTC_640ac -rdynamic /usr/lib/liblapack.so /usr/lib/libf77blas.so /usr/lib/libatlas.so 
+make[2]: Leaving directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp'
+make[1]: Leaving directory '/home/qqh/projects/RandomForest/build/CMakeFiles/CMakeTmp'
+
+
