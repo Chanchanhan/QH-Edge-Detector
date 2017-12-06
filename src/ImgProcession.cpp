@@ -35,9 +35,7 @@ void ImgProcession::getGussainPYR(const cv::Mat& src,const  int& nPYR, std::vect
   dsts.push_back(tmp.clone());
   for(int i=1;i<nPYR;++i){
     cv::pyrDown(tmp,tmp,cv::Size(tmp.cols*0.5f, tmp.rows*0.5f));
-
-    dsts.push_back(tmp.clone());
-    
+    dsts.push_back(tmp);    
   }
 }
 
